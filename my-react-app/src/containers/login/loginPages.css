@@ -23,6 +23,28 @@
     background: linear-gradient(rgb(245, 255, 255), rgba(135, 170, 227, 0.933), skyblue);
     background-size: cover;
     background-position: center;
+    margin-top: 0px;
+}
+.login-container-header{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  min-height: 50px;
+  background: white;
+  background-size: cover;
+  background-position: center;
+  margin-top: 0px;
+}
+.login-container-header .login-title-header{
+  font-size: 20px;
+  text-align: right;
+  color: #060606;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.login-container-header .login-container-header-icon{
+ padding: 10px;
+ margin-right: 10px;
+ margin-left: 100px;
 }
 .login-box {
   width: 420px;
@@ -31,8 +53,9 @@
   border: 2px solid rgba(160, 156, 156, 0.2);
   backdrop-filter: blur(9px);
   color: #060606;
-  border-radius: 12px;
+  border-radius: 2px;
   padding: 30px 40px;
+  margin-top: 0%;
 }
 .login-title {
   grid-column: 3; 
@@ -86,4 +109,7 @@
   font-size: 16px;
   color: #333;
   font-weight: 600;
+}
+.login-google-span{
+  padding-right:0%;
 }
