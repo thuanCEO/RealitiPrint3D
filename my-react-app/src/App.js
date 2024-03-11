@@ -6,8 +6,8 @@ import {
 
 } from "react-router-dom";
 
-import Login from "../containers/login/loginPages";
-import Home from "../containers/home/home";
+
+import Login from "../src/components/user/login/loginPages";
 
 
 
@@ -16,7 +16,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
+    
       </Routes>
     </Router>
   );

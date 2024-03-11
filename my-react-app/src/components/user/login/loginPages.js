@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import './loginPages.css';
+import './loginPages.scss';
 import { useNavigate } from 'react-router-dom';
 import { FaRegUserCircle, FaLock } from "react-icons/fa";
 
 
-import bannerImage from '../../images/banner/banner-login-technology.png';
-import icon_imageShop from '../../images/logo/realiti.png';
-import icon_logo_google from '../../images/logo/google-icon.png';
+import banner_image_logo from '../../../assets/images/banners/banner-login-technology.png';
+import icon_image_shop3D from '../../../assets/images/logos/logoShopPrint3D.png';
+import icon_logo_google from '../../../assets/images/logos/google-icon.png';
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +27,7 @@ export default function Login() {
     <div >
       <div className="login-container-header">
         <div className='login-container-header-icon'>
-          <img src={icon_imageShop} alt="Reality Print 3D" width="100px" height="38px" />
+          <img src={icon_image_shop3D} alt="Reality Print 3D" width="100px" height="38px" />
         </div>
         <div className='login-title-header'>
           <h1 className="login-title-header">Realities Print 3D</h1>
@@ -37,7 +37,7 @@ export default function Login() {
       <div className="login-container"> {/* Form Login */}
         <div className='login-banner'>
           <form className="login-form">    {/* Banner */}
-            <img src={bannerImage} alt="RealitPrint 3D Banner" width="620px" height="435.1px" />
+            <img src={banner_image_logo} alt="RealitPrint 3D Banner" width="620px" height="435.1px" />
           </form>
         </div>
         <div className="login-box">        {/* Login */}
