@@ -1,0 +1,5 @@
+ (Trình xác thực):
+ 
+ 
+  Nếu ứng dụng của bạn có các biểu mẫu và yêu cầu xác thực dữ liệu từ người dùng, bạn có thể tạo một thư mục validators để chứa các hàm xác thực dữ liệu.
+  Điều này giúp tái sử dụng các hàm xác thực và giữ cho mã nguồn của bạn sạch sẽ.

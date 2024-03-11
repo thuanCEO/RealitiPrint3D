@@ -1,0 +1,4 @@
+Storage: 
+
+Nếu ứng dụng của bạn cần tương tác với dịch vụ lưu trữ như Amazon S3 hoặc Google Cloud Storage, 
+bạn có thể tạo một thư mục storage để chứa các module hoặc hàm tương tác với dịch vụ lưu trữ.

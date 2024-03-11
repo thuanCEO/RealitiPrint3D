@@ -1,0 +1,6 @@
+Helpers (Trợ lý): 
+
+Thư mục này chứa các hàm tiện ích hoặc trợ lý được sử dụng để thực hiện các tác vụ nhỏ và phổ biến trong ứng dụng của bạn. 
+Điều này có thể bao gồm các hàm xử lý dữ liệu, định dạng dữ liệu, xử lý chuỗi, vv.
+
+# Các hàm tiện ích chung

@@ -1,0 +1,4 @@
+ (Hằng số): 
+ 
+ Thư mục này chứa các tập tin hoặc module định nghĩa các hằng số 
+ được sử dụng trong toàn bộ ứng dụng của bạn, như các URL cố định, các giá trị hằng số, vv.
