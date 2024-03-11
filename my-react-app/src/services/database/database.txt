@@ -1,0 +1,3 @@
+Database: 
+Nếu ứng dụng của bạn sử dụng cơ sở dữ liệu, 
+bạn có thể tạo một thư mục để chứa các module hoặc hàm liên quan đến việc tương tác với cơ sở dữ liệu.

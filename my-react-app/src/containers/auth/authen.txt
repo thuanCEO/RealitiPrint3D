@@ -1,0 +1,3 @@
+Auth: 
+Nếu bạn có chức năng xác thực trong ứng dụng của mình, 
+bạn có thể tạo một thư mục auth để chứa các module hoặc hàm xử lý việc xác thực người dùng.

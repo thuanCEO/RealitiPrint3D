@@ -1,0 +1,7 @@
+API Routes: 
+
+
+Nếu ứng dụng của bạn có một phần API, bạn có thể tạo một thư mục riêng biệt để chứa các tuyến đường API. 
+Điều này giúp bạn dễ dàng tìm kiếm và quản lý các tuyến đường liên quan đến API.
+
+  # Các dịch vụ giao tiếp với API máy chủ
