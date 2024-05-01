@@ -1,27 +1,48 @@
 @use "sass:map";
 @import "theme";
-
+@import "responsive";
 html,
-body{
+body {
     margin: 0%;
 }
-*{
-    font-family: 'Times New Roman', Times, serif;
+
+* {
+    font-family: Roboto;
     padding: 0;
     margin: 0;
 }
-.container{
+
+.container {
     max-width: 1170px;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
     margin: auto;
 }
-.row{
+
+.row {
     display: flex;
     flex-wrap: wrap;
 }
-.rol-6{
+
+.col-6 {
     flex: 0 0 50%;
     max-width: 50%;
+}
+@include Responsive($DESKTOP) {
+    .col-xl-3{
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+    .col-xl-6{
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+@include Responsive($MEDIUM_DEVICE) {
+    .col-lg-3{
+        flex: 0 0 25%;
+        max-width: 25%;
+
+    }
 }

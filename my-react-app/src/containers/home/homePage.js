@@ -1,14 +1,11 @@
-import React from 'react';
-import './homePage.scss';
-import Header from '../../components/Common/header/header';
+import React from "react";
+import "./homePage.scss";
+import Header from "../../components/Common/header/header";
+
 export default function Login() {
-
-
-return (
-  <>
-  <Header />
-    
-  </>
+  return (
+    <div>
+      <Header />
+    </div>
   );
-
-};
+}
