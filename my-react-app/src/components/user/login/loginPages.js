@@ -7,6 +7,7 @@ import { FaRegUserCircle, FaLock } from "react-icons/fa";
 import banner_image_logo from '../../../assets/images/banners/banner-login-technology.png';
 import icon_image_shop3D from '../../../assets/images/logos/logoShopPrint3D.png';
 import icon_logo_google from '../../../assets/images/logos/google-icon.png';
+
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

@@ -8,6 +8,7 @@ import {
 
 
 import Login from "../src/components/user/login/loginPages";
+import HomePage from "../src/containers/home/homePage";
 
 
 
@@ -15,7 +16,8 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/LoginAccount" element={<Login />} />
     
       </Routes>
     </Router>
