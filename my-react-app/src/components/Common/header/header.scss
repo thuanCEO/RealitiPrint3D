@@ -1,5 +1,6 @@
 @use "sass:map";
 @import "../../../containers/layouts/style.scss";
+@import "../../../containers/layouts/page/responsive";
 
 $bannerImg: "/assets/images/banners/banner1.jpg";
 
@@ -70,7 +71,7 @@ $bannerImg: "/assets/images/banners/banner1.jpg";
   padding-left: 15px;
   padding-right: 15px;
   margin: auto;
-  margin-bottom: 30px;
+  margin-bottom: 0;
 }
 
 .span-login {
@@ -369,6 +370,4 @@ $bannerImg: "/assets/images/banners/banner1.jpg";
       }
     }
   }
-
-
 }

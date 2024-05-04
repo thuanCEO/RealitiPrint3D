@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./header.scss";
 import {
   AiOutlineFacebook,
+  AiOutlineGlobal,
   AiOutlineInstagram,
   AiOutlineLinkedin,
   AiOutlineMail,
@@ -63,7 +64,7 @@ export default function Header() {
               <ul>
                 <li>
                   <AiOutlineMail />
-                  dohuuthuan.bhdn@gmail.com
+                  <i className="fa fa-envelope">reality3d@gmail.com</i>
                 </li>
                 <li>
                   Miễn phí ship toàn quốc gia Việt Nam {formatter(200000)}
@@ -85,6 +86,11 @@ export default function Header() {
                 <li>
                   <Link to={""}>
                     <AiOutlineLinkedin />
+                  </Link>
+                </li>
+                <li>
+                  <Link to={""}>
+                    <AiOutlineGlobal />
                   </Link>
                 </li>
                 <li>
