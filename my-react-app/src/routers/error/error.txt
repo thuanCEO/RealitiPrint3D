@@ -1,3 +1,0 @@
-Error Pages (Trang lỗi): 
-
-Thư mục này có thể chứa các trang được hiển thị khi xảy ra lỗi, như trang 404 (Không tìm thấy), trang 500 (Lỗi máy chủ), vv.

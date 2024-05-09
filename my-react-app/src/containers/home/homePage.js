@@ -7,6 +7,10 @@ import "react-tabs/style/react-tabs.css";
 
 import Header from "../../components/Common/header/header";
 import Footer from "../../components/Common/footer/footer";
+
+import ProductsList from "../../components/products/productList/productList";
+import NewProducts from "../home/newProducts";
+
 import sliderImg1 from "../../assets/images/sliders/slider1.jpg";
 import sliderImg2 from "../../assets/images/sliders/slider2.jpg";
 import sliderImg3 from "../../assets/images/sliders/slider3.jpg";
@@ -221,15 +225,17 @@ export default function Login() {
           ))}
         </Carousel>
       </div>
+      <NewProducts />
       {/*Featured */}
-      <div className="header-container">
+      {/* <div className="header-container">
         <div className="featured">
           <div className="section-title">
             <h2>Sản Phẩm Nổi Bật</h2>
             {renderFeaturedProducts(featProduct)}
           </div>
         </div>
-      </div>
+      </div> */}
+      <ProductsList />
       {/*Banner */}
       <div className="header-container">
         <div className="banner">
@@ -241,6 +247,7 @@ export default function Login() {
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );
