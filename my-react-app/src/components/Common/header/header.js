@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./header.scss";
 import {
   AiOutlineFacebook,
-  AiOutlineGlobal,
   AiOutlineInstagram,
   AiOutlineLinkedin,
   AiOutlineMail,
@@ -23,11 +22,11 @@ export default function Header() {
       path: ROUTERS.USER.HOME,
     },
     {
-      name: "Cửa Hàng",
-      path: ROUTERS.USER.HOME,
+      name: "Best Sale",
+      path: ROUTERS.USER.BESTSALE,
     },
     {
-      name: "Sản Phẩm Nổi Bật",
+      name: "Sản Phẩm",
       path: ROUTERS.USER.HOME,
       isShowSubmenu: false,
       child: [
@@ -47,12 +46,11 @@ export default function Header() {
     },
     {
       name: "Bài Viết",
-      path: ROUTERS.USER.HOME,
+      path: ROUTERS.USER.BLOGS,
     },
-
     {
-      name: "",
-      path: ROUTERS.USER.HOME,
+      name: "Liên Hệ",
+      path: ROUTERS.USER.CONTACT,
     },
   ]);
   return (
@@ -89,12 +87,7 @@ export default function Header() {
                   </Link>
                 </li>
                 <li>
-                  <Link to={""}>
-                    <AiOutlineGlobal />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={""}>
+                  <Link to={"/reality3d/login-account"}>
                     <AiOutlineUser />
                     <span className="span-login">Đăng Nhập</span>
                   </Link>
@@ -108,7 +101,7 @@ export default function Header() {
         <div className="row">
           <div className="col-xl-3">
             <div className="header__logo">
-              <h1>REALITY 3D</h1>
+              <h1 className="header__logo__name">REALITY 3D</h1>
             </div>
           </div>
           <div className="col-xl-6">
@@ -131,11 +124,8 @@ export default function Header() {
               </ul>
             </nav>
           </div>
-          <div className="ol-xl-3">
+          <div className="col-xl-3">
             <div className="header__cart">
-              <div className="header__cart_price">
-                <span>{formatter(120129990)}</span>
-              </div>
               <ul>
                 <li>
                   <Link to="#">
@@ -156,7 +146,7 @@ export default function Header() {
               onClick={() => setShowCategories(!isShowCategories)}
             >
               <AiOutlineMenu />
-              Danh sách sản phẩm
+              Danh Sách
             </div>
             {isShowCategories && (
               <ul className={isShowCategories ? "" : "hidden"}>
@@ -202,17 +192,7 @@ export default function Header() {
               </div>
             </div>
             <div className="hero__item">
-              <div className="hero__text">
-                <span>Sản Phẩm Đang Sale</span>
-                <h2>
-                  Áo rách vai <br />
-                  Rách Vlone
-                </h2>
-                <p>Miễn Phí Giao Hàng Tận Nơi</p>
-                <Link to="" className="primary-btn">
-                  Mua Ngay
-                </Link>
-              </div>
+              <div className="hero__text"></div>
             </div>
           </div>
         </div>

@@ -15,9 +15,12 @@ export default function Footer() {
         <div className="row">
           <div className="col-lg-3 col-md-6">
             <div className="footer__about">
-              <h2 className="footer__about__logo">REALITY 3D</h2>
+              <div className="footer__widget">
+                <h6 className="footer__about__logo">REALITY 3D</h6>
+              </div>
               <ul>
-                <li>Địa chỉ: Q9, Thủ Đức, TP Hồ Chí Minh</li>
+                <li>Địa chỉ: Q9, Thủ Đức</li>
+                <li>TP Hồ Chí Minh</li>
                 <li>Liên hệ: 0333888257</li>
                 <li>Email: reality3d@gmail.com</li>
               </ul>
@@ -28,10 +31,18 @@ export default function Footer() {
               <h6>Cửa Hàng</h6>
               <ul>
                 <li>
-                  <Link to="#">Liên hệ</Link>
+                  <Link to="#">Reality Blog</Link>
                 </li>
+
                 <li>
                   <Link to="#">Thông tin về chúng tôi</Link>
+                </li>
+                <li>
+                  <Link to="#">Chính Sách Bảo Mật</Link>
+                </li>
+
+                <li>
+                  <Link to="#">Trả Hàng & Hoàn Tiền</Link>
                 </li>
                 <li>
                   <Link to="#">Sản phẩm kinh doanh</Link>
@@ -39,13 +50,19 @@ export default function Footer() {
               </ul>
               <ul>
                 <li>
-                  <Link to="#">Thông tin tài khoản</Link>
+                  <Link to="#">Giới Thiệu Về Reality 3D Việt Nam</Link>
                 </li>
                 <li>
-                  <Link to="#">Thông tin về chúng tôi</Link>
+                  <Link to="#">Chăm Sóc Khách Hàng</Link>
                 </li>
                 <li>
-                  <Link to="#">Sản phẩm kinh doanh</Link>
+                  <Link to="#">Liên Hệ Với Truyền Thông</Link>
+                </li>
+                <li>
+                  <Link to="#">Chương Trình Tiếp Thị Liên Kết </Link>
+                </li>
+                <li>
+                  <Link to="#">Chính Sách Bảo Hành</Link>
                 </li>
               </ul>
             </div>
