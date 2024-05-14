@@ -23,7 +23,7 @@ export default function Header() {
     },
     {
       name: "Best Sale",
-      path: ROUTERS.USER.BESTSALE,
+      path: ROUTERS.USER.BEST_SALE,
     },
     {
       name: "Sản Phẩm",
@@ -128,7 +128,7 @@ export default function Header() {
             <div className="header__cart">
               <ul>
                 <li>
-                  <Link to="#">
+                  <Link to={"/reality3d/view-cart"}>
                     <AiOutlineShoppingCart />
                     <span>10</span>
                   </Link>
