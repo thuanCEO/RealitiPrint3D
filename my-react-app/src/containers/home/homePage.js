@@ -7,6 +7,7 @@ import "react-tabs/style/react-tabs.css";
 
 import Header from "../../components/Common/header/header";
 import Footer from "../../components/Common/footer/footer";
+import BlogPage from "./blogPage";
 
 import ProductsList from "../../components/products/productList/productList";
 import NewProducts from "../home/newProducts";
@@ -237,7 +238,7 @@ export default function Login() {
       </div> */}
       <ProductsList />
       {/*Banner */}
-      <div className="header-container">
+      {/* <div className="header-container">
         <div className="banner">
           <div className="banner__pic">
             <img src={featureImg4} alt="banner"></img>
@@ -246,8 +247,8 @@ export default function Login() {
             <img src={featureImg3} alt="banner"></img>
           </div>
         </div>
-      </div>
-
+      </div> */}
+      <BlogPage />
       <Footer />
     </div>
   );
