@@ -5,22 +5,66 @@ import { FaRegUserCircle, FaLock } from "react-icons/fa";
 import icon_image_shop3D from "../../../assets/images/logos/logoShopPrint3D.png";
 import icon_logo_google from "../../../assets/images/logos/google-icon.png";
 import Footer from "../../Common/footer/footer";
+import axiosClient from "../../../services/api/api";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    if (username.trim() === "admin" && password.trim() === "123") {
-      console.log("Login successful");
+  axiosClient.interceptors.request.use(
+    (config) => {
+      const token = sessionStorage.getItem("token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  const handleLogin = async () => {
+    try {
+      const response = await axiosClient.post(
+        `/api/User/Login?userName=${userName}&password=${password}`,
+        {
+          userName,
+          password,
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
       setErrorMessage("");
-      navigate("/reality3d/home-page");
-    } else {
-      setErrorMessage("Invalid username or password");
+      const userData = response.data;
+      console.log("User data:", userData);
+      const { roleId, fullname, gemail, address, token } = userData;
+      sessionStorage.setItem("userData", JSON.stringify(userData));
+      sessionStorage.setItem("roleId", roleId);
+      sessionStorage.setItem("fullname", fullname);
+      sessionStorage.setItem("gemail", gemail);
+      sessionStorage.setItem("address", address);
+      //    sessionStorage.setItem("token", token);
+
+      if (roleId === 1) {
+        //role 1= admin
+        navigate("/reality3d/home-page");
+      }
+      if (roleId === 2) {
+        // role 2 = managements
+        navigate("/reality3d/home-page");
+      }
+      if (roleId === 3) {
+        //role 3 = staff
+        navigate("/reality3d/home-page");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+      setErrorMessage("Invalid email or password");
     }
   };
+
   return (
     <div>
       <div className="login-container-header">
@@ -47,8 +91,8 @@ export default function Login() {
               <input
                 placeholder="Tên đăng nhập "
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
                 className="login-input"
               />
               <FaRegUserCircle className="icon" />

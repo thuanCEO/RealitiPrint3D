@@ -6,78 +6,77 @@ const people = [
     role: "Co-Founder / CEO",
     imageUrl: require("../../../assets/images/users/people/dht.jpg"),
   },
-
   {
-    name: "Ngô Thị Thùy Trang",
+    name: "Lương Như Quỳnh",
     role: "Co-Founder / CEO",
-    imageUrl: require("../../../assets/images/users/people/nttt.jpg"),
+    imageUrl: require("../../../assets/images/users/people/lmn.jpg"),
   },
 
   {
-    name: "Đỗ Hữu Thuận",
+    name: "Trần Đăng Quang",
     role: "Co-Founder / CEO",
-    imageUrl: require("../../../assets/images/users/people/dht.jpg"),
+    imageUrl: require("../../../assets/images/users/people/qt.jpg"),
   },
 
   {
-    name: "Đỗ Hữu Thuận",
+    name: "Lê Nguyễn",
     role: "Co-Founder / CEO",
-    imageUrl: require("../../../assets/images/users/people/dht.jpg"),
+    imageUrl: require("../../../assets/images/users/people/ln.jpg"),
   },
 
   {
-    name: "Đỗ Hữu Thuận",
+    name: "Phạm Nhật Huy",
     role: "Co-Founder / CEO",
-    imageUrl: require("../../../assets/images/users/people/dht.jpg"),
+    imageUrl: require("../../../assets/images/users/people/nh.jpg"),
   },
 
   {
-    name: "Đỗ Hữu Thuận",
+    name: "Phan Bá Lộc",
     role: "Co-Founder / CEO",
-    imageUrl: require("../../../assets/images/users/people/dht.jpg"),
+    imageUrl: require("../../../assets/images/users/people/loc.jpg"),
   },
-
-  // More people...
+  {
+    name: "Phạm Hồng Việt",
+    role: "Co-Founder / CEO",
+    imageUrl: require("../../../assets/images/users/people/hv.jpg"),
+  },
+  {
+    name: "Trịnh Trung Hiếu",
+    role: "Co-Founder / CEO",
+    imageUrl: require("../../../assets/images/users/people/ht2.jpg"),
+  },
 ];
 
 export default function AboutUsPage() {
   return (
     <>
       <div className="bg-white py-24 sm:py-32">
-        <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Thông tin về chúng tôi
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Bằng những kĩ năng điêu nghệ chúng tôi đã có những cái oke nhất
-              dành cho sản phẩm.
-            </p>
-          </div>
-          <ul
-            role="list"
-            className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2"
-          >
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-12">
+            Thông tin về chúng tôi
+          </h2>
+          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {people.map((person) => (
-              <li key={person.name}>
-                <div className="flex items-center gap-x-6">
-                  <img
-                    className="h-20 w-20 rounded-full"
-                    src={person.imageUrl}
-                    alt=""
-                  />
-                  <div>
-                    <h3 className="text-base font-semibold leading-7 tracking-tight text-gray-900">
-                      {person.name}
-                    </h3>
-                    <p className="text-sm font-semibold leading-6 text-indigo-600">
-                      {person.role}
-                    </p>
-                  </div>
+              <div
+                key={person.name}
+                className="flex flex-col items-center gap-y-4"
+              >
+                <img
+                  className="h-32 w-32 rounded-full"
+                  src={person.imageUrl}
+                  alt=""
+                />
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {person.name}
+                  </h3>
+                  <p className="text-sm font-semibold text-indigo-600">
+                    {person.role}
+                  </p>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </>

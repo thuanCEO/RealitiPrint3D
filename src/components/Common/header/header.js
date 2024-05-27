@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./header.scss";
 import {
   AiOutlineFacebook,
@@ -11,12 +11,28 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { formatter } from "../../../utils/constants/fomatter";
 import { ROUTERS } from "../../../utils/constants/routers";
 
 export default function Header() {
+  const [userData, setUserData] = useState(null);
   const [isShowCategories, setShowCategories] = useState(true);
-  const [menus, setMenus] = useState([
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
+  useEffect(() => {
+    const userDataFromStorage = sessionStorage.getItem("userData");
+    if (userDataFromStorage) {
+      setUserData(JSON.parse(userDataFromStorage));
+      setIsLoggedIn(true);
+    }
+  }, []);
+  const handleLogout = () => {
+    sessionStorage.clear();
+    setIsLoggedIn(false);
+  };
+  const toggleProfileMenu = () => {
+    setProfileMenuOpen(!isProfileMenuOpen);
+  };
+  const [menus] = useState([
     {
       name: "Trang Chủ",
       path: ROUTERS.USER.HOME,
@@ -27,22 +43,7 @@ export default function Header() {
     },
     {
       name: "Sản Phẩm",
-      path: ROUTERS.USER.HOME,
-      isShowSubmenu: false,
-      child: [
-        {
-          name: "Ao",
-          path: ROUTERS.USER.HOME,
-        },
-        {
-          name: "Model",
-          path: ROUTERS.USER.HOME,
-        },
-        {
-          name: "Superman",
-          path: ROUTERS.USER.HOME,
-        },
-      ],
+      path: ROUTERS.USER.PRODUCTS,
     },
     {
       name: "Bài Viết",
@@ -64,9 +65,7 @@ export default function Header() {
                   <AiOutlineMail />
                   <i className="fa fa-envelope">reality3d@gmail.com</i>
                 </li>
-                <li>
-                  Miễn phí ship toàn quốc gia Việt Nam {formatter(200000)}
-                </li>
+                <li>Ship toàn quốc gia Việt Nam</li>
               </ul>
             </div>
             <div className="col-6 header-container-top-right">
@@ -81,16 +80,46 @@ export default function Header() {
                     <AiOutlineInstagram />
                   </Link>
                 </li>
+
                 <li>
-                  <Link to={""}>
-                    <AiOutlineLinkedin />
-                  </Link>
-                </li>
-                <li>
-                  <Link to={"/reality3d/login-account"}>
-                    <AiOutlineUser />
-                    <span className="span-login">Đăng Nhập</span>
-                  </Link>
+                  {!isLoggedIn && (
+                    <Link to={"/reality3d/login-account"}>
+                      <span className="span-login">Đăng Nhập</span>
+                    </Link>
+                  )}
+                  {/* {isLoggedIn && (
+                    <Link to={"/reality3d/home-page"}>
+                      <span className="span-logout" onClick={handleLogout}>
+                        Đăng Xuất
+                      </span>
+                    </Link>
+                  )} */}
+                  {isLoggedIn && (
+                    <div className="profile-menu-container">
+                      <span
+                        className="profile-menu-trigger"
+                        onClick={toggleProfileMenu}
+                      >
+                        {userData?.name}
+                        <AiOutlineUser />
+                      </span>{" "}
+                      {isProfileMenuOpen && (
+                        <ul className="profile-menu">
+                          <li>
+                            <Link to={"/reality3d/profile"}>Profile</Link>
+                          </li>
+                          <li>
+                            <span
+                              className="span-logout"
+                              onClick={handleLogout}
+                            >
+                              Đăng Xuất
+                            </span>
+                          </li>
+                        </ul>
+                      )}
+                    </div>
+                  )}
                 </li>
               </ul>
             </div>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -5,7 +7,8 @@
   font-family: "Poppins", sans-serif;
 }
 
-html,body{
+html,
+body {
   min-height: 100%;
   background: linear-gradient(rgba(143, 246, 246, 0.685), rgba(150, 187, 242, 0.452), rgb(110, 168, 190));
 }

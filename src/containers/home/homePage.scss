@@ -1,5 +1,6 @@
 @use "sass:map";
 @import "../../../src/containers/layouts/page/all";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 
 .container__categories_slider {
@@ -13,21 +14,24 @@
             position: relative;
             background-size: cover;
             background-repeat: no-repeat;
-            background-position: top center;
+            background-position: center;
             border-radius: 5px;
+            margin: 0 10px; // Add margin for spacing between items
 
             p {
                 position: absolute;
-                left: 5%;
                 bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%); // Center text horizontally
                 text-align: center;
                 font-size: 18px;
-                color: map.get($theme-colors, "normal-text");
+                color: white; // Adjust text color for better visibility
                 font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: 2px;
-                padding: 12px 0 10px;
-                width: 250px;
+                padding: 12px 20px; // Increase padding for better readability
+                background-color: rgba(0, 0, 0, 0.5); // Add background color with transparency
+                border-radius: 5px;
                 cursor: pointer;
 
                 &:hover {
@@ -35,120 +39,53 @@
                 }
             }
         }
-
-        .react-multi-carousel-item:not(:first-child):not(:last-child) {
-            margin-right: 5px;
-            margin-left: 5px;
-        }
     }
+
 }
 
 .featured {
     margin-top: 50px;
-    border-bottom: none;
 
     .section-title {
         margin-bottom: 50px;
         text-align: center;
 
-
         h2 {
             position: relative;
+
+            &::after {
+                // Styles for the underline
+            }
         }
-
-        h2::after {
-            position: absolute;
-            left: 0;
-            bottom: -15px;
-            right: 0;
-            height: 4px;
-            width: 80px;
-            background: map.get($theme-colors, "main");
-            content: "";
-            margin: 0 auto;
-        }
-    }
-
-    .react-tabs {
-
-        ul {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 50px;
-            margin-bottom: 30px;
-        }
-
-        li {
-            list-style: none;
-            font-size: 18px;
-            color: map.get($theme-colors, "normal-text");
-            display: inline-block;
-            margin-right: 25px;
-            position: relative;
-            cursor: pointer;
-            text-decoration: none;
-        }
-    }
-
-    .react-tabs .react-tabs__tab-list {
-        border-bottom: none;
-        padding-top: 30px;
-        padding-bottom: 30px;
-    }
-
-    .react-tabs .react-tabs__tab--selected {
-        background: map.get($theme-colors, "main");
-        border: 1px solid map.get($theme-colors, "main");
     }
 
     .featured__item {
         margin-bottom: 50px;
 
-        :hover {
-            .featured__item__pic__hover {
-                bottom: -15% !important;
-            }
-        }
-
         .featured__item__pic {
             height: 270px;
-            //width: 270px;
             position: relative;
             overflow: hidden;
             background-position: center;
+            border-radius: 5px;
 
             .featured__item__pic__hover {
                 position: absolute;
-                left: 0;
                 bottom: -40%;
-                width: 100%;
+                left: 50%;
+                transform: translateX(-50%);
                 text-align: center;
-                transform: all, 0.5s;
 
                 li {
-                    list-style: none;
                     display: inline-block;
                     margin-right: 10px;
 
-                    &:hover {
-                        svg {
-                            background: #7fad39;
-                            border-color: #7fad39;
-                            color: #ffffff;
-                            transform: rotate(360deg) !important;
-                        }
+                    &:last-child {
+                        margin-right: 0;
                     }
 
                     svg {
-                        padding: 10px;
-                        height: 20px;
-                        width: 20px;
-                        border: 1px solid #ebebeb;
-                        background: #ffffff;
-                        color: #565656;
-                        transform: all, 0.3s;
-                        border-radius: 30%;
-                        margin-bottom: 20px;
+                        // Styles for SVG icons
                     }
                 }
             }
@@ -169,15 +106,15 @@
             }
 
             h5 {
-                color: map.get($theme-colors, "normal-text");
                 margin-top: 10px;
                 font-size: 18px;
                 font-weight: 700;
+                color: map.get($theme-colors, "normal-text");
             }
-
         }
     }
 }
+
 
 .banner {
     display: flex;
