@@ -10,11 +10,16 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { ROUTERS } from "../../../utils/constants/routers";
 
-export default function Header() {
+export default function Header({ products = [] }) {
   const [userData, setUserData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
+  const totalItems = products.reduce(
+    (total, product) => total + product.quantity,
+    0
+  );
   const location = useLocation();
+
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");
     if (userDataFromStorage) {
@@ -22,14 +27,17 @@ export default function Header() {
       setIsLoggedIn(true);
     }
   }, []);
+
   const handleLogout = () => {
     sessionStorage.clear();
     setIsLoggedIn(false);
   };
+
   const toggleProfileMenu = () => {
     setProfileMenuOpen(!isProfileMenuOpen);
   };
-  const [menus] = useState([
+
+  const menus = [
     {
       name: "Trang Chủ",
       path: ROUTERS.USER.HOME,
@@ -58,7 +66,8 @@ export default function Header() {
       name: "Liên Hệ",
       path: ROUTERS.USER.CONTACT,
     },
-  ]);
+  ];
+
   return (
     <>
       <div className="header-on-top">
@@ -68,7 +77,7 @@ export default function Header() {
               <ul>
                 <li>
                   <AiOutlineMail />
-                  <i className="fa fa-envelope">reality3d@gmail.com</i>
+                  <span>reality3d@gmail.com</span>
                 </li>
                 <li>Ship toàn quốc gia Việt Nam</li>
               </ul>
@@ -107,14 +116,12 @@ export default function Header() {
                             <Link to={"/reality3d/profile-page"}>Profile</Link>
                           </li>
                           <li>
-                            <Link to={"/reality3d/login-account"}>
-                              <span
-                                className="span-logout"
-                                onClick={handleLogout}
-                              >
-                                Đăng Xuất
-                              </span>
-                            </Link>
+                            <span
+                              className="span-logout"
+                              onClick={handleLogout}
+                            >
+                              Đăng Xuất
+                            </span>
                           </li>
                         </ul>
                       )}
@@ -145,16 +152,16 @@ export default function Header() {
           <div className="col-xl-8">
             <nav className="header__menu">
               <ul>
-                {menus?.map((menu, menuKey) => (
+                {menus.map((menu, index) => (
                   <li
-                    key={menuKey}
+                    key={index}
                     className={location.pathname === menu.path ? "active" : ""}
                   >
-                    <Link to={menu?.path}>{menu?.name}</Link>
+                    <Link to={menu.path}>{menu.name}</Link>
                     {menu.child && (
                       <ul className="header__menu__dropdown">
-                        {menu.child.map((childItem, childKey) => (
-                          <li key={`${menuKey}-${childKey}`}>
+                        {menu.child.map((childItem, childIndex) => (
+                          <li key={childIndex}>
                             <Link to={childItem.path}> {childItem.name}</Link>
                           </li>
                         ))}
@@ -171,7 +178,7 @@ export default function Header() {
                 <li>
                   <Link to={"/reality3d/view-cart"}>
                     <AiOutlineShoppingCart />
-                    <span>10</span>
+                    <span>{totalItems}</span>
                   </Link>
                 </li>
               </ul>
