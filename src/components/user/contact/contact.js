@@ -1,22 +1,9 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import { useState } from "react";
+import React, { useState } from "react";
 import { Switch } from "@headlessui/react";
 import { Link } from "react-router-dom";
 import Footer from "../../Common/footer/footer";
 import AboutUsPage from "./aboutus";
+import Header from "../../Common/header/header";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -27,6 +14,7 @@ export default function ContactPage() {
 
   return (
     <>
+      <Header />
       <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div
           className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
@@ -53,10 +41,10 @@ export default function ContactPage() {
           method="POST"
           className="mx-auto mt-16 max-w-xl sm:mt-20"
         >
-          <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div className="sm:col-span-2">
             <div>
               <label
-                htmlFor="first-name"
+                htmlFor="fullName"
                 className="block text-sm font-semibold leading-6 text-gray-900"
               >
                 Tên của bạn
@@ -64,26 +52,9 @@ export default function ContactPage() {
               <div className="mt-2.5">
                 <input
                   type="text"
-                  name="first-name"
-                  id="first-name"
+                  name="fullName"
+                  id="fullName"
                   autoComplete="given-name"
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="last-name"
-                className="block text-sm font-semibold leading-6 text-gray-900"
-              >
-                Họ (Nếu có)
-              </label>
-              <div className="mt-2.5">
-                <input
-                  type="text"
-                  name="last-name"
-                  id="last-name"
-                  autoComplete="family-name"
                   className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -162,7 +133,7 @@ export default function ContactPage() {
               </div>
               <Switch.Label className="text-sm leading-6 text-gray-600">
                 By selecting this, you agree to our{" "}
-                <Link href="#" className="font-semibold text-indigo-600">
+                <Link to="#" className="font-semibold text-indigo-600">
                   privacy&nbsp;policy
                 </Link>
                 .

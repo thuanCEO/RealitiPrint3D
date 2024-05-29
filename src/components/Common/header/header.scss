@@ -120,13 +120,21 @@ $bannerImg: "/assets/images/banners/banner1.jpg";
 
 .header__logo {
   padding: 15px 0;
+  text-align: center;
+}
 
-  .header__logo__name,
-  h1 {
-    font-weight: 600;
-    text-align: center;
-    font-weight: bold;
-  }
+.header__logo__name {
+  font-weight: bold;
+}
+
+.header__logo__img-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.header__logo__img {
+  border-radius: 50%;
 }
 
 .header__menu {

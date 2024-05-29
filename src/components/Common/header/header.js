@@ -3,10 +3,7 @@ import "./header.scss";
 import {
   AiOutlineFacebook,
   AiOutlineInstagram,
-  AiOutlineLinkedin,
   AiOutlineMail,
-  AiOutlineMenu,
-  AiOutlinePhone,
   AiOutlineShoppingCart,
   AiOutlineUser,
 } from "react-icons/ai";
@@ -15,7 +12,6 @@ import { ROUTERS } from "../../../utils/constants/routers";
 
 export default function Header() {
   const [userData, setUserData] = useState(null);
-  const [isShowCategories, setShowCategories] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
   useEffect(() => {
@@ -44,6 +40,14 @@ export default function Header() {
     {
       name: "Sản Phẩm",
       path: ROUTERS.USER.PRODUCTS,
+    },
+    {
+      name: "Model",
+      path: ROUTERS.USER.MODELS,
+    },
+    {
+      name: "Thiết Kế",
+      path: ROUTERS.USER.EDITS,
     },
     {
       name: "Bài Viết",
@@ -87,13 +91,6 @@ export default function Header() {
                       <span className="span-login">Đăng Nhập</span>
                     </Link>
                   )}
-                  {/* {isLoggedIn && (
-                    <Link to={"/reality3d/home-page"}>
-                      <span className="span-logout" onClick={handleLogout}>
-                        Đăng Xuất
-                      </span>
-                    </Link>
-                  )} */}
                   {isLoggedIn && (
                     <div className="profile-menu-container">
                       <span
@@ -106,15 +103,17 @@ export default function Header() {
                       {isProfileMenuOpen && (
                         <ul className="profile-menu">
                           <li>
-                            <Link to={"/reality3d/profile"}>Profile</Link>
+                            <Link to={"/reality3d/profile-page"}>Profile</Link>
                           </li>
                           <li>
-                            <span
-                              className="span-logout"
-                              onClick={handleLogout}
-                            >
-                              Đăng Xuất
-                            </span>
+                            <Link to={"/reality3d/login-account"}>
+                              <span
+                                className="span-logout"
+                                onClick={handleLogout}
+                              >
+                                Đăng Xuất
+                              </span>
+                            </Link>
                           </li>
                         </ul>
                       )}
@@ -128,12 +127,21 @@ export default function Header() {
       </div>
       <div className="header-container">
         <div className="row">
-          <div className="col-xl-3">
+          <div className="col-xl-2">
             <div className="header__logo">
               <h1 className="header__logo__name">REALITY 3D</h1>
+              <div className="header__logo__img-container">
+                <img
+                  className="header__logo__img"
+                  src="https://firebasestorage.googleapis.com/v0/b/webid-6c809.appspot.com/o/logo3d.jpg?alt=media&token=1d2623f2-5b7e-4569-bfab-fe4bc271ef17"
+                  width={50}
+                  height={50}
+                  alt="Logo"
+                />
+              </div>
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-8">
             <nav className="header__menu">
               <ul>
                 {menus?.map((menu, menuKey) => (
@@ -153,7 +161,7 @@ export default function Header() {
               </ul>
             </nav>
           </div>
-          <div className="col-xl-3">
+          <div className="col-xl-2">
             <div className="header__cart">
               <ul>
                 <li>
@@ -167,7 +175,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <div className="header-container">
+      {/* <div className="header-container">
         <div className="row hero__categories_container">
           <div className="col-lg-3 hero__categories">
             <div
@@ -225,7 +233,7 @@ export default function Header() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
