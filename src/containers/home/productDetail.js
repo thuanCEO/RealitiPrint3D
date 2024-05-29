@@ -1,298 +1,135 @@
-import React, { useState } from "react";
+import React from "react";
+import Footer from "../../components/Common/footer/footer";
+import Header from "../../components/Common/header/header";
+import ViewFeedBackProduct from "./feedbackProduct";
+import ProductsListPage from "../../components/products/productList/productList";
 export default function ProductDetail() {
-  const [show, setShow] = useState(false);
-  const [show2, setShow2] = useState(false);
-
   return (
-    <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
-      <div className="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
-        <img
-          className="w-full"
-          alt="img of a girl posing"
-          src="https://i.ibb.co/QMdWfzX/component-image-one.png"
-        />
-        <img
-          className="mt-6 w-full"
-          alt="img of a girl posing"
-          src="https://i.ibb.co/qxkRXSq/component-image-two.png"
-        />
-      </div>
-      <div className="md:hidden">
-        <img
-          className="w-full"
-          alt="img of a girl posing"
-          src="https://i.ibb.co/QMdWfzX/component-image-one.png"
-        />
-        <div className="flex items-center justify-between mt-3 space-x-4 md:space-x-0">
-          <img
-            alt="img-tag-one"
-            className="md:w-48 md:h-48 w-full"
-            src="https://i.ibb.co/cYDrVGh/Rectangle-245.png"
-          />
-          <img
-            alt="img-tag-one"
-            className="md:w-48 md:h-48 w-full"
-            src="https://i.ibb.co/f17NXrW/Rectangle-244.png"
-          />
-          <img
-            alt="img-tag-one"
-            className="md:w-48 md:h-48 w-full"
-            src="https://i.ibb.co/cYDrVGh/Rectangle-245.png"
-          />
-          <img
-            alt="img-tag-one"
-            className="md:w-48 md:h-48 w-full"
-            src="https://i.ibb.co/f17NXrW/Rectangle-244.png"
-          />
-        </div>
-      </div>
-      <div className="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
-        <div className="border-b border-gray-200 pb-6">
-          <p className="text-sm leading-none text-gray-600">
-            Balenciaga Fall Collection
-          </p>
-          <h1
-            className="
-							lg:text-2xl
-							text-xl
-							font-semibold
-							lg:leading-6
-							leading-7
-							text-gray-800
-							mt-2
-						"
-          >
-            Balenciaga Signature Sweatshirt
-          </h1>
-        </div>
-        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
-          <p className="text-base leading-4 text-gray-800">Colours</p>
-          <div className="flex items-center justify-center">
-            <p className="text-sm leading-none text-gray-600">
-              Smoke Blue with red accents
-            </p>
-            <div
-              className="
-								w-6
-								h-6
-								bg-gradient-to-b
-								from-gray-900
-								to-indigo-500
-								ml-3
-								mr-4
-								cursor-pointer
-							"
-            ></div>
-            <svg
-              className="cursor-pointer"
-              width="6"
-              height="10"
-              viewBox="0 0 6 10"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 1L5 5L1 9"
-                stroke="#4B5563"
-                strokeWidth="1.25"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+    <>
+      <Header />
+      <div className="bg-gray-100 py-10">
+        <section className="text-gray-600 body-font overflow-hidden">
+          <div className="container-fluid px-5 py-24 mx-auto max-w-screen-xl">
+            <div className="lg:flex lg:flex-wrap lg:justify-between lg:items-center bg-white shadow-lg rounded-lg p-6">
+              <img
+                alt="ecommerce"
+                className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
+                src="https://dummyimage.com/800x800"
               />
-            </svg>
-          </div>
-        </div>
-        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
-          <p className="text-base leading-4 text-gray-800">Size</p>
-          <div className="flex items-center justify-center">
-            <p className="text-sm leading-none text-gray-600 mr-3">38.2</p>
-            <svg
-              className="cursor-pointer"
-              width="6"
-              height="10"
-              viewBox="0 0 6 10"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 1L5 5L1 9"
-                stroke="#4B5563"
-                strokeWidth="1.25"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-        </div>
-        <button
-          className="
-						focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800
-						text-base
-						flex
-						items-center
-						justify-center
-						leading-none
-						text-white
-						bg-gray-800
-						w-full
-						py-4
-						hover:bg-gray-700
-					"
-        >
-          <svg
-            className="mr-3"
-            width="16"
-            height="17"
-            viewBox="0 0 16 17"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7.02301 7.18999C7.48929 6.72386 7.80685 6.12992 7.93555 5.48329C8.06425 4.83666 7.9983 4.16638 7.74604 3.55724C7.49377 2.94809 7.06653 2.42744 6.51835 2.06112C5.97016 1.6948 5.32566 1.49928 4.66634 1.49928C4.00703 1.49928 3.36252 1.6948 2.81434 2.06112C2.26615 2.42744 1.83891 2.94809 1.58665 3.55724C1.33439 4.16638 1.26843 4.83666 1.39713 5.48329C1.52583 6.12992 1.8434 6.72386 2.30968 7.18999L4.66634 9.54749L7.02301 7.18999Z"
-              stroke="white"
-              strokeWidth="1.25"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M4.66699 4.83333V4.84166"
-              stroke="white"
-              strokeWidth="1.25"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M13.69 13.8567C14.1563 13.3905 14.4738 12.7966 14.6025 12.15C14.7312 11.5033 14.6653 10.8331 14.413 10.2239C14.1608 9.61476 13.7335 9.09411 13.1853 8.72779C12.6372 8.36148 11.9926 8.16595 11.3333 8.16595C10.674 8.16595 10.0295 8.36148 9.48133 8.72779C8.93314 9.09411 8.5059 9.61476 8.25364 10.2239C8.00138 10.8331 7.93543 11.5033 8.06412 12.15C8.19282 12.7966 8.51039 13.3905 8.97667 13.8567L11.3333 16.2142L13.69 13.8567Z"
-              stroke="white"
-              strokeWidth="1.25"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M11.333 11.5V11.5083"
-              stroke="white"
-              strokeWidth="1.25"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Check availability in store
-        </button>
-        <div>
-          <p className="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 mt-7">
-            It is a long established fact that a reader will be distracted by
-            thereadable content of a page when looking at its layout. The point
-            of usingLorem Ipsum is that it has a more-or-less normal
-            distribution of letters.
-          </p>
-          <p className="text-base leading-4 mt-7 text-gray-600">
-            Product Code: 8BN321AF2IF0NYA
-          </p>
-          <p className="text-base leading-4 mt-4 text-gray-600">
-            Length: 13.2 inches
-          </p>
-          <p className="text-base leading-4 mt-4 text-gray-600">
-            Height: 10 inches
-          </p>
-          <p className="text-base leading-4 mt-4 text-gray-600">
-            Depth: 5.1 inches
-          </p>
-          <p className="md:w-96 text-base leading-normal text-gray-600 mt-4">
-            Composition: 100% calf leather, inside: 100% lamb leather
-          </p>
-        </div>
-        <div>
-          <div className="border-t border-b py-4 mt-7 border-gray-200">
-            <div
-              onClick={() => setShow(!show)}
-              className="flex justify-between items-center cursor-pointer"
-            >
-              <p className="text-base leading-4 text-gray-800">
-                Shipping and returns
-              </p>
-              <button
-                className="
-									cursor-pointer
-									focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400
-									rounded
-								"
-                aria-label="show or hide"
-              >
-                <svg
-                  className={"transform " + (show ? "rotate-180" : "rotate-0")}
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 1L5 5L1 1"
-                    stroke="#4B5563"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div
-              className={
-                "pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 " +
-                (show ? "block" : "hidden")
-              }
-              id="sect"
-            >
-              You will be responsible for paying for your own shipping costs for
-              returning your item. Shipping costs are nonrefundable
+              <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0 p-6">
+                <h2 className="text-sm title-font text-gray-500 tracking-widest">
+                  BRAND NAME
+                </h2>
+                <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
+                  The Catcher in the Rye
+                </h1>
+                <div className="flex mb-4">
+                  <span className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        fill="currentColor"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        className="w-4 h-4 text-indigo-500"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                      </svg>
+                    ))}
+                    <span className="text-gray-600 ml-3">4 Reviews</span>
+                  </span>
+                  <span className="flex ml-3 pl-3 py-2 border-l-2 border-gray-200 space-x-2">
+                    {["facebook", "twitter", "instagram"].map((platform) => (
+                      <a
+                        key={platform}
+                        className="text-gray-500"
+                        href={`https://${platform}.com`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <svg
+                          fill="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          className="w-5 h-5"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                        </svg>
+                      </a>
+                    ))}
+                  </span>
+                </div>
+                <p className="leading-relaxed mb-4">
+                  Fam locavore kickstarter distillery. Mixtape chillwave tumeric
+                  sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo
+                  juiceramps cornhole raw denim forage brooklyn. Everyday carry
+                  +1 seitan poutine tumeric. Gastropub blue bottle austin
+                  listicle pour-over, neutra jean shorts keytar banjo tattooed
+                  umami cardigan.
+                </p>
+                <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
+                  <div className="flex">
+                    <span className="mr-3">Giá:</span>
+
+                    <button className="border-2 border-gray-300 ml-1 bg-indigo-500 rounded-full w-6 h-6 focus:outline-none"></button>
+                  </div>
+                  <div className="flex ml-6 items-center">
+                    <span className="mr-3">Size</span>
+                    <div className="relative">
+                      <select className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
+                        <option>M</option>
+                        <option>L</option>
+                        <option>XL</option>
+                      </select>
+                      <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
+                        <svg
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          className="w-4 h-4"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M6 9l6 6 6-6"></path>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex">
+                  <span className="title-font font-medium text-2xl text-gray-900">
+                    $58.00
+                  </span>
+                  <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                    Add to Cart
+                  </button>
+                  <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+                    <svg
+                      fill="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      className="w-5 h-5"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <div className="border-b py-4 border-gray-200">
-            <div
-              onClick={() => setShow2(!show2)}
-              className="flex justify-between items-center cursor-pointer"
-            >
-              <p className="text-base leading-4 text-gray-800">Contact us</p>
-              <button
-                className="
-									cursor-pointer
-									focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400
-									rounded
-								"
-                aria-label="show or hide"
-              >
-                <svg
-                  className={"transform " + (show2 ? "rotate-180" : "rotate-0")}
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 1L5 5L1 1"
-                    stroke="#4B5563"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div
-              className={
-                "pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 " +
-                (show2 ? "block" : "hidden")
-              }
-              id="sect"
-            >
-              If you have any questions on how to return your item to us,
-              contact us.
-            </div>
-          </div>
-        </div>
+        </section>
       </div>
-    </div>
+      <ViewFeedBackProduct />
+      <ProductsListPage />
+      <Footer />
+    </>
   );
 }

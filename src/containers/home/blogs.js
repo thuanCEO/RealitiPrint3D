@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../services/api/api";
-import Footer from "../../components/Common/footer/footer";
-import Header from "../../components/Common/header/header";
-
-export default function BlogPage() {
+export default function Blogs() {
   const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
 
@@ -20,16 +17,14 @@ export default function BlogPage() {
   useEffect(() => {
     fetchBlogs();
   }, []);
-
   return (
     <>
-      <Header />
       <section className="section-fullscreen text-gray-600 body-font overflow-hidden">
         <div className="container px-5 py-24 mx-auto h-full flex flex-col justify-center">
           <div className="-my-8 divide-y-2 divide-gray-100">
             {error && <div className="text-red-500">{error}</div>}
             {blogs.length > 0 ? (
-              blogs.map((blog) => (
+              blogs.slice(0, 5).map((blog) => (
                 <div
                   key={blog.id}
                   className="py-8 flex flex-wrap md:flex-nowrap"
@@ -55,12 +50,11 @@ export default function BlogPage() {
                 </div>
               ))
             ) : (
-              <p>No blogs available.</p>
+              <p></p>
             )}
           </div>
         </div>
-      </section>
-      <Footer />
+      </section>{" "}
     </>
   );
 }

@@ -16,6 +16,10 @@ import ProductsList from "../src/containers/home/product";
 import BlogPages from "../src/containers/home/blogPage";
 import ProductDetailPage from "../src/containers/home/productDetail";
 import ViewCart from "../src/components/products/productCarts/productCarts";
+import EditPages from "../src/containers/home/editPage";
+import ProfilePages from "../src/components/user/profile/profile";
+import HistoryPages from "../src/components/user/order/history";
+
 export default function App() {
   return (
     <Router>
@@ -29,18 +33,17 @@ export default function App() {
         <Route path="/reality3d/view-blog" element={<BlogPages />} />
         <Route path="/reality3d/view-cart" element={<ViewCart />} />
         <Route path="/reality3d/contact-page" element={<ContactPage />} />
-        {/* <Route
+        <Route
           path="/reality3d/product-detail/:id"
           element={<ProductDetailPage />}
-        /> */}
+        />
         <Route
           path="/reality3d/registration-account"
           element={<RegistrationAccount />}
         />
-        <Route
-          path="/reality3d/product-detail"
-          element={<ProductDetailPage />}
-        />
+        <Route path="/reality3d/profile-page" element={<ProfilePages />} />
+        <Route path="/reality3d/history-page" element={<HistoryPages />} />
+        <Route path="/reality3d/edits-page" element={<EditPages />} />
       </Routes>
     </Router>
   );
