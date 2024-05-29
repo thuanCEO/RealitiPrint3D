@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../../components/Common/footer/footer";
 import Header from "../../components/Common/header/header";
+import axiosClient from "../../services/api/api";
 
 export default function BestSalePage() {
   const [products, setProducts] = useState([]);
@@ -10,25 +11,29 @@ export default function BestSalePage() {
     fetchProducts();
   }, []);
 
-  const fetchProducts = () => {
-    fetch("https://localhost:7170/api/Product/GetAllProducts")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProducts(data);
-        console.log(data);
-      })
-      .catch((error) => {
-        setError(error);
-      });
+  const fetchProducts = async () => {
+    try {
+      const resq = await axiosClient.get("api/Product/GetAllProducts");
+      setProducts(shuffleArray(resq.data));
+      console.log(resq.data);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+  const shuffleArray = (array) => {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ];
+    }
+    return shuffledArray;
   };
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Error: {error}</div>;
   }
 
   return (
@@ -47,14 +52,14 @@ export default function BestSalePage() {
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     <img
                       src={product.imageUrl}
-                      alt={product.imageAlt}
+                      alt={product.imageAlt || product.productName}
                       className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                     />
                   </div>
                   <div className="mt-4 flex justify-between">
                     <div>
-                      <h3 className="text-sm text-gray-700">
-                        <a href={product.href}>
+                      <h3 className="text-sm font-medium text-gray-700">
+                        <a href={`/reality3d/product-detail/${product.id}`}>
                           <span
                             aria-hidden="true"
                             className="absolute inset-0"
@@ -63,7 +68,7 @@ export default function BestSalePage() {
                         </a>
                       </h3>
                     </div>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-red-500">
                       {product.price}
                     </p>
                   </div>

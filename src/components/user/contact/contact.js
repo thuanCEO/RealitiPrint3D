@@ -8,7 +8,7 @@ export default function ContactPage() {
     <>
       <Header />
       <div>
-        <div class="max-w-lg lg:ms-auto mx-auto text-center ">
+        <div class="max-w-lg lg:ms-auto mx-auto mt-30 mb-30 text-center">
           <div class="py-16 px-7 rounded-md bg-white">
             <form class="" action="" method="POST">
               <div class="grid md:grid-cols-2 grid-cols-1 gap-6">

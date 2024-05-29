@@ -1,24 +1,37 @@
 import React, { useState } from "react";
 import "./registration.scss";
-import { useNavigate } from "react-router-dom";
+
 import { FaRegUserCircle, FaLock } from "react-icons/fa";
 import icon_image_shop3D from "../../../assets/images/logos/logoShopPrint3D.png";
 import icon_logo_google from "../../../assets/images/logos/google-icon.png";
 import Footer from "../../Common/footer/footer";
+import axiosClient from "../../../services/api/api";
 
 export default function Registration() {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
 
-  const handleRegister = () => {
-    if (username.trim() === "admin" && password.trim() === "123") {
-      console.log("Login successful");
-      setErrorMessage("");
-      navigate("/reality3d/home-page");
-    } else {
-      setErrorMessage("Invalid username or password");
+  const handleRegister = async () => {
+    try {
+      if (!username || !email || !password || !confirmPassword) {
+        setErrorMessage("Vui lòng điền đầy đủ thông tin.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        setErrorMessage("Mật khẩu và xác nhận mật khẩu không khớp.");
+        return;
+      }
+      const response = await axiosClient.post("api/User/CreateUser", {
+        username,
+        email,
+        password,
+      });
+    } catch (error) {
+      console.error("Error while registering:", error);
+      setErrorMessage("Đã có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.");
     }
   };
 
@@ -38,17 +51,25 @@ export default function Registration() {
         </div>
       </div>
       <div className="login-container">
-        {" "}
         <div className="login-box">
-          {" "}
           <h1 className="login-title">Đăng Kí Tài Khoản</h1>
           <form className="login-form">
             <div className="login-input-group">
               <input
-                placeholder="Tên đăng nhập "
+                placeholder="Tên đăng nhập"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                className="login-input"
+              />
+              <FaRegUserCircle className="icon" />
+            </div>
+            <div className="login-input-group">
+              <input
+                placeholder="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="login-input"
               />
               <FaRegUserCircle className="icon" />
@@ -63,13 +84,12 @@ export default function Registration() {
               />
               <FaLock className="icon" />
             </div>
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
             <div className="login-input-group">
               <input
-                placeholder="Xát nhận lại mật khẩu"
+                placeholder="Xác nhận lại mật khẩu"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="login-input"
               />
               <FaLock className="icon" />
@@ -83,14 +103,14 @@ export default function Registration() {
                 <a href="/reality3d/home-page">Trang Chủ</a>
               </div>
             </div>
-            <br></br>
+            <br />
             <div className="login-button-group">
               <button
                 type="button"
                 className="login-button"
                 onClick={handleRegister}
               >
-                ĐĂNG NHẬP
+                ĐĂNG KÍ
               </button>
             </div>
             <div className="login-button-group">

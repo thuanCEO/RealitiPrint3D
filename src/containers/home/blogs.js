@@ -34,8 +34,8 @@ export default function Blogs() {
                       {blog.user.fullName}
                     </span>
                     <img
-                      src="https://firebasestorage.googleapis.com/v0/b/webid-6c809.appspot.com/o/emiu.jpg?alt=media&token=4a6cbadc-f1d9-4589-b217-9c1f926a17d6"
-                      // src={blog.user.avatar}
+                      // src="https://firebasestorage.googleapis.com/v0/b/webid-6c809.appspot.com/o/emiu.jpg?alt=media&token=4a6cbadc-f1d9-4589-b217-9c1f926a17d6"
+                      src={blog.user.avatar}
                       className="mt-1 rounded-full"
                       width="100px"
                       height="100px"

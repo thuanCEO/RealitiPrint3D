@@ -3,6 +3,8 @@ import Footer from "../../components/Common/footer/footer";
 import Header from "../../components/Common/header/header";
 import ViewFeedBackProduct from "./feedbackProduct";
 import ProductsListPage from "../../components/products/productList/productList";
+import ModelList from "./model";
+
 export default function ProductDetail() {
   return (
     <>
@@ -127,8 +129,9 @@ export default function ProductDetail() {
           </div>
         </section>
       </div>
-      <ViewFeedBackProduct />
       <ProductsListPage />
+      <ModelList />
+      <ViewFeedBackProduct />
       <Footer />
     </>
   );
