@@ -33,17 +33,13 @@ export default function App() {
         <Route path="/reality3d/view-blog" element={<BlogPages />} />
         <Route path="/reality3d/view-cart" element={<ViewCart />} />
         <Route path="/reality3d/contact-page" element={<ContactPage />} />
-        {/* <Route
+        <Route
           path="/reality3d/product-detail/:id"
           element={<ProductDetailPage />}
-        /> */}
+        />
         <Route
           path="/reality3d/registration-account"
           element={<RegistrationAccount />}
-        />
-        <Route
-          path="/reality3d/product-detail"
-          element={<ProductDetailPage />}
         />
         <Route path="/reality3d/profile-page" element={<ProfilePages />} />
         <Route path="/reality3d/history-page" element={<HistoryPages />} />

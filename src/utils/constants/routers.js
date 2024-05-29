@@ -5,7 +5,7 @@ export const ROUTERS = {
     CONTACT: "/reality3d/contact-page",
     BLOGS: "/reality3d/view-blog",
     PRODUCTS: "/reality3d/product-list",
-    MODELS: "/reality3d/product-list",
+    MODELS: "/reality3d/product-model-list",
     EDITS: "/reality3d/edits-page",
   },
 };
