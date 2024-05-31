@@ -4,11 +4,26 @@ export default function CartItem({ product, onQuantityChange, onRemove }) {
   const handleDecrement = () => {
     if (product.quantity > 1) {
       onQuantityChange(product.id, product.quantity - 1);
+      updateCart(product.id, product.quantity - 1);
     }
   };
 
   const handleIncrement = () => {
     onQuantityChange(product.id, product.quantity + 1);
+    updateCart(product.id, product.quantity + 1);
+  };
+  const updateCart = (productId, newQuantity) => {
+    const updatedCart = JSON.parse(sessionStorage.getItem("cart")).map((item) =>
+      item.id === productId ? { ...item, quantity: newQuantity } : item
+    );
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+  const handleRemove = () => {
+    onRemove(product.id);
+    const updatedCart = JSON.parse(sessionStorage.getItem("cart")).filter(
+      (item) => item.id !== product.id
+    );
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   return (
@@ -53,7 +68,7 @@ export default function CartItem({ product, onQuantityChange, onRemove }) {
               strokeWidth="1.5"
               stroke="currentColor"
               className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
-              onClick={() => onRemove(product.id)}
+              onClick={handleRemove}
             >
               <path
                 strokeLinecap="round"

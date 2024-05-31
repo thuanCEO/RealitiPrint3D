@@ -29,7 +29,7 @@ export default function Blogs() {
                   key={blog.id}
                   className="py-8 flex flex-wrap md:flex-nowrap"
                 >
-                  <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                  {/* <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
                     <span className="font-semibold title-font text-gray-700">
                       {blog.user.fullName}
                     </span>
@@ -40,7 +40,7 @@ export default function Blogs() {
                       width="100px"
                       height="100px"
                     ></img>
-                  </div>
+                  </div> */}
                   <div className="md:flex-grow">
                     <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
                       {blog.title}
