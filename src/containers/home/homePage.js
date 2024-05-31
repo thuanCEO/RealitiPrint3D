@@ -7,7 +7,6 @@ import Header from "../../components/Common/header/header";
 import Footer from "../../components/Common/footer/footer";
 import ProductsList from "../../components/products/productList/productList";
 import NewProducts from "../home/newProducts";
-import CarouselDefault from "./carousel";
 import Blogs from "./blogs";
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);

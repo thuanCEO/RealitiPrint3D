@@ -7,11 +7,12 @@ import {
   AiOutlineShoppingCart,
   AiOutlineUser,
 } from "react-icons/ai";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../utils/constants/routers";
 
 export default function Header({ products = [] }) {
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
   const totalItems = products.reduce(
@@ -31,6 +32,7 @@ export default function Header({ products = [] }) {
   const handleLogout = () => {
     sessionStorage.clear();
     setIsLoggedIn(false);
+    navigate(0);
   };
 
   const toggleProfileMenu = () => {
@@ -85,7 +87,11 @@ export default function Header({ products = [] }) {
             <div className="col-6 header-container-top-right">
               <ul>
                 <li>
-                  <Link to={""}>
+                  <Link
+                    to={
+                      "https://www.facebook.com/realityprint3d.page?mibextid=LQQJ4d"
+                    }
+                  >
                     <AiOutlineFacebook />
                   </Link>
                 </li>

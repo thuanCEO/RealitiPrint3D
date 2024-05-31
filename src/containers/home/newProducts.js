@@ -8,22 +8,6 @@ export default function ProductsListPage() {
   useEffect(() => {
     fetchProducts();
   }, []);
-
-  // const fetchProducts = () => {
-  //   fetch("https://localhost:7170/api/Product/GetAllProducts")
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setProducts(data);
-  //     })
-  //     .catch((error) => {
-  //       setError(error);
-  //     });
-  // };
   const fetchProducts = async () => {
     try {
       const resq = await axiosClient.get("api/Product/GetAllProducts");
@@ -33,6 +17,9 @@ export default function ProductsListPage() {
       setError(error.message);
     }
   };
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <>
@@ -65,7 +52,7 @@ export default function ProductsListPage() {
                       </h3>
                     </div>
                     <p className="text-sm font-medium text-red-500">
-                      {product.price}
+                      {product.price.toLocaleString()}
                     </p>
                   </div>
                 </div>
