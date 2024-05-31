@@ -24,7 +24,7 @@ export default function Header({ products = [] }) {
     setCart(cartData);
     const total = cartData.reduce((total, item) => total + item.quantity, 0);
     setTotalItems(total);
-  }, []);
+  }, [sessionStorage.getItem("cart")]);
 
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");

@@ -19,7 +19,6 @@ export default function ProductDetail() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [cart, setCart] = useState([]);
-  const [reloadPage, setReloadPage] = useState(false);
   const fetchProductDetails = async (productId) => {
     try {
       const response = await axiosClient.get(
@@ -248,10 +247,7 @@ export default function ProductDetail() {
                       </button>
                       <button
                         className="bg-indigo-500 text-white px-4 py-2 rounded mr-2"
-                        onClick={() => {
-                          setShowPopup(false);
-                          setReloadPage(true);
-                        }}
+                        onClick={() => setShowPopup(false)}
                       >
                         Đóng
                       </button>

@@ -5,6 +5,8 @@ import Footer from "../../components/Common/footer/footer";
 
 export default function Cart() {
   const [products, setProducts] = useState([]);
+  const [selectedVoucher, setSelectedVoucher] = useState("");
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
     const cartProducts = JSON.parse(sessionStorage.getItem("cart")) || [];
@@ -34,8 +36,17 @@ export default function Cart() {
     (total, product) => total + product.price * product.quantity,
     0
   );
+
+  useEffect(() => {
+    if (selectedVoucher === "voucher1") {
+      setDiscount(subtotal * 0.1);
+    } else {
+      setDiscount(0);
+    }
+  }, [selectedVoucher, subtotal]);
+
   const shipping = 49900;
-  const total = subtotal + shipping;
+  const total = subtotal + shipping - discount;
 
   return (
     <>
@@ -60,16 +71,29 @@ export default function Cart() {
               <div className="rounded-lg md:w-1/2">
                 <div className="border bg-white p-6 shadow-md">
                   <div className="mb-2 flex justify-between">
-                    <p className="text-gray-700">Subtotal</p>
+                    <p className="text-gray-700">Tổng giá tiền</p>
                     <p className="text-gray-700">
                       {subtotal.toLocaleString()} đ
                     </p>
                   </div>
                   <div className="flex justify-between">
-                    <p className="text-gray-700">Shipping</p>
+                    <p className="text-gray-700">Phí vận chuyển</p>
                     <p className="text-gray-700">
                       {shipping.toLocaleString()}{" "}
                     </p>
+                  </div>
+                  <hr className="my-4" />
+                  <div className="flex justify-between">
+                    <p className="text-gray-700">Voucher giảm giá</p>
+                    <select
+                      value={selectedVoucher}
+                      onChange={(e) => setSelectedVoucher(e.target.value)}
+                      className="border border-gray-300 rounded p-1"
+                    >
+                      <option value="">Chọn voucher</option>
+                      <option value="voucher1">Voucher 1</option>
+                      <option value="voucher2">Voucher 2</option>
+                    </select>
                   </div>
                   <hr className="my-4" />
                   <div className="flex justify-between">
@@ -81,7 +105,7 @@ export default function Cart() {
                     </div>
                   </div>
                   <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-white hover:bg-blue-600">
-                    Check out
+                    Thanh Toán
                   </button>
                 </div>
               </div>
