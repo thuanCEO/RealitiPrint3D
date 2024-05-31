@@ -13,6 +13,7 @@ import ErrorPage from "../src/containers/errorPages/404pages";
 import ContactPage from "../src/components/user/contact/contact";
 import BestSale from "../src/containers/home/bestSale";
 import ProductsList from "../src/containers/home/product";
+import ServicesList from "../src/containers/home/service";
 import ModelsList from "../src/containers/home/modelPage";
 import BlogPages from "../src/containers/home/blogPage";
 import ProductDetailPage from "../src/containers/home/productDetail";
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="/reality3d/product-list" element={<ProductsList />} />
         <Route path="/reality3d/product-model-list" element={<ModelsList />} />
         <Route path="/reality3d/view-blog" element={<BlogPages />} />
+        <Route path="/reality3d/service-page" element={<ServicesList />} />
         <Route path="/reality3d/view-cart" element={<ViewCart />} />
         <Route path="/reality3d/contact-page" element={<ContactPage />} />
         <Route

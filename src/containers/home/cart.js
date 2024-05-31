@@ -7,41 +7,39 @@ export default function Cart() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const cartProducts = sessionStorage.getItem("cartProducts");
-    if (cartProducts) {
-      setProducts(JSON.parse(cartProducts));
-    }
+    const cartProducts = JSON.parse(sessionStorage.getItem("cart")) || [];
+    setProducts(cartProducts);
   }, []);
 
-  useEffect(() => {
-    sessionStorage.setItem("cartProducts", JSON.stringify(products));
-  }, [products]);
-
   const handleQuantityChange = (productId, newQuantity) => {
-    setProducts(
-      products.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: newQuantity }
-          : product
-      )
+    const updatedProducts = products.map((product) =>
+      product.id === productId ? { ...product, quantity: newQuantity } : product
     );
+    setProducts(updatedProducts);
+    updateSessionStorage(updatedProducts);
   };
 
   const handleRemoveProduct = (productId) => {
-    setProducts(products.filter((product) => product.id !== productId));
+    const updatedProducts = products.filter(
+      (product) => product.id !== productId
+    );
+    setProducts(updatedProducts);
+    updateSessionStorage(updatedProducts);
+  };
+  const updateSessionStorage = (updatedProducts) => {
+    sessionStorage.setItem("cart", JSON.stringify(updatedProducts));
   };
 
   const subtotal = products.reduce(
     (total, product) => total + product.price * product.quantity,
     0
   );
-
   const shipping = 49900;
   const total = subtotal + shipping;
 
   return (
     <>
-      <Header products={products} />
+      <Header />
       <main className="flex-1 p-6 bg-gray-300 flex justify-center items-center">
         <div className="p-6 bg-gray-100 rounded shadow-md w-full h-full flex flex-col items-center">
           <h1 className="mb-10 text-center text-2xl font-bold">
@@ -56,7 +54,6 @@ export default function Cart() {
                     product={product}
                     onQuantityChange={handleQuantityChange}
                     onRemove={handleRemoveProduct}
-                    products={products}
                   />
                 ))}
               </div>

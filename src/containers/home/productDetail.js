@@ -17,7 +17,9 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [unitPrice, setUnitPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [reloadPage, setReloadPage] = useState(false);
   const fetchProductDetails = async (productId) => {
     try {
       const response = await axiosClient.get(
@@ -34,7 +36,6 @@ export default function ProductDetail() {
   const handleLogin = () => {
     navigate("/reality3d/login-account");
   };
-
   const handleSizeChange = (e) => {
     const selected = e.target.value;
     setSelectedSize(selected);
@@ -68,6 +69,7 @@ export default function ProductDetail() {
       const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
       const productToAdd = {
         id: productDetails.id,
+        imageUrl: productDetails.imageUrl,
         name: productDetails.productName,
         description: productDetails.description,
         price: totalPrice,
@@ -76,10 +78,14 @@ export default function ProductDetail() {
       };
       const updatedCart = [...cart, productToAdd];
       sessionStorage.setItem("cart", JSON.stringify(updatedCart));
-      console.log("Product added to cart");
+      setCart(updatedCart);
+      setShowSuccessPopup(true);
     }
   };
-
+  useEffect(() => {
+    const storedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    setCart(storedCart);
+  }, []);
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");
     if (userDataFromStorage) {
@@ -98,7 +104,7 @@ export default function ProductDetail() {
   if (error) {
     return (
       <>
-        <Header />
+        <Header products={cart} />
         <div className="bg-gray-100 py-10 text-center">
           <p className="text-red-500">{error}</p>
         </div>
@@ -110,7 +116,7 @@ export default function ProductDetail() {
   if (!productDetails) {
     return (
       <>
-        <Header />
+        <Header products={cart} />
         <div className="bg-gray-100 py-10 text-center">
           <p>Loading...</p>
         </div>
@@ -121,7 +127,7 @@ export default function ProductDetail() {
 
   return (
     <>
-      <Header />
+      <Header products={cart} />
       <div className="bg-gray-100 py-10">
         <section className="text-gray-600 body-font overflow-hidden">
           <div className="container-fluid px-5 py-24 mx-auto max-w-screen-xl">
@@ -210,6 +216,21 @@ export default function ProductDetail() {
                     Thêm vào giỏ hàng
                   </button>
                 </div>
+                {showSuccessPopup && (
+                  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-6 rounded shadow-lg text-center">
+                      <h2 className="text-xl mb-4 text-green-500">
+                        Sản phẩm đã được thêm vào giỏ hàng!
+                      </h2>
+                      <button
+                        className="bg-indigo-500 text-white px-4 py-2 rounded"
+                        onClick={() => setShowSuccessPopup(false)}
+                      >
+                        Đóng
+                      </button>
+                    </div>
+                  </div>
+                )}
                 {showPopup && (
                   <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-6 rounded shadow-lg text-center">
@@ -227,7 +248,10 @@ export default function ProductDetail() {
                       </button>
                       <button
                         className="bg-indigo-500 text-white px-4 py-2 rounded mr-2"
-                        onClick={() => setShowPopup(false)}
+                        onClick={() => {
+                          setShowPopup(false);
+                          setReloadPage(true);
+                        }}
                       >
                         Đóng
                       </button>

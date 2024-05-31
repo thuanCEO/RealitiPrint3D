@@ -15,11 +15,16 @@ export default function Header({ products = [] }) {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
-  const totalItems = products.reduce(
-    (total, product) => total + product.quantity,
-    0
-  );
+  const [cart, setCart] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
+
   const location = useLocation();
+  useEffect(() => {
+    const cartData = JSON.parse(sessionStorage.getItem("cart")) || [];
+    setCart(cartData);
+    const total = cartData.reduce((total, item) => total + item.quantity, 0);
+    setTotalItems(total);
+  }, []);
 
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");
@@ -55,6 +60,10 @@ export default function Header({ products = [] }) {
     {
       name: "Model",
       path: ROUTERS.USER.MODELS,
+    },
+    {
+      name: "Dịch Vụ",
+      path: ROUTERS.USER.SERVICE3D,
     },
     {
       name: "Thiết Kế",
