@@ -17,6 +17,7 @@ export default function CartItem({ product, onQuantityChange, onRemove }) {
       item.id === productId ? { ...item, quantity: newQuantity } : item
     );
     sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+    window.location.reload();
   };
   const handleRemove = () => {
     onRemove(product.id);
@@ -24,6 +25,7 @@ export default function CartItem({ product, onQuantityChange, onRemove }) {
       (item) => item.id !== product.id
     );
     sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+    window.location.reload();
   };
 
   return (
