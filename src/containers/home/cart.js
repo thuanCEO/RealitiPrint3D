@@ -4,44 +4,18 @@ import Header from "../../components/Common/header/header";
 import Footer from "../../components/Common/footer/footer";
 
 export default function Cart() {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Nike Air Max 2019",
-      size: "36EU - 4US",
-      price: 259000,
-      quantity: 2,
-      imageUrl:
-        "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-    },
-    {
-      id: 2,
-      name: "Nike Air Max 2019",
-      size: "36EU - 4US",
-      price: 259000,
-      quantity: 2,
-      imageUrl:
-        "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80",
-    },
-    {
-      id: 3,
-      name: "Nike Air Max 2019",
-      size: "36EU - 4US",
-      price: 259000,
-      quantity: 2,
-      imageUrl:
-        "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80",
-    },
-    {
-      id: 4,
-      name: "Nike Air Max 2019",
-      size: "36EU - 4US",
-      price: 259000,
-      quantity: 2,
-      imageUrl:
-        "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80",
-    },
-  ]);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const cartProducts = sessionStorage.getItem("cartProducts");
+    if (cartProducts) {
+      setProducts(JSON.parse(cartProducts));
+    }
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem("cartProducts", JSON.stringify(products));
+  }, [products]);
 
   const handleQuantityChange = (productId, newQuantity) => {
     setProducts(
@@ -62,14 +36,7 @@ export default function Cart() {
     0
   );
 
-  useEffect(() => {
-    const cartProducts = sessionStorage.getItem("cartProducts");
-    if (cartProducts) {
-      setProducts(JSON.parse(cartProducts));
-    }
-  }, []);
-
-  const shipping = 49900; // example shipping cost
+  const shipping = 49900;
   const total = subtotal + shipping;
 
   return (
@@ -89,6 +56,7 @@ export default function Cart() {
                     product={product}
                     onQuantityChange={handleQuantityChange}
                     onRemove={handleRemoveProduct}
+                    products={products}
                   />
                 ))}
               </div>

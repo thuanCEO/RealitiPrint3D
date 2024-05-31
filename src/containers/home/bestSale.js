@@ -9,7 +9,7 @@ export default function BestSalePage() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  });
 
   const fetchProducts = async () => {
     try {
@@ -69,7 +69,7 @@ export default function BestSalePage() {
                       </h3>
                     </div>
                     <p className="text-sm font-medium text-red-500">
-                      {product.price}
+                      {product.price.toLocaleString()}
                     </p>
                   </div>
                 </div>

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../services/api/api";
-
+import { useParams } from "react-router-dom";
 export default function ViewFeedBackProduct() {
+  const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-  const fetchProducts = async () => {
+  const fetchProducts = async (productId) => {
     try {
-      const resq = await axiosClient.get("api/Product/GetAllProducts");
+      const resq = await axiosClient.get(
+        `/api/Product/GetProductById?id=${productId}`
+      );
       setProducts(resq.data);
       console.log(resq.data);
     } catch (error) {
@@ -15,8 +18,12 @@ export default function ViewFeedBackProduct() {
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    if (id) {
+      fetchProducts(id);
+    } else {
+      setError("Error: No product ID provided.");
+    }
+  }, [id]);
   return (
     <>
       <section class="text-gray-600 body-font overflow-hidden">

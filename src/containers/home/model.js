@@ -56,7 +56,7 @@ export default function ModelList() {
                         </h3>
                       </div>
                       <p className="text-sm font-medium text-red-500">
-                        {product.price}
+                        {product.price.toLocaleString()}
                       </p>
                     </div>
                   </div>
