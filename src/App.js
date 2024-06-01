@@ -20,7 +20,7 @@ import ProductDetailPage from "../src/containers/home/productDetail";
 import ViewCart from "../src/containers/home/cart";
 import EditPages from "../src/containers/home/editPage";
 import ProfilePages from "../src/components/user/profile/profile";
-import HistoryPages from "../src/components/user/order/history";
+import HistoryPages from "../src/components/user/order/orderHistory";
 
 export default function App() {
   return (

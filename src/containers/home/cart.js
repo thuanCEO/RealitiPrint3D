@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import CartItem from "./cartItem";
 import Header from "../../components/Common/header/header";
 import Footer from "../../components/Common/footer/footer";
+import axiosClient from "../../services/api/api";
+import SuccessModal from "./successModal";
 
 export default function Cart() {
   const [products, setProducts] = useState([]);
   const [selectedVoucher, setSelectedVoucher] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     const cartProducts = JSON.parse(sessionStorage.getItem("cart")) || [];
@@ -28,6 +31,7 @@ export default function Cart() {
     setProducts(updatedProducts);
     updateSessionStorage(updatedProducts);
   };
+
   const updateSessionStorage = (updatedProducts) => {
     sessionStorage.setItem("cart", JSON.stringify(updatedProducts));
   };
@@ -47,6 +51,57 @@ export default function Cart() {
 
   const shipping = 49900;
   const total = subtotal + shipping - discount;
+
+  const fetchCheckOut = async () => {
+    try {
+      const userData = JSON.parse(sessionStorage.getItem("userData"));
+      if (userData && userData.id) {
+        const userId = userData.id;
+
+        const orderDTO = {
+          userId: userId,
+          paymentId: 1,
+          totalPrice: total,
+          finalPrice: total,
+        };
+
+        const orderDetailDTO = products.map((product) => ({
+          productId: product.id,
+          quantity: product.quantity,
+          totalPrice: product.price * product.quantity,
+        }));
+
+        const response = await axiosClient.post(
+          "api/Order/CreateOrder",
+          {
+            orderDTO,
+            orderDetailDTO,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Order created successfully:", response.data);
+
+        sessionStorage.removeItem("cart");
+
+        // Show the success modal
+        setShowSuccessModal(true);
+      } else {
+        console.error("User data or user ID not found.");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    window.location.reload();
+  };
 
   return (
     <>
@@ -104,7 +159,10 @@ export default function Cart() {
                       </p>
                     </div>
                   </div>
-                  <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-white hover:bg-blue-600">
+                  <button
+                    className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-white hover:bg-blue-600"
+                    onClick={fetchCheckOut}
+                  >
                     Thanh Toán
                   </button>
                 </div>
@@ -115,6 +173,8 @@ export default function Cart() {
       </main>
 
       <Footer />
+
+      {showSuccessModal && <SuccessModal onClose={handleCloseModal} />}
     </>
   );
 }

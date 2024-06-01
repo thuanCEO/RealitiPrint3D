@@ -6,6 +6,8 @@ import icon_image_shop3D from "../../../assets/images/logos/logoShopPrint3D.png"
 import icon_logo_google from "../../../assets/images/logos/google-icon.png";
 import Footer from "../../Common/footer/footer";
 import axiosClient from "../../../services/api/api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [userName, setUserName] = useState("");
@@ -39,26 +41,31 @@ export default function Login() {
       setErrorMessage("");
       const userData = response.data;
       console.log("User data:", userData);
-      const { roleId, fullname, gemail, address, token } = userData;
+      const { roleId, fullname, gemail, address, id } = userData;
       sessionStorage.setItem("userData", JSON.stringify(userData));
       sessionStorage.setItem("roleId", roleId);
       sessionStorage.setItem("fullname", fullname);
       sessionStorage.setItem("gemail", gemail);
       sessionStorage.setItem("address", address);
+      sessionStorage.setItem("id", id);
       //    sessionStorage.setItem("token", token);
 
-      if (roleId === 1) {
-        //role 1= admin
-        navigate("/reality3d/home-page");
-      }
-      if (roleId === 2) {
-        // role 2 = managements
-        navigate("/reality3d/home-page");
-      }
-      if (roleId === 3) {
-        //role 3 = staff
-        navigate("/reality3d/home-page");
-      }
+      toast.success("Đăng nhập thành công!");
+
+      setTimeout(() => {
+        if (roleId === 1) {
+          //role 1= admin
+          navigate("/reality3d/home-page");
+        }
+        if (roleId === 2) {
+          // role 2 = managements
+          navigate("/reality3d/home-page");
+        }
+        if (roleId === 3) {
+          //role 3 = staff
+          navigate("/reality3d/home-page");
+        }
+      }, 2000);
     } catch (error) {
       console.error("Login failed", error);
       setErrorMessage("Invalid username or password");
@@ -145,6 +152,7 @@ export default function Login() {
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }
