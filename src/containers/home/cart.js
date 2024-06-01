@@ -89,6 +89,7 @@ export default function Cart() {
         sessionStorage.removeItem("cart");
 
         // Show the success modal
+
         setShowSuccessModal(true);
       } else {
         console.error("User data or user ID not found.");
@@ -159,6 +160,15 @@ export default function Cart() {
                       </p>
                     </div>
                   </div>
+                  {/* Checkout */}
+
+                  {/* <button
+                    className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-white hover:bg-blue-600"
+                    onClick={fetchCheckOut}
+                  >
+                    Thanh Toán
+                  </button> */}
+
                   <button
                     className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-white hover:bg-blue-600"
                     onClick={fetchCheckOut}
