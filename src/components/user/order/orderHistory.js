@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../Common/header/header";
 import Footer from "../../Common/footer/footer";
-import ProfileFormat from "./profileForm";
+import HisoryFormat from "./history";
 
 export default function ProfilePages() {
   const [userData, setUserData] = useState(null);
@@ -67,9 +67,9 @@ export default function ProfilePages() {
           <main className="flex-1 p-6 bg-gray-100">
             <div className="p-6 bg-white rounded shadow-md">
               <h2 className="text-2xl font-bold text-center">
-                Chi tiết thông tin cá nhân
+                Lịch sử đơn hàng
               </h2>
-              <ProfileFormat />
+              <HisoryFormat />
             </div>
           </main>
         </div>
