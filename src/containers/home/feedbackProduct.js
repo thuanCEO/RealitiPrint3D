@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../services/api/api";
 import { useParams } from "react-router-dom";
+
 export default function ViewFeedBackProduct() {
   const { id } = useParams();
-  const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
-  const fetchProducts = async (productId) => {
+
+  const fetchProduct = async (productId) => {
     try {
       const resq = await axiosClient.get(
         `/api/Product/GetProductById?id=${productId}`
       );
-      setProducts(resq.data);
-      console.log(resq.data);
+      setProduct(resq.data);
     } catch (error) {
       setError(error.message);
     }
@@ -19,57 +20,48 @@ export default function ViewFeedBackProduct() {
 
   useEffect(() => {
     if (id) {
-      fetchProducts(id);
+      fetchProduct(id);
     } else {
       setError("Error: No product ID provided.");
     }
   }, [id]);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!product) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <>
-      <section class="text-gray-600 body-font overflow-hidden">
-        <div className="container px-5 py-24 mx-auto h-full flex flex-col justify-center">
-          <div class="-my-8 divide-y-2 divide-gray-100">
-            <div class="py-8 flex flex-wrap md:flex-nowrap">
-              <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                <span class="font-semibold title-font text-gray-700">
-                  Đỗ Hữu Thuận
-                </span>
-                <span class="mt-1 text-gray-500 text-sm">12 Jun 2019</span>
+    <section className="text-gray-600 body-font overflow-hidden">
+      <div className="container px-5 py-24 mx-auto h-full flex flex-col justify-center">
+        <div className="-my-8 divide-y-2 divide-gray-100">
+          {product.feedbacks && product.feedbacks.length > 0 ? (
+            product.feedbacks.map((feedback) => (
+              <div
+                key={feedback.id}
+                className="py-8 flex flex-wrap md:flex-nowrap"
+              >
+                <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                  <span className="font-semibold title-font text-gray-700">
+                    {feedback.userId}
+                  </span>
+                </div>
+                <div className="md:flex-grow">
+                  <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
+                    {feedback.title}
+                  </h2>
+                  <p className="leading-relaxed">{feedback.description}</p>
+                </div>
               </div>
-              <div class="md:flex-grow">
-                <h2 class="text-2xl font-medium text-gray-900 title-font mb-2">
-                  Bitters hashtag waistcoat fashion axe chia unicorn
-                </h2>
-                <p class="leading-relaxed">
-                  Glossier echo park pug, church-key sartorial biodiesel
-                  vexillologist pop-up snackwave ramps cornhole. Marfa 3 wolf
-                  moon party messenger bag selfies, poke vaporware kombucha
-                  lumbersexual pork belly polaroid hoodie portland craft beer.
-                </p>
-              </div>
-            </div>
-            <div class="py-8 flex flex-wrap md:flex-nowrap">
-              <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                <span class="font-semibold title-font text-gray-700">
-                  Ngô Thị Thùy Trang
-                </span>
-                <span class="mt-1 text-gray-500 text-sm">12 Jun 2019</span>
-              </div>
-              <div class="md:flex-grow">
-                <h2 class="text-2xl font-medium text-gray-900 title-font mb-2">
-                  Bitters hashtag waistcoat fashion axe chia unicorn
-                </h2>
-                <p class="leading-relaxed">
-                  Glossier echo park pug, church-key sartorial biodiesel
-                  vexillologist pop-up snackwave ramps cornhole. Marfa 3 wolf
-                  moon party messenger bag selfies, poke vaporware kombucha
-                  lumbersexual pork belly polaroid hoodie portland craft beer.
-                </p>
-              </div>
-            </div>
-          </div>
+            ))
+          ) : (
+            <p>No feedback available for this product.</p>
+          )}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
