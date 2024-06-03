@@ -22,8 +22,6 @@ import EditPages from "../src/containers/home/editPage";
 import ProfilePages from "../src/components/user/profile/profile";
 import HistoryPages from "../src/components/user/order/orderHistory";
 
-import PaymentPages from "../src/containers/home/paymentPage";
-
 export default function App() {
   return (
     <Router>
@@ -50,8 +48,6 @@ export default function App() {
         <Route path="/reality3d/profile-page" element={<ProfilePages />} />
         <Route path="/reality3d/history-page" element={<HistoryPages />} />
         <Route path="/reality3d/edits-page" element={<EditPages />} />
-
-        <Route path="/reality3d/payment-page" element={<PaymentPages />} />
       </Routes>
     </Router>
   );

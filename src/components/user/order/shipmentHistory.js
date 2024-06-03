@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../Common/header/header";
 import Footer from "../../Common/footer/footer";
-import HisoryFormat from "./history";
+import ProfileFormat from "./profileForm";
 
-export default function OrderHistoryPages() {
+export default function ShipmentHistoryPages() {
   const [userData, setUserData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -67,9 +67,9 @@ export default function OrderHistoryPages() {
           <main className="flex-1 p-6 bg-gray-100">
             <div className="p-6 bg-white rounded shadow-md">
               <h2 className="text-2xl font-bold text-center">
-                Lịch sử đơn hàng
+                Chi tiết thông tin cá nhân
               </h2>
-              <HisoryFormat />
+              <ProfileFormat />
             </div>
           </main>
         </div>
