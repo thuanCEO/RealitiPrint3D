@@ -22,6 +22,19 @@ import EditPages from "../src/containers/home/editPage";
 import ProfilePages from "../src/components/user/profile/profile";
 import HistoryPages from "../src/components/user/order/orderHistory";
 
+// Management
+import ManagementDashboardPage from "./containers/management/managementDashboard";
+import ManagementAccountsPage from "./containers/management/managementAccount";
+import ManagementProductsPage from "./containers/management/managementProduct";
+import ManagementBlogsPage from "./containers/management/managementBlog";
+import ManagementOrdersPage from "./containers/management/managementOrder";
+import ManagementVouchersPage from "./containers/management/managementVoucher";
+import ManagementFeedbacksPage from "./containers/management/managementFeedback";
+import ManagementCategoriesPage from "./containers/management/managementCategory";
+
+import ManagementAccountDetailsPage from "./containers/management/managementAccountDetails";
+import ManagementProductDetailsPage from "./containers/management/managementProductDetails";
+
 export default function App() {
   return (
     <Router>
@@ -48,6 +61,50 @@ export default function App() {
         <Route path="/reality3d/profile-page" element={<ProfilePages />} />
         <Route path="/reality3d/history-page" element={<HistoryPages />} />
         <Route path="/reality3d/edits-page" element={<EditPages />} />
+
+        {/* Manager management*/}
+        <Route
+          path="/reality3d/management/management-dashboard-page"
+          element={<ManagementDashboardPage />}
+        />
+        <Route
+          path="/reality3d/management/management-accounts-page"
+          element={<ManagementAccountsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-products-page"
+          element={<ManagementProductsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-blogs-page"
+          element={<ManagementBlogsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-orders-page"
+          element={<ManagementOrdersPage />}
+        />
+        <Route
+          path="/reality3d/management/management-vouchers-page"
+          element={<ManagementVouchersPage />}
+        />
+        <Route
+          path="/reality3d/management/management-feedbacks-page"
+          element={<ManagementFeedbacksPage />}
+        />
+        <Route
+          path="/reality3d/management/management-categories-page"
+          element={<ManagementCategoriesPage />}
+        />
+
+        {/* Manager action*/}
+        <Route
+          path="/reality3d/management/management-account-details-page/:id"
+          element={<ManagementAccountDetailsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-product-details-page/:id"
+          element={<ManagementProductDetailsPage />}
+        />
       </Routes>
     </Router>
   );

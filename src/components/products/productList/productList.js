@@ -7,7 +7,7 @@ export default function ProductsListPage() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  });
 
   const fetchProducts = async () => {
     try {

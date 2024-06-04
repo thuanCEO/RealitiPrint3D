@@ -9,4 +9,8 @@ export const ROUTERS = {
     EDITS: "/reality3d/edits-page",
     SERVICE3D: "/reality3d/service-page",
   },
+  MANAGEMENT: {
+    MANAGEMENT_DASHBOARD: "/reality3d/management/management-dashboard-page",
+    MANAGEMENT_ACCOUNT: "/reality3d/management/management-accounts-page",
+  },
 };
