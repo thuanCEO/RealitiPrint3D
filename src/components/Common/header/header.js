@@ -15,7 +15,7 @@ export default function Header({ products = [] }) {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
-  const [cart, setCart] = useState([]);
+  const [, setCart] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
 
   const location = useLocation();

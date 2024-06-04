@@ -12,7 +12,6 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
-import Footer from "../../components/Common/footer/footer";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
@@ -21,6 +20,7 @@ import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../services/api/api";
+import { MdCheck, MdClose } from "react-icons/md";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -96,14 +96,14 @@ export default function ManagementAccount() {
     },
     { field: "fullName", headerName: "Full Name", width: 140 },
     { field: "phoneNumber", headerName: "Phone", width: 80 },
-    { field: "email", headerName: "Email", width: 80 },
+    { field: "email", headerName: "Email", width: 150 },
     { field: "userName", headerName: "UserName", width: 160 },
     {
-      field: "password",
-      headerName: "Password",
-      width: 160,
+      field: "roleId",
+      headerName: "Role",
+      width: 100,
     },
-    { field: "address", headerName: "Address", width: 160 },
+    { field: "address", headerName: "Address", width: 100 },
     {
       field: "avatar",
       headerName: "Avatar",
@@ -118,7 +118,38 @@ export default function ManagementAccount() {
         />
       ),
     },
-    { field: "status", headerName: "Status", width: 30 },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 30,
+      renderCell: (params) => {
+        if (params.value === 1) {
+          return (
+            <MdCheck
+              style={{
+                color: "green",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: 20,
+              }}
+            />
+          );
+        } else if (params.value === 2) {
+          return (
+            <span
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MdClose style={{ fontSize: 16, color: "red" }} />
+            </span>
+          );
+        }
+        return null;
+      },
+    },
     {
       field: "detail",
       headerName: "Detail",
@@ -193,29 +224,40 @@ export default function ManagementAccount() {
   const fetchUsers = async () => {
     try {
       const response = await axiosClient.get("/api/User/GetAllUsers");
-      const ordersWithId = response.data.map((orders, index) => ({
-        ...orders,
+      console.log("All users:", response.data);
+      // Log roleId values
+      const roleIds = response.data.map((user) => user.roleId);
+      console.log("Role IDs:", roleIds);
+      // Filter out users with roleId equal to 1 or 2
+      const filteredData = response.data.filter(
+        (user) => user.roleId === 3 || user.roleId === 4
+      );
+      console.log("Filtered users:", filteredData);
+      // Map through the filtered data to add an id field to each user
+      const usersWithId = filteredData.map((user, index) => ({
+        ...user,
         id: index + 1,
       }));
-      setUser(ordersWithId);
+      setUser(usersWithId);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching users:", error);
     }
   };
 
-  const handleDetailsClick = (userID) => {
-    navigate(`/detailsID/${userID}`);
+  const handleDetailsClick = (id) => {
+    navigate(`/reality3d/management/management-account-details-page/${id}`);
   };
   // Delete Users -> delete from database
   const deleteUsers = async (Id) => {
     try {
-      await axiosClient.delete(`/api/Users/${Id}`);
+      await axiosClient.delete(`/api/User/GetUserById/${Id}`);
       const updatedUsers = users.filter((user) => user.Id !== Id);
       setUser(updatedUsers);
     } catch (error) {
       console.error("Error deleting user:", error);
     }
   };
+
   return (
     <>
       <div className="min-h-full">
@@ -398,26 +440,25 @@ export default function ManagementAccount() {
             </h1>
           </div>
         </header>
+        {/* Main  */}
         <div>
-          <main
-            style={{
-              height: "100vh",
-              width: "100vw",
-              margin: 0,
-              padding: 0,
-            }}
-          >
+          <main>
             <div className="flex flex-wrap justify-center mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 h-screen w-full">
-              <div className="w-full  h-screen">
+              <div className="w-full h-full">
+                {" "}
                 <Row className="justify-content-center">
                   <Col>
                     <DataGrid
-                      className="table-manage-order-box"
                       rows={users}
                       columns={columns}
                       pageSize={10}
                       pagination
-                    />
+                    >
+                      <div style={{ textAlign: "center" }}>
+                        <button onClick={() => {}}>Previous</button>
+                        <button onClick={() => {}}>Next</button>
+                      </div>
+                    </DataGrid>
                   </Col>
                 </Row>
               </div>

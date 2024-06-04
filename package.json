@@ -26,6 +26,7 @@
     "react-draggable": "^4.4.6",
     "react-i18next": "^14.1.1",
     "react-icons": "^5.1.0",
+    "react-modal": "^3.16.1",
     "react-multi-carousel": "^2.8.5",
     "react-qr-code": "^2.0.13",
     "react-router-dom": "^6.22.2",
@@ -36,11 +37,12 @@
     "sass": "^1.71.1",
     "slick-carousel": "^1.8.1",
     "tailblocks": "^0.0.13",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "webpack": "^5.91.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "node --max-old-space-size=4096 node_modules/.bin/react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -63,6 +65,7 @@
     ]
   },
   "devDependencies": {
+    "compression-webpack-plugin": "^11.1.0",
     "tailwindcss": "^3.4.3"
   }
 }

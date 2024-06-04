@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from "../../Common/header/header";
 import Footer from "../../Common/footer/footer";
 import ProfileFormat from "./profileForm";
 
 export default function ProfilePages() {
-  const [userData, setUserData] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
+  const [setUserData] = useState(null);
+  const [setIsLoggedIn] = useState(false);
+
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");
     if (userDataFromStorage) {
       setUserData(JSON.parse(userDataFromStorage));
       setIsLoggedIn(true);
     }
-  }, []);
+  });
 
   return (
     <>

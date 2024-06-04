@@ -30,7 +30,10 @@ import ManagementBlogsPage from "./containers/management/managementBlog";
 import ManagementOrdersPage from "./containers/management/managementOrder";
 import ManagementVouchersPage from "./containers/management/managementVoucher";
 import ManagementFeedbacksPage from "./containers/management/managementFeedback";
-import ManagementCategorysPage from "./containers/management/managementCategory";
+import ManagementCategoriesPage from "./containers/management/managementCategory";
+
+import ManagementAccountDetailsPage from "./containers/management/managementAccountDetails";
+import ManagementProductDetailsPage from "./containers/management/managementProductDetails";
 
 export default function App() {
   return (
@@ -59,7 +62,7 @@ export default function App() {
         <Route path="/reality3d/history-page" element={<HistoryPages />} />
         <Route path="/reality3d/edits-page" element={<EditPages />} />
 
-        {/* Manager */}
+        {/* Manager management*/}
         <Route
           path="/reality3d/management/management-dashboard-page"
           element={<ManagementDashboardPage />}
@@ -90,7 +93,17 @@ export default function App() {
         />
         <Route
           path="/reality3d/management/management-categories-page"
-          element={<ManagementCategorysPage />}
+          element={<ManagementCategoriesPage />}
+        />
+
+        {/* Manager action*/}
+        <Route
+          path="/reality3d/management/management-account-details-page/:id"
+          element={<ManagementAccountDetailsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-product-details-page/:id"
+          element={<ManagementProductDetailsPage />}
         />
       </Routes>
     </Router>

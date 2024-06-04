@@ -5,29 +5,24 @@ import {
   DisclosureButton,
   DisclosurePanel,
   Menu,
-  MenuButton,
   MenuItem,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useLocation } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
-import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
-import { BiSolidDetail } from "react-icons/bi";
-import { FaRegEdit } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+
 import axiosClient from "../../services/api/api";
-import { MdCheck, MdClose } from "react-icons/md";
+import { useParams } from "react-router-dom";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
   imageUrl:
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
-
+const roleMapping = {
+  1: "Admin",
+  2: "Manager",
+  3: "Staff",
+  4: "Customer",
+};
 const navigation = [
   {
     name: "Dashboard",
@@ -81,152 +76,34 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ManagementBlog() {
+export default function ManagementAccountDetails() {
   const [open, setOpen] = useState(false);
-  const location = useLocation();
-  const [users, setUser] = useState([]);
-
-  const navigate = useNavigate();
-
-  const columns = [
-    {
-      field: "id",
-      headerName: "No",
-      width: 70,
-    },
-    { field: "title", headerName: "Title", width: 200 },
-    { field: "content", headerName: "Content", width: 300 },
-    { field: "userId", headerName: "UserId", width: 80 },
-    { field: "user", headerName: "User", width: 160 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 30,
-      renderCell: (params) => {
-        if (params.value === 1) {
-          return (
-            <MdCheck
-              style={{
-                color: "green",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: 20,
-              }}
-            />
-          );
-        } else if (params.value === 2) {
-          return (
-            <span
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <MdClose style={{ fontSize: 16, color: "red" }} />
-            </span>
-          );
-        }
-        return null;
-      },
-    },
-    {
-      field: "detail",
-      headerName: "Detail",
-      sortable: false,
-      width: 80,
-      renderCell: (params) => {
-        const onClick = (e) => {
-          e.stopPropagation();
-          handleDetailsClick(params.row.id);
-        };
-
-        return (
-          <Button variant="contained" color="primary" onClick={onClick}>
-            <BiSolidDetail className="icon-table" />
-          </Button>
-        );
-      },
-    },
-    {
-      field: "edit",
-      headerName: "Edit",
-      sortable: false,
-      width: 80,
-      renderCell: (params) => {
-        return (
-          <Button variant="contained" color="primary">
-            <FaRegEdit className="icon-table" />
-          </Button>
-        );
-      },
-    },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
-          </Button>
-        );
-      },
-    },
-  ].map((column) => ({
-    ...column,
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-  }));
-
+  const [userDetails, setUserDetails] = useState(null);
+  const [error, setError] = useState(null);
+  const { id } = useParams();
   function toggleOpen() {
     setOpen(!open);
   }
 
+  const fetchUserDetails = async (userId) => {
+    try {
+      const response = await axiosClient.get(
+        `/api/User/GetUserById?id=${userId}`
+      );
+      setUserDetails(response.data);
+    } catch (error) {
+      setError("Error fetching user details.");
+    }
+  };
+
   useEffect(() => {
-    const url = location.pathname;
-    navigation.forEach((item) => {
-      if (url === item.path) {
-        item.current = true;
-      } else {
-        item.current = false;
-      }
-    });
-    fetchUsers();
-  }, [location]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axiosClient.get("/api/Blog/GetAllBlogs");
-      const ordersWithId = response.data.map((orders, index) => ({
-        ...orders,
-        id: index + 1,
-      }));
-      setUser(ordersWithId);
-    } catch (error) {
-      console.error("Error fetching products:", error);
+    if (id) {
+      fetchUserDetails(id);
+    } else {
+      setError("Error: No user ID provided.");
     }
-  };
+  }, [id]);
 
-  const handleDetailsClick = (userID) => {
-    navigate(`/detailsID/${userID}`);
-  };
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
-    try {
-      await axiosClient.delete(`/api/Users/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
   return (
     <>
       <div className="min-h-full">
@@ -265,47 +142,6 @@ export default function ManagementBlog() {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
-                          </MenuButton>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <MenuItem key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </MenuItem>
-                            ))}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
@@ -405,7 +241,7 @@ export default function ManagementBlog() {
         <header className="bg-white shadow h-16 w-full">
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Management Accounts
+              Management Details Accounts
             </h1>
           </div>
         </header>
@@ -414,22 +250,78 @@ export default function ManagementBlog() {
           <main>
             <div className="flex flex-wrap justify-center mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 h-screen w-full">
               <div className="w-full h-full">
-                {" "}
-                <Row className="justify-content-center">
-                  <Col>
-                    <DataGrid
-                      rows={users}
-                      columns={columns}
-                      pageSize={10}
-                      pagination
-                    >
-                      <div style={{ textAlign: "center" }}>
-                        <button onClick={() => {}}>Previous</button>
-                        <button onClick={() => {}}>Next</button>
+                {userDetails ? (
+                  <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl mx-auto">
+                    <h2 className="text-2xl font-bold mb-4">User Details</h2>
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">ID:</span>
+                        <span>{userDetails.id}</span>
                       </div>
-                    </DataGrid>
-                  </Col>
-                </Row>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Avatar:</span>
+                        <img
+                          className="h-12 w-12 rounded-full"
+                          src={userDetails.avatar}
+                          alt="User Avatar"
+                        />
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Full Name:</span>
+                        <span>{userDetails.fullName}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Phone Number:</span>
+                        <span>{userDetails.phoneNumber}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Email:</span>
+                        <span>{userDetails.email}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">User Name:</span>
+                        <span>{userDetails.userName}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Password:</span>
+                        <span>{userDetails.password}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Address:</span>
+                        <span>{userDetails.address}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Status:</span>
+                        <span>{userDetails.status}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Role ID:</span>
+                        <span>{roleMapping[userDetails.roleId]}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Role:</span>
+                        <span>{userDetails.role}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Carts:</span>
+                        <span>{userDetails.carts}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Feedbacks:</span>
+                        <span>{userDetails.feedbacks}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Orders:</span>
+                        <span>{userDetails.orders}</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center mt-4">Loading...</div>
+                )}
+                {error && (
+                  <div className="text-red-500 text-center mt-4">{error}</div>
+                )}
               </div>
             </div>
           </main>
