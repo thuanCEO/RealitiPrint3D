@@ -22,6 +22,16 @@ import EditPages from "../src/containers/home/editPage";
 import ProfilePages from "../src/components/user/profile/profile";
 import HistoryPages from "../src/components/user/order/orderHistory";
 
+// Management
+import ManagementDashboardPage from "./containers/management/managementDashboard";
+import ManagementAccountsPage from "./containers/management/managementAccount";
+import ManagementProductsPage from "./containers/management/managementProduct";
+import ManagementBlogsPage from "./containers/management/managementBlog";
+import ManagementOrdersPage from "./containers/management/managementOrder";
+import ManagementVouchersPage from "./containers/management/managementVoucher";
+import ManagementFeedbacksPage from "./containers/management/managementFeedback";
+import ManagementCategorysPage from "./containers/management/managementCategory";
+
 export default function App() {
   return (
     <Router>
@@ -48,6 +58,40 @@ export default function App() {
         <Route path="/reality3d/profile-page" element={<ProfilePages />} />
         <Route path="/reality3d/history-page" element={<HistoryPages />} />
         <Route path="/reality3d/edits-page" element={<EditPages />} />
+
+        {/* Manager */}
+        <Route
+          path="/reality3d/management/management-dashboard-page"
+          element={<ManagementDashboardPage />}
+        />
+        <Route
+          path="/reality3d/management/management-accounts-page"
+          element={<ManagementAccountsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-products-page"
+          element={<ManagementProductsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-blogs-page"
+          element={<ManagementBlogsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-orders-page"
+          element={<ManagementOrdersPage />}
+        />
+        <Route
+          path="/reality3d/management/management-vouchers-page"
+          element={<ManagementVouchersPage />}
+        />
+        <Route
+          path="/reality3d/management/management-feedbacks-page"
+          element={<ManagementFeedbacksPage />}
+        />
+        <Route
+          path="/reality3d/management/management-categories-page"
+          element={<ManagementCategorysPage />}
+        />
       </Routes>
     </Router>
   );

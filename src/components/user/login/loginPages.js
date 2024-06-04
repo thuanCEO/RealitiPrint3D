@@ -54,16 +54,16 @@ export default function Login() {
 
       setTimeout(() => {
         if (roleId === 1) {
-          //role 1= admin
+          //role 1 = admin
+          navigate("/reality3d/management/management-page");
+        } else if (roleId === 2) {
+          //role 1 = admin
+          navigate("/reality3d/management/management-dashboard-page");
+        } else if (roleId === 3) {
+          //role 4 = customer
           navigate("/reality3d/home-page");
-        }
-        if (roleId === 2) {
-          // role 2 = managements
-          navigate("/reality3d/home-page");
-        }
-        if (roleId === 3) {
-          //role 3 = staff
-          navigate("/reality3d/home-page");
+        } else {
+          navigate("/reality3d/404-page");
         }
       }, 2000);
     } catch (error) {
