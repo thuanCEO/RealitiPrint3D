@@ -35,6 +35,7 @@ import ManagementServicesPage from "./containers/management/managementService";
 
 import ManagementAccountDetailsPage from "./containers/management/managementAccountDetails";
 import ManagementProductDetailsPage from "./containers/management/managementProductDetails";
+import ManagementOrderDetailsPage from "./containers/management/managementOrderDetails";
 
 export default function App() {
   return (
@@ -108,6 +109,10 @@ export default function App() {
         <Route
           path="/reality3d/management/management-product-details-page/:id"
           element={<ManagementProductDetailsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-order-details-page/:id"
+          element={<ManagementOrderDetailsPage />}
         />
       </Routes>
     </Router>

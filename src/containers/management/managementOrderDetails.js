@@ -5,21 +5,12 @@ import {
   DisclosureButton,
   DisclosurePanel,
   Menu,
-  MenuButton,
   MenuItem,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useLocation } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
-import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
-import { BiSolidDetail } from "react-icons/bi";
-import { FaRegEdit } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+
 import axiosClient from "../../services/api/api";
+import { useParams } from "react-router-dom";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -85,144 +76,68 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ManagementOrder() {
+export default function ManagementOrderDetails() {
   const [open, setOpen] = useState(false);
-  const location = useLocation();
-  const [users, setUser] = useState([]);
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [error, setError] = useState(null);
+  const { id } = useParams();
 
-  const navigate = useNavigate();
+  function getStatusText(status) {
+    switch (status) {
+      case 1:
+        return "Chờ xác nhận đơn hàng";
+      case 2:
+        return "Chờ lấy hàng";
+      case 3:
+        return "Chờ giao hàng";
+      case 4:
+        return "Giao hàng thành công";
+      case 5:
+        return "Giao hàng thất bại";
+      default:
+        return "Unknown status";
+    }
+  }
 
-  const columns = [
-    {
-      field: "id",
-      headerName: "No",
-      width: 70,
-    },
-    { field: "userId", headerName: "User Id", width: 60 },
-    { field: "totalPrice", headerName: "Total Price", width: 150 },
-    { field: "finalPrice", headerName: "Final Price", width: 150 },
-    { field: "voucherId", headerName: "Voucher Id", width: 80 },
-    {
-      field: "shippingId",
-      headerName: "Shipping Id",
-      width: 80,
-    },
-    { field: "payment", headerName: "Payment", width: 100 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 250,
-      renderCell: (params) => {
-        if (params.value === 1) {
-          return <span style={{ color: "#ccc" }}>Chờ xát nhận đơn hàng</span>;
-        } else if (params.value === 2) {
-          return <span style={{ color: "#ffff00" }}>Chờ lấy hàng</span>;
-        } else if (params.value === 3) {
-          return <span style={{ color: "#00cc00" }}>Chờ giao hàng</span>;
-        } else if (params.value === 4) {
-          return <span style={{ color: "#228b22" }}>Giao hàng thành công</span>;
-        } else if (params.value === 5) {
-          return <span style={{ color: "#ff0000" }}>Giao hàng thất bại</span>;
-        }
-      },
-    },
-    {
-      field: "detail",
-      headerName: "Detail",
-      sortable: false,
-      width: 80,
-      renderCell: (params) => {
-        const onClick = (e) => {
-          e.stopPropagation();
-          handleDetailsClick(params.row.id);
-        };
-
-        return (
-          <Button variant="contained" color="primary" onClick={onClick}>
-            <BiSolidDetail className="icon-table" />
-          </Button>
-        );
-      },
-    },
-    {
-      field: "edit",
-      headerName: "Edit",
-      sortable: false,
-      width: 80,
-      renderCell: (params) => {
-        return (
-          <Button variant="contained" color="primary">
-            <FaRegEdit className="icon-table" />
-          </Button>
-        );
-      },
-    },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
-          </Button>
-        );
-      },
-    },
-  ].map((column) => ({
-    ...column,
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-  }));
-
+  function getStatusClassName(status) {
+    switch (status) {
+      case 1:
+        return "text-gray-500";
+      case 2:
+        return "text-yellow-500";
+      case 3:
+        return "text-green-500";
+      case 4:
+        return "text-green-700";
+      case 5:
+        return "text-red-500";
+      default:
+        return "text-black";
+    }
+  }
   function toggleOpen() {
     setOpen(!open);
   }
 
+  const fetchProductsDetails = async (productId) => {
+    try {
+      const response = await axiosClient.get(
+        `/api/OrderDetail/GetOrderDetailById?id=${productId}`
+      );
+      setOrderDetails(response.data);
+    } catch (error) {
+      setError("Error fetching user details.");
+    }
+  };
+
   useEffect(() => {
-    const url = location.pathname;
-    navigation.forEach((item) => {
-      if (url === item.path) {
-        item.current = true;
-      } else {
-        item.current = false;
-      }
-    });
-    fetchUsers();
-  }, [location]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axiosClient.get("/api/Order/GetAllOrders");
-      const ordersWithId = response.data.map((orders, index) => ({
-        ...orders,
-        id: index + 1,
-      }));
-      setUser(ordersWithId);
-    } catch (error) {
-      console.error("Error fetching products:", error);
+    if (id) {
+      fetchProductsDetails(id);
+    } else {
+      setError("Error: No user ID provided.");
     }
-  };
+  }, [id]);
 
-  const handleDetailsClick = (userID) => {
-    navigate(`/reality3d/management/management-order-details-page/${userID}`);
-  };
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
-    try {
-      await axiosClient.delete(`/api/Users/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
   return (
     <>
       <div className="min-h-full">
@@ -261,47 +176,6 @@ export default function ManagementOrder() {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
-                          </MenuButton>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <MenuItem key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </MenuItem>
-                            ))}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
@@ -401,7 +275,7 @@ export default function ManagementOrder() {
         <header className="bg-white shadow h-16 w-full">
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Management Orders
+              Management Details Orders
             </h1>
           </div>
         </header>
@@ -410,22 +284,50 @@ export default function ManagementOrder() {
           <main>
             <div className="flex flex-wrap justify-center mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 h-screen w-full">
               <div className="w-full h-full">
-                {" "}
-                <Row className="justify-content-center">
-                  <Col>
-                    <DataGrid
-                      rows={users}
-                      columns={columns}
-                      pageSize={10}
-                      pagination
-                    >
-                      <div style={{ textAlign: "center" }}>
-                        <button onClick={() => {}}>Previous</button>
-                        <button onClick={() => {}}>Next</button>
+                {orderDetails ? (
+                  <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl mx-auto">
+                    <h2 className="text-2xl font-bold mb-4">Product Details</h2>
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">ID:</span>
+                        <span>{orderDetails.id}</span>
                       </div>
-                    </DataGrid>
-                  </Col>
-                </Row>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Order ID:</span>
+                        <span>{orderDetails.orderId}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Product ID:</span>
+                        <span>{orderDetails.productId}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Quantity:</span>
+                        <span>{orderDetails.quantity}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Total Price:</span>
+                        <span>{orderDetails.totalPrice}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Status:</span>
+                        <span
+                          className={getStatusClassName(orderDetails.status)}
+                        >
+                          {getStatusText(orderDetails.status)}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Service ID:</span>
+                        <span>{orderDetails.serviceId}</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center mt-4">Loading...</div>
+                )}
+                {error && (
+                  <div className="text-red-500 text-center mt-4">{error}</div>
+                )}
               </div>
             </div>
           </main>
