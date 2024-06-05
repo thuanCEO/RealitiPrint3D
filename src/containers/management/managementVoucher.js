@@ -45,6 +45,11 @@ const navigation = [
     current: false,
   },
   {
+    name: "Service",
+    path: "/reality3d/management/management-services-page",
+    current: false,
+  },
+  {
     name: "Blogs",
     path: "/reality3d/management/management-blogs-page",
     current: false,
@@ -405,7 +410,7 @@ export default function ManagementVoucher() {
         <header className="bg-white shadow h-16 w-full">
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Management Accounts
+              Management Vouchers
             </h1>
           </div>
         </header>

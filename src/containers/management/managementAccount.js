@@ -6,14 +6,12 @@ import {
   DisclosurePanel,
   Menu,
   MenuButton,
-  MenuItem,
   MenuItems,
   Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 import { MdDeleteOutline } from "react-icons/md";
 import { BiSolidDetail } from "react-icons/bi";
@@ -21,6 +19,14 @@ import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../services/api/api";
 import { MdCheck, MdClose } from "react-icons/md";
+import {
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  Box,
+  MenuItem,
+} from "@mui/material";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -42,6 +48,11 @@ const navigation = [
   {
     name: "Products",
     path: "/reality3d/management/management-products-page",
+    current: false,
+  },
+  {
+    name: "Service",
+    path: "/reality3d/management/management-services-page",
     current: false,
   },
   {
@@ -85,8 +96,17 @@ export default function ManagementAccount() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [users, setUser] = useState([]);
-
+  const [currentRow, setCurrentRow] = useState(null);
   const navigate = useNavigate();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const handleOpenEditModal = (row) => {
+    setCurrentRow(row);
+    setEditModalOpen(true);
+  };
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+    setCurrentRow(null);
+  };
 
   const columns = [
     {
@@ -173,13 +193,15 @@ export default function ManagementAccount() {
       headerName: "Edit",
       sortable: false,
       width: 80,
-      renderCell: (params) => {
-        return (
-          <Button variant="contained" color="primary">
-            <FaRegEdit className="icon-table" />
-          </Button>
-        );
-      },
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenEditModal(params.row)}
+        >
+          <FaRegEdit className="icon-table" />
+        </Button>
+      ),
     },
     {
       field: "delete",
@@ -230,7 +252,7 @@ export default function ManagementAccount() {
       console.log("Role IDs:", roleIds);
       // Filter out users with roleId equal to 1 or 2
       const filteredData = response.data.filter(
-        (user) => user.roleId === 3 || user.roleId === 4
+        (user) => user.roleId === 3 || user.roleId === 4 || user.roleId === 2
       );
       console.log("Filtered users:", filteredData);
       // Map through the filtered data to add an id field to each user
@@ -255,6 +277,50 @@ export default function ManagementAccount() {
       setUser(updatedUsers);
     } catch (error) {
       console.error("Error deleting user:", error);
+    }
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentRow((prev) => ({
+      ...prev,
+      [name]: name === "status" ? parseInt(value, 10) : value,
+    }));
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      if (!currentRow || !currentRow.id) {
+        console.error("Invalid category data.");
+        return;
+      }
+
+      const dataToUpdate = {
+        fullName: currentRow.fullName,
+        phoneNumber: currentRow.phoneNumber,
+        email: currentRow.email,
+        userName: currentRow.userName,
+        password: currentRow.password,
+        address: currentRow.address,
+        avatar: currentRow.avatar,
+        roleId: currentRow.roleId,
+        status: parseInt(currentRow.status, 10),
+      };
+
+      await axiosClient.put(
+        `/api/User/UpdateUser/${currentRow.id}`,
+        dataToUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      fetchUsers();
+      handleCloseEditModal();
+    } catch (error) {
+      console.error("Error saving edited data:", error);
     }
   };
 
@@ -466,6 +532,125 @@ export default function ManagementAccount() {
           </main>
         </div>
       </div>
+      <Modal
+        open={editModalOpen}
+        onClose={handleCloseEditModal}
+        aria-labelledby="edit-category-modal-title"
+        aria-describedby="edit-category-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 1,
+          }}
+        >
+          <Typography
+            id="edit-category-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            Edit Category
+          </Typography>
+          {currentRow && (
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { mt: 2 },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                fullWidth
+                label="Full Name"
+                name="fullName"
+                value={currentRow.fullName}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Phone Number"
+                name="phoneNumber"
+                value={currentRow.phoneNumber}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                value={currentRow.email}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="User Name"
+                name="userName"
+                value={currentRow.userName}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                value={currentRow.password}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Avatar"
+                name="avatar"
+                value={currentRow.avatar}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Address"
+                name="address"
+                value={currentRow.address}
+                onChange={handleEditChange}
+              />{" "}
+              <TextField
+                fullWidth
+                select
+                label="Role"
+                name="roleId"
+                value={currentRow.roleId}
+                onChange={handleEditChange}
+              >
+                <MenuItem value={2}>Quản Lí</MenuItem>
+                <MenuItem value={3}>Nhân Viên</MenuItem>
+                <MenuItem value={4}>Khách Hàng</MenuItem>
+              </TextField>
+              <TextField
+                fullWidth
+                select
+                label="Status"
+                name="status"
+                value={currentRow.status}
+                onChange={handleEditChange}
+              >
+                <MenuItem value={1}>Hoạt động</MenuItem>
+                <MenuItem value={2}>Dừng hoạt động</MenuItem>
+              </TextField>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveEdit}
+                sx={{ mt: 2 }}
+              >
+                Save
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Modal>
     </>
   );
 }

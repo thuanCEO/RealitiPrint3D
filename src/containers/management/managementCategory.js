@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
   Menu,
   MenuButton,
-  MenuItem,
   MenuItems,
   Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Modal,
+  Box,
+  TextField,
+  Typography,
+  MenuItem,
+} from "@mui/material";
 import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
-import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import axiosClient from "../../services/api/api";
 import { MdCheck, MdClose } from "react-icons/md";
+
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -42,6 +45,11 @@ const navigation = [
   {
     name: "Products",
     path: "/reality3d/management/management-products-page",
+    current: false,
+  },
+  {
+    name: "Service",
+    path: "/reality3d/management/management-services-page",
     current: false,
   },
   {
@@ -85,8 +93,18 @@ export default function ManagementCategory() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [users, setUser] = useState([]);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
 
-  const navigate = useNavigate();
+  const handleOpenEditModal = (row) => {
+    setCurrentRow(row);
+    setEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+    setCurrentRow(null);
+  };
 
   const columns = [
     {
@@ -129,52 +147,19 @@ export default function ManagementCategory() {
       },
     },
     {
-      field: "detail",
-      headerName: "Detail",
-      sortable: false,
-      width: 80,
-      renderCell: (params) => {
-        const onClick = (e) => {
-          e.stopPropagation();
-          handleDetailsClick(params.row.id);
-        };
-
-        return (
-          <Button variant="contained" color="primary" onClick={onClick}>
-            <BiSolidDetail className="icon-table" />
-          </Button>
-        );
-      },
-    },
-    {
       field: "edit",
       headerName: "Edit",
       sortable: false,
       width: 80,
-      renderCell: (params) => {
-        return (
-          <Button variant="contained" color="primary">
-            <FaRegEdit className="icon-table" />
-          </Button>
-        );
-      },
-    },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
-          </Button>
-        );
-      },
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenEditModal(params.row)}
+        >
+          <FaRegEdit className="icon-table" />
+        </Button>
+      ),
     },
   ].map((column) => ({
     ...column,
@@ -190,11 +175,7 @@ export default function ManagementCategory() {
   useEffect(() => {
     const url = location.pathname;
     navigation.forEach((item) => {
-      if (url === item.path) {
-        item.current = true;
-      } else {
-        item.current = false;
-      }
+      item.current = url === item.path;
     });
     fetchUsers();
   }, [location]);
@@ -212,19 +193,44 @@ export default function ManagementCategory() {
     }
   };
 
-  const handleDetailsClick = (userID) => {
-    navigate(`/detailsID/${userID}`);
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentRow((prev) => ({
+      ...prev,
+      [name]: name === "status" ? parseInt(value, 10) : value,
+    }));
   };
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
+
+  const handleSaveEdit = async () => {
     try {
-      await axiosClient.delete(`/api/Users/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
+      if (!currentRow || !currentRow.id) {
+        console.error("Invalid category data.");
+        return;
+      }
+
+      const dataToUpdate = {
+        title: currentRow.title,
+        description: currentRow.description,
+        status: parseInt(currentRow.status, 10),
+      };
+
+      await axiosClient.put(
+        `/api/Category/UpdateCategory/${currentRow.id}`,
+        dataToUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      fetchUsers();
+      handleCloseEditModal();
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("Error saving edited data:", error);
     }
   };
+
   return (
     <>
       <div className="min-h-full">
@@ -264,7 +270,6 @@ export default function ManagementCategory() {
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
 
-                      {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
                           <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -293,7 +298,7 @@ export default function ManagementCategory() {
                                     href={item.href}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
+                                      "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                   >
                                     {item.name}
@@ -311,17 +316,17 @@ export default function ManagementCategory() {
                     <DisclosureButton
                       type="button"
                       onClick={toggleOpen}
-                      className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-blue focus-ring-offset-blue"
+                      className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="sr-only">Open main menu</span>
                       {open ? (
                         <XMarkIcon
-                          className="block h-auto w-auto"
+                          className="block h-6 w-6"
                           aria-hidden="true"
                         />
                       ) : (
                         <Bars3Icon
-                          className="block h-auto w-auto"
+                          className="block h-6 w-6"
                           aria-hidden="true"
                         />
                       )}
@@ -329,12 +334,8 @@ export default function ManagementCategory() {
                   </div>
                 </div>
               </div>
-
-              <DisclosurePanel
-                className="md:hidden"
-                style={{ maxHeight: "calc(100vh - 16rem)" }}
-              >
-                <div className="space-y-1 px-[4px] pb-[3px] pt-[2px] sm:px-[6px]">
+              <DisclosurePanel className="md:hidden">
+                <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
                   {navigation.map((item) => (
                     <DisclosureButton
                       key={item.name}
@@ -344,7 +345,7 @@ export default function ManagementCategory() {
                         item.current
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "block rounded-md px-[4px] py-[2px] text-sm font-medium"
+                        "block rounded-md px-3 py-2 text-base font-medium"
                       )}
                       aria-current={item.current ? "page" : undefined}
                     >
@@ -352,87 +353,115 @@ export default function ManagementCategory() {
                     </DisclosureButton>
                   ))}
                 </div>
-                <div className="border-t border-gray-streamer pb-[3px] pt-[4px]">
-                  <div className="flex items-center px-[4px]">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-auto w-auto rounded-full"
-                        src={user.imageUrl}
-                        alt=""
-                      />
-                    </div>
-                    <div className="ml-[3px]">
-                      <div className="text-base font-medium leading-none text-white">
-                        {user.name}
-                      </div>
-                      <div className="text-sm font-medium leading-none text-gray-streamer">
-                        {user.email}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="relative ml-auto flex-shrink-0 rounded-full bg-gray-streamer p-[1px] text-gray-streamer hover:text-white focus:outline-none focus-ring-blue focus-ring-offset-blue"
-                    >
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-auto w-auto" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <Menu as={Fragment} className="">
-                    {userNavigation.map((item) => (
-                      <MenuItem key={item.name}>
-                        {({ active }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              active ? "bg-gray-streamer" : "",
-                              "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                            )}
-                          >
-                            {item.name}
-                          </a>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </div>
               </DisclosurePanel>
             </Fragment>
           )}
         </Disclosure>
 
-        <header className="bg-white shadow h-16 w-full">
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <header className="bg-white shadow">
+          <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Management Category
+              Management Categories
             </h1>
           </div>
         </header>
-        {/* Main  */}
-        <div>
-          <main>
-            <div className="flex flex-wrap justify-center mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 h-screen w-full">
-              <div className="w-full h-full">
-                {" "}
-                <Row className="justify-content-center">
-                  <Col>
-                    <DataGrid
-                      rows={users}
-                      columns={columns}
-                      pageSize={10}
-                      pagination
-                    >
-                      <div style={{ textAlign: "center" }}>
-                        <button onClick={() => {}}>Previous</button>
-                        <button onClick={() => {}}>Next</button>
-                      </div>
-                    </DataGrid>
-                  </Col>
-                </Row>
+        <main>
+          <div className="py-6">
+            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              <div className="px-4 py-6 sm:px-0">
+                <div className="h-auto">
+                  <Row>
+                    <Col>
+                      <DataGrid
+                        rows={users}
+                        columns={columns}
+                        pageSize={10}
+                        rowsPerPageOptions={[10]}
+                        disableSelectionOnClick
+                        autoHeight
+                      />
+                    </Col>
+                  </Row>
+                </div>
               </div>
             </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
+
+      {/* Edit Modal */}
+      <Modal
+        open={editModalOpen}
+        onClose={handleCloseEditModal}
+        aria-labelledby="edit-category-modal-title"
+        aria-describedby="edit-category-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 1,
+          }}
+        >
+          <Typography
+            id="edit-category-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            Edit Category
+          </Typography>
+          {currentRow && (
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { mt: 2 },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                fullWidth
+                label="Title"
+                name="title"
+                value={currentRow.title}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Description"
+                name="description"
+                value={currentRow.description}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                select
+                label="Status"
+                name="status"
+                value={currentRow.status}
+                onChange={handleEditChange}
+              >
+                <MenuItem value={1}>Hoạt động</MenuItem>
+                <MenuItem value={2}>Dừng hoạt động</MenuItem>
+              </TextField>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveEdit}
+                sx={{ mt: 2 }}
+              >
+                Save
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Modal>
     </>
   );
 }

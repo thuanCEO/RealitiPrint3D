@@ -57,7 +57,7 @@ export default function Login() {
           //role 1 = admin
           navigate("/reality3d/management/management-page");
         } else if (roleId === 2) {
-          //role 1 = admin
+          //role 2 = management
           navigate("/reality3d/management/management-dashboard-page");
         } else if (roleId === 3) {
           //role 4 = customer

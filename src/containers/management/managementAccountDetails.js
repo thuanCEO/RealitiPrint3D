@@ -40,6 +40,11 @@ const navigation = [
     current: false,
   },
   {
+    name: "Service",
+    path: "/reality3d/management/management-services-page",
+    current: false,
+  },
+  {
     name: "Blogs",
     path: "/reality3d/management/management-blogs-page",
     current: false,
