@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   Disclosure,
   DisclosureButton,
@@ -9,6 +8,9 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useLocation } from "react-router-dom";
+import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,
   Modal,
@@ -17,14 +19,11 @@ import {
   Typography,
   MenuItem,
 } from "@mui/material";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useLocation } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
 import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import axiosClient from "../../services/api/api";
 import { MdCheck, MdClose } from "react-icons/md";
+
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -90,7 +89,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ManagementFeedback() {
+export default function ManagementService() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [users, setUser] = useState([]);
@@ -101,27 +100,25 @@ export default function ManagementFeedback() {
     setCurrentRow(row);
     setEditModalOpen(true);
   };
+
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
     setCurrentRow(null);
   };
+
   const columns = [
     {
       field: "id",
       headerName: "No",
       width: 70,
     },
-    { field: "userId", headerName: "User Id", width: 70 },
-    { field: "fullName", headerName: "Full Name", width: 200 },
-    { field: "productName", headerName: "Product Name", width: 150 },
-    { field: "productId", headerName: "ProductId", width: 70 },
-    { field: "rating", headerName: "Rating", width: 70 },
-    { field: "title", headerName: "Title", width: 80 },
-    { field: "description", headerName: "Description", width: 200 },
+    { field: "serviceName", headerName: "ServiceName", width: 200 },
+    { field: "price", headerName: "Price", width: 200 },
+    { field: "description", headerName: "Description", width: 580 },
     {
       field: "status",
       headerName: "Status",
-      width: 30,
+      width: 70,
       renderCell: (params) => {
         if (params.value === 1) {
           return (
@@ -165,23 +162,6 @@ export default function ManagementFeedback() {
         </Button>
       ),
     },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
-          </Button>
-        );
-      },
-    },
   ].map((column) => ({
     ...column,
     headerClassName: "super-app-theme--header",
@@ -196,18 +176,14 @@ export default function ManagementFeedback() {
   useEffect(() => {
     const url = location.pathname;
     navigation.forEach((item) => {
-      if (url === item.path) {
-        item.current = true;
-      } else {
-        item.current = false;
-      }
+      item.current = url === item.path;
     });
     fetchUsers();
   }, [location]);
 
   const fetchUsers = async () => {
     try {
-      const response = await axiosClient.get("/api/Feedback/GetAllFeedbacks");
+      const response = await axiosClient.get("/api/Service/GetAllServices");
       const ordersWithId = response.data.map((orders, index) => ({
         ...orders,
         id: index + 1,
@@ -218,16 +194,6 @@ export default function ManagementFeedback() {
     }
   };
 
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
-    try {
-      await axiosClient.delete(`/api/Users/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setCurrentRow((prev) => ({
@@ -235,6 +201,7 @@ export default function ManagementFeedback() {
       [name]: name === "status" ? parseInt(value, 10) : value,
     }));
   };
+
   const handleSaveEdit = async () => {
     try {
       if (!currentRow || !currentRow.id) {
@@ -243,16 +210,13 @@ export default function ManagementFeedback() {
       }
 
       const dataToUpdate = {
-        userId: currentRow.userId,
-        productId: currentRow.productId,
-        rating: currentRow.rating,
         title: currentRow.title,
         description: currentRow.description,
         status: parseInt(currentRow.status, 10),
       };
 
       await axiosClient.put(
-        `/api/Feedback/UpdateFeedback/${currentRow.id}`,
+        `/api/Category/UpdateCategory/${currentRow.id}`,
         dataToUpdate,
         {
           headers: {
@@ -267,6 +231,7 @@ export default function ManagementFeedback() {
       console.error("Error saving edited data:", error);
     }
   };
+
   return (
     <>
       <div className="min-h-full">
@@ -306,7 +271,6 @@ export default function ManagementFeedback() {
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
 
-                      {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
                           <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -335,7 +299,7 @@ export default function ManagementFeedback() {
                                     href={item.href}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
+                                      "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                   >
                                     {item.name}
@@ -353,17 +317,17 @@ export default function ManagementFeedback() {
                     <DisclosureButton
                       type="button"
                       onClick={toggleOpen}
-                      className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-blue focus-ring-offset-blue"
+                      className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="sr-only">Open main menu</span>
                       {open ? (
                         <XMarkIcon
-                          className="block h-auto w-auto"
+                          className="block h-6 w-6"
                           aria-hidden="true"
                         />
                       ) : (
                         <Bars3Icon
-                          className="block h-auto w-auto"
+                          className="block h-6 w-6"
                           aria-hidden="true"
                         />
                       )}
@@ -371,12 +335,8 @@ export default function ManagementFeedback() {
                   </div>
                 </div>
               </div>
-
-              <DisclosurePanel
-                className="md:hidden"
-                style={{ maxHeight: "calc(100vh - 16rem)" }}
-              >
-                <div className="space-y-1 px-[4px] pb-[3px] pt-[2px] sm:px-[6px]">
+              <DisclosurePanel className="md:hidden">
+                <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
                   {navigation.map((item) => (
                     <DisclosureButton
                       key={item.name}
@@ -386,7 +346,7 @@ export default function ManagementFeedback() {
                         item.current
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "block rounded-md px-[4px] py-[2px] text-sm font-medium"
+                        "block rounded-md px-3 py-2 text-base font-medium"
                       )}
                       aria-current={item.current ? "page" : undefined}
                     >
@@ -394,87 +354,42 @@ export default function ManagementFeedback() {
                     </DisclosureButton>
                   ))}
                 </div>
-                <div className="border-t border-gray-streamer pb-[3px] pt-[4px]">
-                  <div className="flex items-center px-[4px]">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-auto w-auto rounded-full"
-                        src={user.imageUrl}
-                        alt=""
-                      />
-                    </div>
-                    <div className="ml-[3px]">
-                      <div className="text-base font-medium leading-none text-white">
-                        {user.name}
-                      </div>
-                      <div className="text-sm font-medium leading-none text-gray-streamer">
-                        {user.email}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="relative ml-auto flex-shrink-0 rounded-full bg-gray-streamer p-[1px] text-gray-streamer hover:text-white focus:outline-none focus-ring-blue focus-ring-offset-blue"
-                    >
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-auto w-auto" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <Menu as={Fragment} className="">
-                    {userNavigation.map((item) => (
-                      <MenuItem key={item.name}>
-                        {({ active }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              active ? "bg-gray-streamer" : "",
-                              "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                            )}
-                          >
-                            {item.name}
-                          </a>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </div>
               </DisclosurePanel>
             </Fragment>
           )}
         </Disclosure>
 
-        <header className="bg-white shadow h-16 w-full">
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <header className="bg-white shadow">
+          <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Management Feedback
+              Management Services
             </h1>
           </div>
         </header>
-        {/* Main  */}
-        <div>
-          <main>
-            <div className="flex flex-wrap justify-center mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 h-screen w-full">
-              <div className="w-full h-full">
-                {" "}
-                <Row className="justify-content-center">
-                  <Col>
-                    <DataGrid
-                      rows={users}
-                      columns={columns}
-                      pageSize={10}
-                      pagination
-                    >
-                      <div style={{ textAlign: "center" }}>
-                        <button onClick={() => {}}>Previous</button>
-                        <button onClick={() => {}}>Next</button>
-                      </div>
-                    </DataGrid>
-                  </Col>
-                </Row>
+        <main>
+          <div className="py-6">
+            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              <div className="px-4 py-6 sm:px-0">
+                <div className="h-auto">
+                  <Row>
+                    <Col>
+                      <DataGrid
+                        rows={users}
+                        columns={columns}
+                        pageSize={10}
+                        rowsPerPageOptions={[10]}
+                        disableSelectionOnClick
+                        autoHeight
+                      />
+                    </Col>
+                  </Row>
+                </div>
               </div>
             </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
+
       {/* Edit Modal */}
       <Modal
         open={editModalOpen}
@@ -511,27 +426,6 @@ export default function ManagementFeedback() {
               noValidate
               autoComplete="off"
             >
-              <TextField
-                fullWidth
-                label="UserId"
-                name="userId"
-                value={currentRow.userId}
-                onChange={handleEditChange}
-              />
-              <TextField
-                fullWidth
-                label="Rating"
-                name="rating"
-                value={currentRow.rating}
-                onChange={handleEditChange}
-              />
-              <TextField
-                fullWidth
-                label="ProductId"
-                name="productId"
-                value={currentRow.productId}
-                onChange={handleEditChange}
-              />
               <TextField
                 fullWidth
                 label="Title"

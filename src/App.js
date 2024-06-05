@@ -31,6 +31,7 @@ import ManagementOrdersPage from "./containers/management/managementOrder";
 import ManagementVouchersPage from "./containers/management/managementVoucher";
 import ManagementFeedbacksPage from "./containers/management/managementFeedback";
 import ManagementCategoriesPage from "./containers/management/managementCategory";
+import ManagementServicesPage from "./containers/management/managementService";
 
 import ManagementAccountDetailsPage from "./containers/management/managementAccountDetails";
 import ManagementProductDetailsPage from "./containers/management/managementProductDetails";
@@ -95,7 +96,10 @@ export default function App() {
           path="/reality3d/management/management-categories-page"
           element={<ManagementCategoriesPage />}
         />
-
+        <Route
+          path="/reality3d/management/management-services-page"
+          element={<ManagementServicesPage />}
+        />
         {/* Manager action*/}
         <Route
           path="/reality3d/management/management-account-details-page/:id"

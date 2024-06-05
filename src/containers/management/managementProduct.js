@@ -6,14 +6,20 @@ import {
   DisclosurePanel,
   Menu,
   MenuButton,
-  MenuItem,
   MenuItems,
   Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  Box,
+  MenuItem,
+} from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 import { MdDeleteOutline } from "react-icons/md";
 import { BiSolidDetail } from "react-icons/bi";
@@ -42,6 +48,11 @@ const navigation = [
   {
     name: "Products",
     path: "/reality3d/management/management-products-page",
+    current: false,
+  },
+  {
+    name: "Service",
+    path: "/reality3d/management/management-services-page",
     current: false,
   },
   {
@@ -85,9 +96,17 @@ export default function ManagementProduct() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [users, setUser] = useState([]);
-
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
   const navigate = useNavigate();
-
+  const handleOpenEditModal = (row) => {
+    setCurrentRow(row);
+    setEditModalOpen(true);
+  };
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+    setCurrentRow(null);
+  };
   const columns = [
     {
       field: "id",
@@ -117,7 +136,7 @@ export default function ManagementProduct() {
       headerName: "Quantity",
       width: 100,
     },
-    { field: "category", headerName: "Category", width: 80 },
+    { field: "categoryId", headerName: "Category", width: 80 },
 
     {
       field: "status",
@@ -174,13 +193,15 @@ export default function ManagementProduct() {
       headerName: "Edit",
       sortable: false,
       width: 80,
-      renderCell: (params) => {
-        return (
-          <Button variant="contained" color="primary">
-            <FaRegEdit className="icon-table" />
-          </Button>
-        );
-      },
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenEditModal(params.row)}
+        >
+          <FaRegEdit className="icon-table" />
+        </Button>
+      ),
     },
     {
       field: "delete",
@@ -246,6 +267,47 @@ export default function ManagementProduct() {
       setUser(updatedUsers);
     } catch (error) {
       console.error("Error deleting user:", error);
+    }
+  };
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentRow((prev) => ({
+      ...prev,
+      [name]: name === "status" ? parseInt(value, 10) : value,
+    }));
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      if (!currentRow || !currentRow.id) {
+        console.error("Invalid category data.");
+        return;
+      }
+
+      const dataToUpdate = {
+        title: currentRow.title,
+        productName: currentRow.productName,
+        description: currentRow.description,
+        price: currentRow.price,
+        quantity: currentRow.quantity,
+        categoryId: currentRow.categoryId,
+        imageUrl: currentRow.imageUrl,
+        status: parseInt(currentRow.status, 10),
+      };
+
+      await axiosClient.put(
+        `/api/Product/UpdateProduct/${currentRow.id}`,
+        dataToUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      fetchUsers();
+      handleCloseEditModal();
+    } catch (error) {
+      console.error("Error saving edited data:", error);
     }
   };
   return (
@@ -426,7 +488,7 @@ export default function ManagementProduct() {
         <header className="bg-white shadow h-16 w-full">
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Management Accounts
+              Management Products
             </h1>
           </div>
         </header>
@@ -456,6 +518,119 @@ export default function ManagementProduct() {
           </main>
         </div>
       </div>
+      <Modal
+        open={editModalOpen}
+        onClose={handleCloseEditModal}
+        aria-labelledby="edit-category-modal-title"
+        aria-describedby="edit-category-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 1,
+          }}
+        >
+          <Typography
+            id="edit-category-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            Edit Category
+          </Typography>
+          {currentRow && (
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { mt: 2 },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                fullWidth
+                label="Title"
+                name="title"
+                value={currentRow.title}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Product Name"
+                name="productName"
+                value={currentRow.productName}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Description"
+                name="description"
+                value={currentRow.description}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="User Name"
+                name="userName"
+                value={currentRow.userName}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Price"
+                name="price"
+                value={currentRow.price}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Quantity"
+                name="quantity"
+                value={currentRow.quantity}
+                onChange={handleEditChange}
+              />
+
+              <TextField
+                fullWidth
+                select
+                label="Category"
+                name="categoryId"
+                value={currentRow.categoryId}
+                onChange={handleEditChange}
+              >
+                <MenuItem value={1}>Áo</MenuItem>
+                <MenuItem value={2}>Model</MenuItem>
+                <MenuItem value={3}>Dịch Vụ In </MenuItem>
+              </TextField>
+              {/* <TextField
+                fullWidth
+                select
+                label="Status"
+                name="status"
+                value={currentRow.status}
+                onChange={handleEditChange}
+              >
+                <MenuItem value={1}>Hoạt động</MenuItem>
+                <MenuItem value={2}>Dừng hoạt động</MenuItem>
+              </TextField> */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveEdit}
+                sx={{ mt: 2 }}
+              >
+                Save
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Modal>
     </>
   );
 }
