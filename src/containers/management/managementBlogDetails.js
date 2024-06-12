@@ -85,11 +85,9 @@ export default function ManagementBlogsDetails() {
     setOpen(!open);
   }
 
-  const fetchProductsDetails = async (productId) => {
+  const fetchProductsDetails = async (id) => {
     try {
-      const response = await axiosClient.get(
-        `/api/Product/GetProductById?id=${productId}`
-      );
+      const response = await axiosClient.get(`/api/Blog/GetBlogById?id=${id}`);
       setProductDetails(response.data);
     } catch (error) {
       setError("Error fetching user details.");
@@ -241,7 +239,7 @@ export default function ManagementBlogsDetails() {
         <header className="bg-white shadow h-16 w-full">
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Management Details Accounts
+              Management Details Blog
             </h1>
           </div>
         </header>
@@ -259,21 +257,22 @@ export default function ManagementBlogsDetails() {
                         <span>{productDetails.id}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Product Name:</span>
-                        <span>{productDetails.productName}</span>
+                        <span className="font-semibold">Title:</span>
+                        <span>{productDetails.title}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Description:</span>
-                        <span>{productDetails.description}</span>
+                        <span className="font-semibold">Content:</span>
+                        <span>{productDetails.content}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Price:</span>
-                        <span>{productDetails.price}</span>
+                        <span className="font-semibold">User:</span>
+                        <span>
+                          {productDetails.user
+                            ? productDetails.user.fullName
+                            : "Unknown"}
+                        </span>
                       </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Quantity:</span>
-                        <span>{productDetails.quantity}</span>
-                      </div>
+
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">Status:</span>
                         <span
@@ -287,18 +286,6 @@ export default function ManagementBlogsDetails() {
                             ? "Còn hàng"
                             : "Hết hàng"}
                         </span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Category:</span>
-                        <span>{productDetails.category?.title}</span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Image:</span>
-                        <img
-                          className="h-12 w-12 rounded-full"
-                          src={productDetails.imageUrl}
-                          alt=""
-                        />
                       </div>
                     </div>
                   </div>

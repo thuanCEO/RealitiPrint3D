@@ -4,8 +4,8 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
 } from "@headlessui/react";
+
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
@@ -78,12 +78,6 @@ const navigation = [
   },
 ];
 
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -94,6 +88,8 @@ export default function ManagementProduct() {
   const [users, setUser] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
+  const [categories, setCategories] = useState([]);
+
   const navigate = useNavigate();
   const handleOpenEditModal = (row) => {
     setCurrentRow(row);
@@ -218,7 +214,19 @@ export default function ManagementProduct() {
     });
     fetchUsers();
   }, [location]);
-
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosClient.get(
+          "/api/Category/GetAllCategories"
+        );
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
   const fetchUsers = async () => {
     try {
       const response = await axiosClient.get("/api/Product/GetAllProducts");
@@ -264,7 +272,7 @@ export default function ManagementProduct() {
       };
 
       await axiosClient.put(
-        `/api/Product/UpdateProduct/${currentRow.id}`,
+        `/api/Product/UpdateProduct/?id=${currentRow.pro}`,
         dataToUpdate,
         {
           headers: {
@@ -389,23 +397,6 @@ export default function ManagementProduct() {
                       <BellIcon className="h-auto w-auto" aria-hidden="true" />
                     </button>
                   </div>
-                  <Menu as={Fragment} className="">
-                    {userNavigation.map((item) => (
-                      <MenuItem key={item.name}>
-                        {({ active }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              active ? "bg-gray-streamer" : "",
-                              "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                            )}
-                          >
-                            {item.name}
-                          </a>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </Menu>
                 </div>
               </DisclosurePanel>
             </Fragment>
@@ -457,7 +448,8 @@ export default function ManagementProduct() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 400,
+            maxHeight: "calc(100vh - 100px)",
+            overflowY: "auto",
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
@@ -501,13 +493,7 @@ export default function ManagementProduct() {
                 value={currentRow.description}
                 onChange={handleEditChange}
               />
-              <TextField
-                fullWidth
-                label="User Name"
-                name="userName"
-                value={currentRow.userName}
-                onChange={handleEditChange}
-              />
+
               <TextField
                 fullWidth
                 label="Price"
@@ -522,6 +508,13 @@ export default function ManagementProduct() {
                 value={currentRow.quantity}
                 onChange={handleEditChange}
               />
+              <TextField
+                fullWidth
+                label="Image Url"
+                name="imageUrl"
+                value={currentRow.imageUrl}
+                onChange={handleEditChange}
+              />
 
               <TextField
                 fullWidth
@@ -531,11 +524,14 @@ export default function ManagementProduct() {
                 value={currentRow.categoryId}
                 onChange={handleEditChange}
               >
-                <MenuItem value={1}>Áo</MenuItem>
-                <MenuItem value={2}>Model</MenuItem>
-                <MenuItem value={3}>Dịch Vụ In </MenuItem>
+                {categories.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.title}
+                  </MenuItem>
+                ))}
               </TextField>
-              {/* <TextField
+
+              <TextField
                 fullWidth
                 select
                 label="Status"
@@ -545,7 +541,8 @@ export default function ManagementProduct() {
               >
                 <MenuItem value={1}>Hoạt động</MenuItem>
                 <MenuItem value={2}>Dừng hoạt động</MenuItem>
-              </TextField> */}
+              </TextField>
+
               <Button
                 variant="contained"
                 color="primary"
