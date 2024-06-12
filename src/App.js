@@ -21,6 +21,7 @@ import ViewCart from "../src/containers/home/cart";
 import EditPages from "../src/containers/home/editPage";
 import ProfilePages from "../src/components/user/profile/profile";
 import HistoryPages from "../src/components/user/order/orderHistory";
+import HistoryOrdersPages from "../src/components/user/order/shipmentHistory";
 
 // Management
 import ManagementDashboardPage from "./containers/management/managementDashboard";
@@ -36,6 +37,7 @@ import ManagementServicesPage from "./containers/management/managementService";
 import ManagementAccountDetailsPage from "./containers/management/managementAccountDetails";
 import ManagementProductDetailsPage from "./containers/management/managementProductDetails";
 import ManagementOrderDetailsPage from "./containers/management/managementOrderDetails";
+import ManagementBlogsDetailsPage from "./containers/management/managementBlogDetails";
 
 export default function App() {
   return (
@@ -62,6 +64,10 @@ export default function App() {
         />
         <Route path="/reality3d/profile-page" element={<ProfilePages />} />
         <Route path="/reality3d/history-page" element={<HistoryPages />} />
+        <Route
+          path="/reality3d/history-orders-page"
+          element={<HistoryOrdersPages />}
+        />
         <Route path="/reality3d/edits-page" element={<EditPages />} />
 
         {/* Manager management*/}
@@ -113,6 +119,10 @@ export default function App() {
         <Route
           path="/reality3d/management/management-order-details-page/:id"
           element={<ManagementOrderDetailsPage />}
+        />
+        <Route
+          path="/reality3d/management/management-blogs-details-page/:id"
+          element={<ManagementBlogsDetailsPage />}
         />
       </Routes>
     </Router>

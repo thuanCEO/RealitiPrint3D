@@ -17,11 +17,7 @@ const user = {
   imageUrl:
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
-const roleMapping = {
-  1: "Manager",
-  2: "Staff",
-  3: "Customer",
-};
+
 const navigation = [
   {
     name: "Dashboard",
@@ -80,21 +76,21 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ManagementAccountDetails() {
+export default function ManagementBlogsDetails() {
   const [open, setOpen] = useState(false);
-  const [userDetails, setUserDetails] = useState(null);
+  const [productDetails, setProductDetails] = useState(null);
   const [error, setError] = useState(null);
   const { id } = useParams();
   function toggleOpen() {
     setOpen(!open);
   }
 
-  const fetchUserDetails = async (userId) => {
+  const fetchProductsDetails = async (productId) => {
     try {
       const response = await axiosClient.get(
-        `/api/User/GetUserById?id=${userId}`
+        `/api/Product/GetProductById?id=${productId}`
       );
-      setUserDetails(response.data);
+      setProductDetails(response.data);
     } catch (error) {
       setError("Error fetching user details.");
     }
@@ -102,7 +98,7 @@ export default function ManagementAccountDetails() {
 
   useEffect(() => {
     if (id) {
-      fetchUserDetails(id);
+      fetchProductsDetails(id);
     } else {
       setError("Error: No user ID provided.");
     }
@@ -254,53 +250,55 @@ export default function ManagementAccountDetails() {
           <main>
             <div className="flex flex-wrap justify-center mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 h-screen w-full">
               <div className="w-full h-full">
-                {userDetails ? (
+                {productDetails ? (
                   <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl mx-auto">
-                    <h2 className="text-2xl font-bold mb-4">User Details</h2>
+                    <h2 className="text-2xl font-bold mb-4">Product Details</h2>
                     <div className="flex flex-col space-y-2">
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">ID:</span>
-                        <span>{userDetails.id}</span>
+                        <span>{productDetails.id}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Avatar:</span>
-                        <img
-                          className="h-12 w-12 rounded-full"
-                          src={userDetails.avatar}
-                          alt="User Avatar"
-                        />
+                        <span className="font-semibold">Product Name:</span>
+                        <span>{productDetails.productName}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Full Name:</span>
-                        <span>{userDetails.fullName}</span>
+                        <span className="font-semibold">Description:</span>
+                        <span>{productDetails.description}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Phone Number:</span>
-                        <span>{userDetails.phoneNumber}</span>
+                        <span className="font-semibold">Price:</span>
+                        <span>{productDetails.price}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Email:</span>
-                        <span>{userDetails.email}</span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="font-semibold">User Name:</span>
-                        <span>{userDetails.userName}</span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Password:</span>
-                        <span>{userDetails.password}</span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Address:</span>
-                        <span>{userDetails.address}</span>
+                        <span className="font-semibold">Quantity:</span>
+                        <span>{productDetails.quantity}</span>
                       </div>
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">Status:</span>
-                        <span>{userDetails.status}</span>
+                        <span
+                          className={
+                            productDetails.status === 1
+                              ? "text-green-500"
+                              : "text-red-500"
+                          }
+                        >
+                          {productDetails.status === 1
+                            ? "Còn hàng"
+                            : "Hết hàng"}
+                        </span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Role ID:</span>
-                        <span>{roleMapping[userDetails.roleId]}</span>
+                        <span className="font-semibold">Category:</span>
+                        <span>{productDetails.category?.title}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Image:</span>
+                        <img
+                          className="h-12 w-12 rounded-full"
+                          src={productDetails.imageUrl}
+                          alt=""
+                        />
                       </div>
                     </div>
                   </div>

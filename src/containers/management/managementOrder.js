@@ -94,20 +94,37 @@ export default function ManagementOrder() {
 
   const columns = [
     {
-      field: "id",
+      field: "no",
       headerName: "No",
       width: 70,
     },
-    { field: "userId", headerName: "User Id", width: 60 },
+    { field: "id", headerName: "Order ID", width: 60 },
+    { field: "userId", headerName: "User ID", width: 60 },
     { field: "totalPrice", headerName: "Total Price", width: 150 },
     { field: "finalPrice", headerName: "Final Price", width: 150 },
-    { field: "voucherId", headerName: "Voucher Id", width: 80 },
+    { field: "voucherId", headerName: "Voucher ID", width: 80 },
     {
       field: "shippingId",
       headerName: "Shipping Id",
       width: 80,
     },
-    { field: "payment", headerName: "Payment", width: 100 },
+    {
+      field: "payment",
+      headerName: "Payment Method",
+      width: 150,
+      valueGetter: (params) => {
+        if (
+          !params ||
+          !params.row ||
+          !params.row.payment ||
+          !params.row.payment.methodName
+        ) {
+          return "N/A";
+        }
+        return params.row.payment.methodName;
+      },
+    },
+
     {
       field: "status",
       headerName: "Status",
@@ -157,23 +174,6 @@ export default function ManagementOrder() {
         );
       },
     },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
-          </Button>
-        );
-      },
-    },
   ].map((column) => ({
     ...column,
     headerClassName: "super-app-theme--header",
@@ -200,9 +200,11 @@ export default function ManagementOrder() {
   const fetchUsers = async () => {
     try {
       const response = await axiosClient.get("/api/Order/GetAllOrders");
+      console.log("Response from API:", response.data);
       const ordersWithId = response.data.map((orders, index) => ({
         ...orders,
-        id: index + 1,
+        no: index + 1,
+        id: orders.id,
       }));
       setUser(ordersWithId);
     } catch (error) {
@@ -261,47 +263,6 @@ export default function ManagementOrder() {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
-                          </MenuButton>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <MenuItem key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </MenuItem>
-                            ))}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
@@ -416,7 +377,7 @@ export default function ManagementOrder() {
                     <DataGrid
                       rows={users}
                       columns={columns}
-                      pageSize={10}
+                      pageSize={100}
                       pagination
                     >
                       <div style={{ textAlign: "center" }}>

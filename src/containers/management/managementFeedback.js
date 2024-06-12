@@ -5,9 +5,6 @@ import {
   DisclosureButton,
   DisclosurePanel,
   Menu,
-  MenuButton,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import {
   Button,
@@ -21,7 +18,6 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import axiosClient from "../../services/api/api";
 import { MdCheck, MdClose } from "react-icons/md";
@@ -111,12 +107,13 @@ export default function ManagementFeedback() {
       headerName: "No",
       width: 70,
     },
+    { field: "feedbackId", headerName: "Feedback Id", width: 100 },
     { field: "userId", headerName: "User Id", width: 70 },
     { field: "fullName", headerName: "Full Name", width: 200 },
-    { field: "productName", headerName: "Product Name", width: 150 },
+    { field: "productName", headerName: "Product Name", width: 200 },
     { field: "productId", headerName: "ProductId", width: 70 },
     { field: "rating", headerName: "Rating", width: 70 },
-    { field: "title", headerName: "Title", width: 80 },
+    { field: "title", headerName: "Title", width: 100 },
     { field: "description", headerName: "Description", width: 200 },
     {
       field: "status",
@@ -165,23 +162,6 @@ export default function ManagementFeedback() {
         </Button>
       ),
     },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
-          </Button>
-        );
-      },
-    },
   ].map((column) => ({
     ...column,
     headerClassName: "super-app-theme--header",
@@ -210,6 +190,7 @@ export default function ManagementFeedback() {
       const response = await axiosClient.get("/api/Feedback/GetAllFeedbacks");
       const ordersWithId = response.data.map((orders, index) => ({
         ...orders,
+        feedbackId: orders.id,
         id: index + 1,
       }));
       setUser(ordersWithId);
@@ -218,16 +199,6 @@ export default function ManagementFeedback() {
     }
   };
 
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
-    try {
-      await axiosClient.delete(`/api/Users/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setCurrentRow((prev) => ({
@@ -305,47 +276,6 @@ export default function ManagementFeedback() {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
-                          </MenuButton>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <MenuItem key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </MenuItem>
-                            ))}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">

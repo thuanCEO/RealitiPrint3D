@@ -5,9 +5,6 @@ import {
   DisclosureButton,
   DisclosurePanel,
   Menu,
-  MenuButton,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
@@ -21,7 +18,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
 import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -109,11 +105,10 @@ export default function ManagementProduct() {
   };
   const columns = [
     {
-      field: "id",
+      field: "pro",
       headerName: "No",
       width: 70,
     },
-    { field: "title", headerName: "Title", width: 140 },
     {
       field: "imageUrl",
       headerName: "Image",
@@ -129,15 +124,13 @@ export default function ManagementProduct() {
       ),
     },
     { field: "productName", headerName: "Product Name", width: 200 },
-    { field: "description", headerName: "Description", width: 150 },
+    { field: "description", headerName: "Description", width: 300 },
     { field: "price", headerName: "Price", width: 160 },
     {
       field: "quantity",
       headerName: "Quantity",
       width: 100,
     },
-    { field: "categoryId", headerName: "Category", width: 80 },
-
     {
       field: "status",
       headerName: "Status",
@@ -178,7 +171,7 @@ export default function ManagementProduct() {
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation();
-          handleDetailsClick(params.row.id);
+          handleDetailsClick(params.row.pro);
         };
 
         return (
@@ -196,29 +189,12 @@ export default function ManagementProduct() {
       renderCell: (params) => (
         <Button
           variant="contained"
-          color="primary"
+          color="error"
           onClick={() => handleOpenEditModal(params.row)}
         >
           <FaRegEdit className="icon-table" />
         </Button>
       ),
-    },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
-          </Button>
-        );
-      },
     },
   ].map((column) => ({
     ...column,
@@ -246,8 +222,9 @@ export default function ManagementProduct() {
   const fetchUsers = async () => {
     try {
       const response = await axiosClient.get("/api/Product/GetAllProducts");
-      const ordersWithId = response.data.map((orders, index) => ({
-        ...orders,
+      const ordersWithId = response.data.map((pro, index) => ({
+        ...pro,
+        pro: pro.id,
         id: index + 1,
       }));
       setUser(ordersWithId);
@@ -256,19 +233,10 @@ export default function ManagementProduct() {
     }
   };
 
-  const handleDetailsClick = (userID) => {
-    navigate(`/reality3d/management/management-product-details-page/${userID}`);
+  const handleDetailsClick = (id) => {
+    navigate(`/reality3d/management/management-product-details-page/${id}`);
   };
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
-    try {
-      await axiosClient.delete(`/api/Users/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
+
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setCurrentRow((prev) => ({
@@ -348,47 +316,6 @@ export default function ManagementProduct() {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
-                          </MenuButton>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <MenuItem key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </MenuItem>
-                            ))}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">

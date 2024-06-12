@@ -105,12 +105,6 @@ export default function Header({ products = [] }) {
                   </Link>
                 </li>
                 <li>
-                  <Link to={""}>
-                    <AiOutlineInstagram />
-                  </Link>
-                </li>
-
-                <li>
                   {!isLoggedIn && (
                     <Link to={"/reality3d/login-account"}>
                       <span className="span-login">Đăng Nhập</span>

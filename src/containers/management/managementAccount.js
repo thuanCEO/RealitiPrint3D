@@ -4,16 +4,11 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
 import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -82,12 +77,6 @@ const navigation = [
   },
 ];
 
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -99,6 +88,7 @@ export default function ManagementAccount() {
   const [currentRow, setCurrentRow] = useState(null);
   const navigate = useNavigate();
   const [editModalOpen, setEditModalOpen] = useState(false);
+
   const handleOpenEditModal = (row) => {
     setCurrentRow(row);
     setEditModalOpen(true);
@@ -114,6 +104,7 @@ export default function ManagementAccount() {
       headerName: "No",
       width: 70,
     },
+    { field: "accId", headerName: "Account Id", width: 100 },
     { field: "fullName", headerName: "Full Name", width: 140 },
     { field: "phoneNumber", headerName: "Phone", width: 80 },
     { field: "email", headerName: "Email", width: 150 },
@@ -178,7 +169,7 @@ export default function ManagementAccount() {
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation();
-          handleDetailsClick(params.row.id);
+          handleDetailsClick(params.row.accId);
         };
 
         return (
@@ -196,29 +187,12 @@ export default function ManagementAccount() {
       renderCell: (params) => (
         <Button
           variant="contained"
-          color="primary"
+          color="error"
           onClick={() => handleOpenEditModal(params.row)}
         >
           <FaRegEdit className="icon-table" />
         </Button>
       ),
-    },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
-          </Button>
-        );
-      },
     },
   ].map((column) => ({
     ...column,
@@ -258,6 +232,7 @@ export default function ManagementAccount() {
       // Map through the filtered data to add an id field to each user
       const usersWithId = filteredData.map((user, index) => ({
         ...user,
+        accId: user.id,
         id: index + 1,
       }));
       setUser(usersWithId);
@@ -269,33 +244,30 @@ export default function ManagementAccount() {
   const handleDetailsClick = (id) => {
     navigate(`/reality3d/management/management-account-details-page/${id}`);
   };
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
-    try {
-      await axiosClient.delete(`/api/User/GetUserById/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
+
+    // Convert the value to an integer if the name is "status"
+    const updatedValue = name === "status" ? parseInt(value, 10) : value;
+
+    // Update the currentRow state
     setCurrentRow((prev) => ({
       ...prev,
-      [name]: name === "status" ? parseInt(value, 10) : value,
+      [name]: updatedValue,
     }));
   };
 
   const handleSaveEdit = async () => {
     try {
-      if (!currentRow || !currentRow.id) {
+      if (!currentRow || !currentRow.accId) {
         console.error("Invalid category data.");
         return;
       }
+      console.log("Updating user with accId:", currentRow.accId);
 
       const dataToUpdate = {
+        id: currentRow.accId,
         fullName: currentRow.fullName,
         phoneNumber: currentRow.phoneNumber,
         email: currentRow.email,
@@ -303,12 +275,12 @@ export default function ManagementAccount() {
         password: currentRow.password,
         address: currentRow.address,
         avatar: currentRow.avatar,
-        roleId: currentRow.roleId,
         status: parseInt(currentRow.status, 10),
+        roleId: currentRow.roleId,
       };
 
       await axiosClient.put(
-        `/api/User/UpdateUser/${currentRow.id}`,
+        `/api/User/UpdateUser/?id=${currentRow.accId}`,
         dataToUpdate,
         {
           headers: {
@@ -362,47 +334,6 @@ export default function ManagementAccount() {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
-                          </MenuButton>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <MenuItem key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </MenuItem>
-                            ))}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
@@ -476,23 +407,6 @@ export default function ManagementAccount() {
                       <BellIcon className="h-auto w-auto" aria-hidden="true" />
                     </button>
                   </div>
-                  <Menu as={Fragment} className="">
-                    {userNavigation.map((item) => (
-                      <MenuItem key={item.name}>
-                        {({ active }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              active ? "bg-gray-streamer" : "",
-                              "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                            )}
-                          >
-                            {item.name}
-                          </a>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </Menu>
                 </div>
               </DisclosurePanel>
             </Fragment>
@@ -518,7 +432,7 @@ export default function ManagementAccount() {
                       rows={users}
                       columns={columns}
                       pageSize={10}
-                      pagination
+                      pagination={true}
                     >
                       <div style={{ textAlign: "center" }}>
                         <button onClick={() => {}}>Previous</button>
@@ -544,7 +458,8 @@ export default function ManagementAccount() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 400,
+            maxHeight: "calc(100vh - 100px)",
+            overflowY: "auto",
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
@@ -556,7 +471,7 @@ export default function ManagementAccount() {
             variant="h6"
             component="h2"
           >
-            Edit Category
+            Edit Account
           </Typography>
           {currentRow && (
             <Box
@@ -578,7 +493,7 @@ export default function ManagementAccount() {
                 fullWidth
                 label="Phone Number"
                 name="phoneNumber"
-                value={currentRow.phoneNumber}
+                value={currentRow.phoneNumber || ""}
                 onChange={handleEditChange}
               />
               <TextField
@@ -604,30 +519,18 @@ export default function ManagementAccount() {
               />
               <TextField
                 fullWidth
+                label="Address"
+                name="address"
+                value={currentRow.address}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
                 label="Avatar"
                 name="avatar"
                 value={currentRow.avatar}
                 onChange={handleEditChange}
               />
-              <TextField
-                fullWidth
-                label="Address"
-                name="address"
-                value={currentRow.address}
-                onChange={handleEditChange}
-              />{" "}
-              <TextField
-                fullWidth
-                select
-                label="Role"
-                name="roleId"
-                value={currentRow.roleId}
-                onChange={handleEditChange}
-              >
-                <MenuItem value={2}>Quản Lí</MenuItem>
-                <MenuItem value={3}>Nhân Viên</MenuItem>
-                <MenuItem value={4}>Khách Hàng</MenuItem>
-              </TextField>
               <TextField
                 fullWidth
                 select
@@ -639,6 +542,19 @@ export default function ManagementAccount() {
                 <MenuItem value={1}>Hoạt động</MenuItem>
                 <MenuItem value={2}>Dừng hoạt động</MenuItem>
               </TextField>
+              <TextField
+                fullWidth
+                select
+                label="Role"
+                name="roleId"
+                value={currentRow.roleId}
+                onChange={handleEditChange}
+              >
+                <MenuItem value={1}>Quản Lí</MenuItem>
+                <MenuItem value={2}>Nhân Viên</MenuItem>
+                <MenuItem value={3}>Khách Hàng</MenuItem>
+              </TextField>
+
               <Button
                 variant="contained"
                 color="primary"

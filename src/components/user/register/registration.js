@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./registration.scss";
-
-import { FaRegUserCircle, FaLock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { FaRegUserCircle, FaEyeSlash, FaEye } from "react-icons/fa";
 import icon_image_shop3D from "../../../assets/images/logos/logoShopPrint3D.png";
 import icon_logo_google from "../../../assets/images/logos/google-icon.png";
 import Footer from "../../Common/footer/footer";
@@ -9,14 +9,15 @@ import axiosClient from "../../../services/api/api";
 
 export default function Registration() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
   const handleRegister = async () => {
     try {
-      if (!username || !email || !password || !confirmPassword) {
+      if (!username || !password || !confirmPassword) {
         setErrorMessage("Vui lòng điền đầy đủ thông tin.");
         return;
       }
@@ -24,11 +25,32 @@ export default function Registration() {
         setErrorMessage("Mật khẩu và xác nhận mật khẩu không khớp.");
         return;
       }
-      const response = await axiosClient.post("api/User/CreateUser", {
-        username,
-        email,
-        password,
-      });
+      const response = await axiosClient.post(
+        "api/User/CreateUser",
+        {
+          username,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Log the response for debugging
+      console.log("Response:", response);
+
+      if (response.status === 200 || response.status === 201) {
+        setErrorMessage(
+          "Bạn đã đăng kí thành công tài khoản, vui lòng đăng nhập vào hệ thống !!"
+        );
+        setTimeout(() => {
+          navigate("/reality3d/login-account");
+        }, 3000);
+      } else {
+        setErrorMessage("Đã có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.");
+      }
     } catch (error) {
       console.error("Error while registering:", error);
       setErrorMessage("Đã có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.");
@@ -66,33 +88,39 @@ export default function Registration() {
             </div>
             <div className="login-input-group">
               <input
-                placeholder="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="login-input"
-              />
-              <FaRegUserCircle className="icon" />
-            </div>
-            <div className="login-input-group">
-              <input
                 placeholder="Mật khẩu"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="login-input"
               />
-              <FaLock className="icon" />
+              {/* <FaLock className="icon" /> */}
+              <span onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <FaEyeSlash className="icon" />
+                ) : (
+                  <FaEye className="icon" />
+                )}
+              </span>
             </div>
             <div className="login-input-group">
               <input
                 placeholder="Xác nhận lại mật khẩu"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="login-input"
               />
-              <FaLock className="icon" />
+              {/* <FaLock className="icon" /> */}
+              <span
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <FaEyeSlash className="icon" />
+                ) : (
+                  <FaEye className="icon" />
+                )}
+              </span>
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <div className="container">

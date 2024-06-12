@@ -5,8 +5,8 @@ import Footer from "../../Common/footer/footer";
 import ProfileFormat from "./profileForm";
 
 export default function ProfilePages() {
-  const [setUserData] = useState(null);
-  const [setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");
@@ -14,7 +14,7 @@ export default function ProfilePages() {
       setUserData(JSON.parse(userDataFromStorage));
       setIsLoggedIn(true);
     }
-  });
+  }, []); // Empty dependency array ensures this effect runs only once after initial render
 
   return (
     <>
@@ -47,7 +47,7 @@ export default function ProfilePages() {
                 </li>
                 <li>
                   <Link
-                    to="/shipment-tracking"
+                    to={"/reality3d/history-orders-page"}
                     className="block py-3 px-4 hover:bg-gray-700 transition duration-200"
                   >
                     Xem đơn hàng

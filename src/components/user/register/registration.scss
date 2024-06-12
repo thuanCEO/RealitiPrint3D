@@ -148,3 +148,19 @@
     text-align: center;
     color: red;
 }
+
+@media screen and (-ms-high-contrast: active) {
+    .example {
+        background-color: black;
+        color: white;
+    }
+}
+
+@media (forced-colors: active) {
+    .example {
+        forced-color-adjust: auto;
+        /* Allows the browser to adjust the colors */
+        background-color: CanvasText;
+        color: Canvas;
+    }
+}
