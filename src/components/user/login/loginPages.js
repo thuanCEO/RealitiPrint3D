@@ -54,11 +54,11 @@ export default function Login() {
 
       setTimeout(() => {
         if (roleId === 1) {
-          //role 1 = admin
-          navigate("/reality3d/management/management-page");
-        } else if (roleId === 2) {
-          //role 2 = management
+          //role 1 = management
           navigate("/reality3d/management/management-dashboard-page");
+        } else if (roleId === 2) {
+          //role 2 = staff
+          navigate("/reality3d/management/staff-dashboard-page");
         } else if (roleId === 3) {
           //role 4 = customer
           navigate("/reality3d/home-page");
@@ -133,7 +133,7 @@ export default function Login() {
                 ĐĂNG NHẬP
               </button>
             </div>
-            <div className="login-button-group">
+            {/* <div className="login-button-group">
               <button
                 type="button"
                 onClick={handleLogin}
@@ -147,7 +147,7 @@ export default function Login() {
                 />
                 <span className="login-google-span">Google</span>
               </button>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>

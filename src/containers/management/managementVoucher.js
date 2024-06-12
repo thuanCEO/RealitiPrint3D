@@ -5,18 +5,19 @@ import {
   DisclosureButton,
   DisclosurePanel,
   Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  MenuItem,
+} from "@mui/material";
 import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
-import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../services/api/api";
@@ -90,18 +91,27 @@ export default function ManagementVoucher() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [users, setUser] = useState([]);
-
   const navigate = useNavigate();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
+  const handleOpenEditModal = (row) => {
+    setCurrentRow(row);
+    setEditModalOpen(true);
+  };
 
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+    setCurrentRow(null);
+  };
   const columns = [
     {
       field: "id",
       headerName: "No",
       width: 70,
     },
-    { field: "description", headerName: "Description", width: 300 },
-
-    { field: "discount", headerName: "Discount", width: 200 },
+    { field: "voId", headerName: "Vouchers Id", width: 200 },
+    { field: "description", headerName: "Description", width: 500 },
+    { field: "discount", headerName: "Discount", width: 300 },
 
     {
       field: "status",
@@ -136,49 +146,18 @@ export default function ManagementVoucher() {
       },
     },
     {
-      field: "detail",
-      headerName: "Detail",
-      sortable: false,
-      width: 80,
-      renderCell: (params) => {
-        const onClick = (e) => {
-          e.stopPropagation();
-          handleDetailsClick(params.row.id);
-        };
-
-        return (
-          <Button variant="contained" color="primary" onClick={onClick}>
-            <BiSolidDetail className="icon-table" />
-          </Button>
-        );
-      },
-    },
-    {
       field: "edit",
       headerName: "Edit",
       sortable: false,
       width: 80,
       renderCell: (params) => {
         return (
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleOpenEditModal(params.row)}
+          >
             <FaRegEdit className="icon-table" />
-          </Button>
-        );
-      },
-    },
-    {
-      field: "delete",
-      headerName: "Delete",
-      sortable: false,
-      width: 90,
-      renderCell: (params) => {
-        const onDelete = () => {
-          deleteUsers(params.row.Id);
-        };
-
-        return (
-          <Button variant="contained" color="error" onClick={onDelete}>
-            <MdDeleteOutline className="icon-table" />
           </Button>
         );
       },
@@ -211,6 +190,7 @@ export default function ManagementVoucher() {
       const response = await axiosClient.get("/api/Voucher/GetAllVouchers");
       const ordersWithId = response.data.map((orders, index) => ({
         ...orders,
+        voId: orders.id,
         id: index + 1,
       }));
       setUser(ordersWithId);
@@ -218,20 +198,45 @@ export default function ManagementVoucher() {
       console.error("Error fetching products:", error);
     }
   };
-
-  const handleDetailsClick = (userID) => {
-    navigate(`/detailsID/${userID}`);
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentRow((prev) => ({
+      ...prev,
+      [name]: name === "status" ? parseInt(value, 10) : value,
+    }));
   };
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
+
+  const handleSaveEdit = async () => {
     try {
-      await axiosClient.delete(`/api/Users/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
+      if (!currentRow || !currentRow.id) {
+        console.error("Invalid category data.");
+        return;
+      }
+
+      const dataToUpdate = {
+        title: currentRow.title,
+        description: currentRow.description,
+        discount: currentRow.discount,
+        status: parseInt(currentRow.status, 10),
+      };
+
+      await axiosClient.put(
+        `/api/Voucher/UpdateVoucher/${currentRow.id}`,
+        dataToUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      fetchUsers();
+      handleCloseEditModal();
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("Error saving edited data:", error);
     }
   };
+
   return (
     <>
       <div className="min-h-full">
@@ -270,47 +275,6 @@ export default function ManagementVoucher() {
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <MenuButton className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
-                          </MenuButton>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <MenuItem key={item.name}>
-                                {({ active }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </MenuItem>
-                            ))}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
@@ -440,6 +404,79 @@ export default function ManagementVoucher() {
           </main>
         </div>
       </div>
+      {/* Edit Modal */}
+      <Modal
+        open={editModalOpen}
+        onClose={handleCloseEditModal}
+        aria-labelledby="edit-category-modal-title"
+        aria-describedby="edit-category-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 1,
+          }}
+        >
+          <Typography
+            id="edit-category-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            Edit Category
+          </Typography>
+          {currentRow && (
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { mt: 2 },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                fullWidth
+                label="Description"
+                name="description"
+                value={currentRow.description}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Discount"
+                name="discount"
+                value={currentRow.discount}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                select
+                label="Status"
+                name="status"
+                value={currentRow.status}
+                onChange={handleEditChange}
+              >
+                <MenuItem value={1}>Hoạt động</MenuItem>
+                <MenuItem value={2}>Dừng hoạt động</MenuItem>
+              </TextField>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveEdit}
+                sx={{ mt: 2 }}
+              >
+                Save
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Modal>
     </>
   );
 }
