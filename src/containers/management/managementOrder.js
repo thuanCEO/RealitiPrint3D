@@ -5,17 +5,13 @@ import {
   DisclosureButton,
   DisclosurePanel,
   Menu,
-  MenuButton,
   MenuItem,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
 import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -168,7 +164,7 @@ export default function ManagementOrder() {
       width: 80,
       renderCell: (params) => {
         return (
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="error">
             <FaRegEdit className="icon-table" />
           </Button>
         );
@@ -215,16 +211,7 @@ export default function ManagementOrder() {
   const handleDetailsClick = (userID) => {
     navigate(`/reality3d/management/management-order-details-page/${userID}`);
   };
-  // Delete Users -> delete from database
-  const deleteUsers = async (Id) => {
-    try {
-      await axiosClient.delete(`/api/Users/${Id}`);
-      const updatedUsers = users.filter((user) => user.Id !== Id);
-      setUser(updatedUsers);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
+
   return (
     <>
       <div className="min-h-full">

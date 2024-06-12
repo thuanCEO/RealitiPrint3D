@@ -5,17 +5,19 @@ import {
   DisclosureButton,
   DisclosurePanel,
   Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  MenuItem,
+} from "@mui/material";
 import { Row, Col } from "react-bootstrap";
-import { MdDeleteOutline } from "react-icons/md";
 import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -90,8 +92,18 @@ export default function ManagementBlog() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [users, setUser] = useState([]);
-
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
   const navigate = useNavigate();
+
+  const handleOpenEditModal = (row) => {
+    setCurrentRow(row);
+    setEditModalOpen(true);
+  };
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+    setCurrentRow(null);
+  };
 
   const columns = [
     {
@@ -99,6 +111,7 @@ export default function ManagementBlog() {
       headerName: "No",
       width: 70,
     },
+    { field: "blogId", headerName: "Blog Id", width: 200 },
     { field: "title", headerName: "Title", width: 200 },
     { field: "content", headerName: "Content", width: 300 },
     { field: "userId", headerName: "UserId", width: 80 },
@@ -142,7 +155,7 @@ export default function ManagementBlog() {
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation();
-          handleDetailsClick(params.row.id);
+          handleDetailsClick(params.row.blogId);
         };
 
         return (
@@ -159,7 +172,11 @@ export default function ManagementBlog() {
       width: 80,
       renderCell: (params) => {
         return (
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleOpenEditModal(params.row)}
+          >
             <FaRegEdit className="icon-table" />
           </Button>
         );
@@ -193,6 +210,7 @@ export default function ManagementBlog() {
       const response = await axiosClient.get("/api/Blog/GetAllBlogs");
       const ordersWithId = response.data.map((orders, index) => ({
         ...orders,
+        blogId: orders.id,
         id: index + 1,
       }));
       setUser(ordersWithId);
@@ -201,10 +219,53 @@ export default function ManagementBlog() {
     }
   };
 
-  const handleDetailsClick = (userID) => {
-    navigate(`/reality3d/management/management-blogs-details-page/${userID}`);
+  const handleDetailsClick = (blogId) => {
+    navigate(`/reality3d/management/management-blogs-details-page/${blogId}`);
   };
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
 
+    // Convert the value to an integer if the name is "status"
+    const updatedValue = name === "status" ? parseInt(value, 10) : value;
+
+    // Update the currentRow state
+    setCurrentRow((prev) => ({
+      ...prev,
+      [name]: updatedValue,
+    }));
+  };
+  const handleSaveEdit = async () => {
+    try {
+      if (!currentRow || !currentRow.blogId) {
+        console.error("Invalid category data.");
+        return;
+      }
+      console.log("Updating user with accId:", currentRow.blogId);
+
+      const dataToUpdate = {
+        id: currentRow.accId,
+        title: currentRow.title,
+        content: currentRow.content,
+        userId: currentRow.userId,
+        status: parseInt(currentRow.status, 10),
+      };
+
+      await axiosClient.put(
+        `/api/Blog/UpdateBlog/?id=${currentRow.blogId}`,
+        dataToUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      fetchUsers();
+      handleCloseEditModal();
+    } catch (error) {
+      console.error("Error saving edited data:", error);
+    }
+  };
   return (
     <>
       <div className="min-h-full">
@@ -372,6 +433,88 @@ export default function ManagementBlog() {
           </main>
         </div>
       </div>
+      <Modal
+        open={editModalOpen}
+        onClose={handleCloseEditModal}
+        aria-labelledby="edit-category-modal-title"
+        aria-describedby="edit-category-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            maxHeight: "calc(100vh - 100px)",
+            overflowY: "auto",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 1,
+          }}
+        >
+          <Typography
+            id="edit-category-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            Edit Account
+          </Typography>
+          {currentRow && (
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { mt: 2 },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                fullWidth
+                label="Title"
+                name="title"
+                value={currentRow.title}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="Content"
+                name="content"
+                value={currentRow.content || ""}
+                onChange={handleEditChange}
+              />
+              <TextField
+                fullWidth
+                label="UserId"
+                readOnly // Use readOnly instead of readonly
+                name="userId"
+                value={currentRow.userId}
+                onChange={handleEditChange}
+              />
+
+              <TextField
+                fullWidth
+                select
+                label="Status"
+                name="status"
+                value={currentRow.status}
+                onChange={handleEditChange}
+              >
+                <MenuItem value={1}>Hoạt động</MenuItem>
+                <MenuItem value={2}>Dừng hoạt động</MenuItem>
+              </TextField>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveEdit}
+                sx={{ mt: 2 }}
+              >
+                Save
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Modal>
     </>
   );
 }

@@ -3,10 +3,6 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItems,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
@@ -23,13 +19,6 @@ import { Row, Col } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import axiosClient from "../../services/api/api";
 import { MdCheck, MdClose } from "react-icons/md";
-
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
 
 const navigation = [
   {
@@ -79,12 +68,6 @@ const navigation = [
   },
 ];
 
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -112,9 +95,14 @@ export default function ManagementService() {
       headerName: "No",
       width: 70,
     },
+    {
+      field: "serId",
+      headerName: "Service Id",
+      width: 100,
+    },
     { field: "serviceName", headerName: "ServiceName", width: 200 },
     { field: "price", headerName: "Price", width: 200 },
-    { field: "description", headerName: "Description", width: 580 },
+    { field: "description", headerName: "Description", width: 500 },
     {
       field: "status",
       headerName: "Status",
@@ -155,7 +143,7 @@ export default function ManagementService() {
       renderCell: (params) => (
         <Button
           variant="contained"
-          color="primary"
+          color="error"
           onClick={() => handleOpenEditModal(params.row)}
         >
           <FaRegEdit className="icon-table" />
@@ -186,6 +174,7 @@ export default function ManagementService() {
       const response = await axiosClient.get("/api/Service/GetAllServices");
       const ordersWithId = response.data.map((orders, index) => ({
         ...orders,
+        serId: orders.id,
         id: index + 1,
       }));
       setUser(ordersWithId);
@@ -193,30 +182,35 @@ export default function ManagementService() {
       console.error("Error fetching products:", error);
     }
   };
-
   const handleEditChange = (e) => {
     const { name, value } = e.target;
+
+    // Convert the value to an integer if the name is "status"
+    const updatedValue = name === "status" ? parseInt(value, 10) : value;
+
+    // Update the currentRow state
     setCurrentRow((prev) => ({
       ...prev,
-      [name]: name === "status" ? parseInt(value, 10) : value,
+      [name]: updatedValue,
     }));
   };
 
   const handleSaveEdit = async () => {
     try {
-      if (!currentRow || !currentRow.id) {
+      if (!currentRow || !currentRow.serId) {
         console.error("Invalid category data.");
         return;
       }
 
       const dataToUpdate = {
-        title: currentRow.title,
+        serviceName: currentRow.serviceName,
         description: currentRow.description,
+        price: currentRow.price,
         status: parseInt(currentRow.status, 10),
       };
 
       await axiosClient.put(
-        `/api/Category/UpdateCategory/${currentRow.id}`,
+        `/api/Service/UpdateService/${currentRow.serId}`,
         dataToUpdate,
         {
           headers: {
@@ -388,9 +382,9 @@ export default function ManagementService() {
             >
               <TextField
                 fullWidth
-                label="Title"
-                name="title"
-                value={currentRow.title}
+                label="Service Name"
+                name="serviceName"
+                value={currentRow.serviceName}
                 onChange={handleEditChange}
               />
               <TextField
@@ -398,6 +392,13 @@ export default function ManagementService() {
                 label="Description"
                 name="description"
                 value={currentRow.description}
+                onChange={handleEditChange}
+              />{" "}
+              <TextField
+                fullWidth
+                label="Price"
+                name="price"
+                value={currentRow.price}
                 onChange={handleEditChange}
               />
               <TextField

@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
   Menu,
+  MenuButton,
+  MenuItems,
   MenuItem,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import axiosClient from "../../services/api/api";
 import { useParams } from "react-router-dom";
+
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -119,10 +121,10 @@ export default function ManagementOrderDetails() {
     setOpen(!open);
   }
 
-  const fetchProductsDetails = async (productId) => {
+  const fetchProductsDetails = async (Id) => {
     try {
       const response = await axiosClient.get(
-        `/api/OrderDetail/GetOrderDetailById?id=${productId}`
+        `/api/Order/GetOrderById?id=${Id}`
       );
       setOrderDetails(response.data);
     } catch (error) {
@@ -249,22 +251,35 @@ export default function ManagementOrderDetails() {
                       <BellIcon className="h-auto w-auto" aria-hidden="true" />
                     </button>
                   </div>
-                  <Menu as={Fragment} className="">
-                    {userNavigation.map((item) => (
-                      <MenuItem key={item.name}>
-                        {({ active }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              active ? "bg-gray-streamer" : "",
-                              "block px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer"
-                            )}
-                          >
-                            {item.name}
-                          </a>
-                        )}
-                      </MenuItem>
-                    ))}
+                  <Menu as="div" className="relative">
+                    <MenuButton className="w-full">
+                      {({ open }) => (
+                        <Fragment>
+                          <div className="flex items-center justify-between px-[4px] py-[2px] text-sm font-medium leading-none text-gray-streamer">
+                            User Menu
+                          </div>
+                        </Fragment>
+                      )}
+                    </MenuButton>
+                    <MenuItems className="bg-gray-700">
+                      {userNavigation.map((item) => (
+                        <MenuItem key={item.name}>
+                          {({ active }) => (
+                            <a
+                              href={item.href}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-900 text-white"
+                                  : "text-gray-streamer hover:bg-gray-streamer hover:text-white",
+                                "block rounded-md px-[4px] py-[2px] text-sm font-medium"
+                              )}
+                            >
+                              {item.name}
+                            </a>
+                          )}
+                        </MenuItem>
+                      ))}
+                    </MenuItems>
                   </Menu>
                 </div>
               </DisclosurePanel>
@@ -272,8 +287,8 @@ export default function ManagementOrderDetails() {
           )}
         </Disclosure>
 
-        <header className="bg-white shadow h-16 w-full">
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <header className="bg-white shadow">
+          <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
               Management Details Orders
             </h1>
@@ -286,28 +301,37 @@ export default function ManagementOrderDetails() {
               <div className="w-full h-full">
                 {orderDetails ? (
                   <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl mx-auto">
-                    <h2 className="text-2xl font-bold mb-4">Product Details</h2>
+                    <h2 className="text-2xl font-bold mb-4">Orders Details</h2>
                     <div className="flex flex-col space-y-2">
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">ID:</span>
                         <span>{orderDetails.id}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Order ID:</span>
-                        <span>{orderDetails.orderId}</span>
+                        <span className="font-semibold">User Id:</span>
+                        <span>{orderDetails.userId}</span>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Product ID:</span>
-                        <span>{orderDetails.productId}</span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Quantity:</span>
-                        <span>{orderDetails.quantity}</span>
+                        <span className="font-semibold">Payment ID:</span>
+                        <span>{orderDetails.paymentId}</span>
                       </div>
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">Total Price:</span>
                         <span>{orderDetails.totalPrice}</span>
                       </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Final Price:</span>
+                        <span>{orderDetails.finalPrice}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Voucher Id:</span>
+                        <span>{orderDetails.voucherId}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Shipping Id:</span>
+                        <span>{orderDetails.shippingId}</span>
+                      </div>
+
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">Status:</span>
                         <span
@@ -316,9 +340,49 @@ export default function ManagementOrderDetails() {
                           {getStatusText(orderDetails.status)}
                         </span>
                       </div>
-                      <div className="flex items-center space-x-4">
-                        <span className="font-semibold">Service ID:</span>
-                        <span>{orderDetails.serviceId}</span>
+
+                      <div className="mt-6 ">
+                        <h3 className="text-xl font-bold mb-2 text-center ">
+                          Product Details
+                        </h3>
+                        {orderDetails.orderDetails.map((detail) => (
+                          <div
+                            key={detail.id}
+                            className="flex flex-col space-y-2 border-t pt-4 mt-4"
+                          >
+                            <div className="flex items-center space-x-4">
+                              <span className="font-semibold">Product Id:</span>
+                              <span>{detail.product.id}</span>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <span className="font-semibold">
+                                Product Name:
+                              </span>
+                              <span>{detail.product.productName}</span>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <span className="font-semibold">Title:</span>
+                              <span>{detail.product.title}</span>
+                            </div>
+
+                            <div className="flex items-center space-x-4">
+                              <span className="font-semibold">Quantity:</span>
+                              <span>{detail.quantity}</span>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <span className="font-semibold">
+                                Total Price:
+                              </span>
+                              <span>{detail.totalPrice}</span>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <span className="font-semibold">
+                                Description:
+                              </span>
+                              <span>{detail.product.description}</span>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
