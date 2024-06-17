@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://realityprint.somee.com/",
+  baseURL: "https://realityprint.somee.com/",
 
   // baseURL: "https://localhost:7170/",
   headers: {
