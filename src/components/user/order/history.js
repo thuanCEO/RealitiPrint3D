@@ -13,10 +13,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function OrderHistory() {
+export default function OrdersShipments() {
   const [orderHistory, setOrderHistory] = useState([]);
   const [error, setError] = useState(null);
   const [productDetails, setProductDetails] = useState({});
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -34,13 +35,24 @@ export default function OrderHistory() {
         console.log("Parsed user data:", data);
         const sortedOrders = (data.orders || []).sort((a, b) => b.id - a.id);
 
-        setOrderHistory(sortedOrders);
+        // Filter out orders with status 4 or 5
+        const filteredOrders = sortedOrders.filter(
+          (order) => order.status !== 4 && order.status !== 5
+        );
 
-        sortedOrders.forEach((order) => {
-          order.orderDetails.forEach(async (detail) => {
-            await fetchProductDetails(detail.productId);
-          });
-        });
+        setOrderHistory(filteredOrders);
+
+        await Promise.all(
+          filteredOrders.map(async (order) => {
+            await Promise.all(
+              order.orderDetails.map(async (detail) => {
+                await fetchProductDetails(detail.productId);
+              })
+            );
+          })
+        );
+
+        setLoading(false); // Set loading to false after fetching data
       } catch (error) {
         console.error("Error fetching user data:", error);
         setError(error.message);
@@ -63,6 +75,10 @@ export default function OrderHistory() {
       setError("Error fetching product details.");
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // Optional: Loading state while data is fetching
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen py-8">
@@ -191,15 +207,6 @@ export default function OrderHistory() {
                         >
                           <span>View Order</span>
                           <span className="sr-only">{order.number}</span>
-                        </a>
-                        <a
-                          href={order.invoiceHref}
-                          className="flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                          <span>View Invoice</span>
-                          <span className="sr-only">
-                            for order {order.number}
-                          </span>
                         </a>
                       </div>
                     </div>

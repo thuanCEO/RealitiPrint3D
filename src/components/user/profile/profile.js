@@ -42,7 +42,7 @@ export default function ProfilePages() {
                     to={"/reality3d/history-page"}
                     className="block py-3 px-4 hover:bg-gray-700 transition duration-200"
                   >
-                    Lịch sử mua hàng
+                    Xem đơn hàng
                   </Link>
                 </li>
                 <li>
@@ -50,15 +50,15 @@ export default function ProfilePages() {
                     to={"/reality3d/history-orders-page"}
                     className="block py-3 px-4 hover:bg-gray-700 transition duration-200"
                   >
-                    Xem đơn hàng
+                    Lịch sử mua hàng
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="/settings"
+                    to={"/reality3d/history-orders-fail-page"}
                     className="block py-3 px-4 hover:bg-gray-700 transition duration-200"
                   >
-                    Cài đặt
+                    Đơn hàng bị hủy
                   </Link>
                 </li>
               </ul>

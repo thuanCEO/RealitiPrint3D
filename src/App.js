@@ -22,6 +22,7 @@ import EditPages from "../src/containers/home/editPage";
 import ProfilePages from "../src/components/user/profile/profile";
 import HistoryPages from "../src/components/user/order/orderHistory";
 import HistoryOrdersPages from "../src/components/user/order/shipmentHistory";
+import HistoryOrdersFailPages from "../src/components/user/order/orderFail";
 
 // Management
 import ManagementDashboardPage from "./containers/management/managementDashboard";
@@ -67,6 +68,10 @@ export default function App() {
         <Route
           path="/reality3d/history-orders-page"
           element={<HistoryOrdersPages />}
+        />
+        <Route
+          path="/reality3d/history-orders-fail-page"
+          element={<HistoryOrdersFailPages />}
         />
         <Route path="/reality3d/edits-page" element={<EditPages />} />
 

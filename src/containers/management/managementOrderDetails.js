@@ -313,7 +313,12 @@ export default function ManagementOrderDetails() {
                       </div>
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">Payment ID:</span>
-                        <span>{orderDetails.paymentId}</span>
+                        <span>
+                          {" "}
+                          {orderDetails.paymentId === 1
+                            ? "Thanh toán khi nhận hàng"
+                            : "Thanh toán online"}
+                        </span>
                       </div>
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">Total Price:</span>
