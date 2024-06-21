@@ -4,13 +4,13 @@ import Header from "../../components/Common/header/header";
 import Footer from "../../components/Common/footer/footer";
 import axiosClient from "../../services/api/api";
 import SuccessModal from "./successModal";
-
+import { useNavigate } from "react-router-dom";
 export default function Cart() {
   const [products, setProducts] = useState([]);
   const [selectedVoucher, setSelectedVoucher] = useState("");
   const [discount, setDiscount] = useState(0);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const cartProducts = JSON.parse(sessionStorage.getItem("cart")) || [];
     setProducts(cartProducts);
@@ -42,8 +42,11 @@ export default function Cart() {
   );
 
   useEffect(() => {
-    if (selectedVoucher === "voucher1") {
+    if (selectedVoucher === "Sale 10%") {
       setDiscount(subtotal * 0.1);
+    }
+    if (selectedVoucher === "Sale 5%") {
+      setDiscount(subtotal * 0.05);
     } else {
       setDiscount(0);
     }
@@ -87,6 +90,7 @@ export default function Cart() {
         console.log("Order created successfully:", response.data);
 
         sessionStorage.removeItem("cart");
+        navigate("/reality3d/home-page");
 
         // Show the success modal
 

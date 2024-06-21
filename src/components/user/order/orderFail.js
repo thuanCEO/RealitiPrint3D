@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "../../Common/header/header";
 import Footer from "../../Common/footer/footer";
-import HisoryFormat from "./history";
+import OrdersFail from "./fail";
 
-export default function OrderHistoryPages() {
+export default function OrderFail() {
   const [, setUserData] = useState(null);
   const [, setIsLoggedIn] = useState(false);
 
@@ -69,7 +69,7 @@ export default function OrderHistoryPages() {
               <h2 className="text-2xl font-bold text-center">
                 Lịch sử mua hàng
               </h2>
-              <HisoryFormat />
+              <OrdersFail />
             </div>
           </main>
         </div>

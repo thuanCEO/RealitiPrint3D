@@ -13,7 +13,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function OrdersShipments() {
+export default function OrdersFail() {
   const [orderHistory, setOrderHistory] = useState([]);
   const [error, setError] = useState(null);
   const [productDetails, setProductDetails] = useState({});
@@ -37,7 +37,7 @@ export default function OrdersShipments() {
 
         // Filter out orders with status 4 or 5
         const filteredOrders = sortedOrders.filter(
-          (order) => order.status === 4
+          (order) => order.status === 5
         );
         setOrderHistory(filteredOrders);
 

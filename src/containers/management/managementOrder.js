@@ -4,13 +4,19 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
-  MenuItem,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  MenuItem,
+  Menu,
+  Modal,
+} from "@mui/material";
 import { Row, Col } from "react-bootstrap";
 import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
@@ -85,9 +91,20 @@ export default function ManagementOrder() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [users, setUser] = useState([]);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
 
   const navigate = useNavigate();
 
+  const handleOpenEditModal = (row) => {
+    setCurrentRow(row);
+    setEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+    setCurrentRow(null);
+  };
   const columns = [
     {
       field: "no",
@@ -164,7 +181,11 @@ export default function ManagementOrder() {
       width: 80,
       renderCell: (params) => {
         return (
-          <Button variant="contained" color="error">
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleOpenEditModal(params.row)}
+          >
             <FaRegEdit className="icon-table" />
           </Button>
         );
@@ -212,6 +233,68 @@ export default function ManagementOrder() {
     navigate(`/reality3d/management/management-order-details-page/${userID}`);
   };
 
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+
+    // Convert the value to an integer if the name is "status"
+    //  const updatedValue = name === "status" ? parseInt(value, 10) : value;
+
+    if (name === "status") {
+      const updatedValue = parseInt(value, 10);
+      const currentStatus = currentRow.status;
+
+      // Define the valid status transitions
+      const validTransitions = {
+        1: [2, 3, 4, 5],
+        2: [3, 4, 5],
+        3: [4, 5],
+        4: [],
+        5: [],
+      };
+      if (!validTransitions[currentStatus]?.includes(updatedValue)) {
+        console.error("Invalid status transition.");
+        return;
+      }
+    }
+
+    setCurrentRow((prev) => ({
+      ...prev,
+      [name]: name === "status" ? parseInt(value, 10) : value,
+    }));
+  };
+  const handleSaveEdit = async () => {
+    try {
+      if (!currentRow || !currentRow.id) {
+        console.error("Invalid category data.");
+        return;
+      }
+
+      const dataToUpdate = {
+        userId: currentRow.userId,
+        paymentId: currentRow.paymentId,
+        totalPrice: currentRow.totalPrice,
+        finalPrice: currentRow.finalPrice,
+        voucherId: currentRow.voucherId,
+        shippingId: currentRow.shippingId,
+        status: parseInt(currentRow.status, 10),
+      };
+
+      await axiosClient.put(
+        `/api/Order/UpdateOrder/?id=${currentRow.id}`,
+        dataToUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      fetchUsers();
+      handleCloseEditModal();
+    } catch (error) {
+      console.error("Error saving edited data:", error);
+    }
+  };
   return (
     <>
       <div className="min-h-full">
@@ -377,6 +460,116 @@ export default function ManagementOrder() {
               </div>
             </div>
           </main>
+          {/* Edit Modal */}
+          <Modal
+            open={editModalOpen}
+            onClose={handleCloseEditModal}
+            aria-labelledby="edit-category-modal-title"
+            aria-describedby="edit-category-modal-description"
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 400,
+                bgcolor: "background.paper",
+                boxShadow: 24,
+                p: 4,
+                borderRadius: 1,
+              }}
+            >
+              <Typography
+                id="edit-category-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Edit Category
+              </Typography>
+              {currentRow && (
+                <Box
+                  component="form"
+                  sx={{
+                    "& .MuiTextField-root": { mt: 2 },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                  <TextField
+                    fullWidth
+                    label="userId"
+                    name="User Id"
+                    value={currentRow.userId}
+                    onChange={handleEditChange}
+                    readOnly={true}
+                  />
+                  <TextField
+                    fullWidth
+                    label="paymentId"
+                    name="Payment Id"
+                    value={currentRow.paymentId}
+                    onChange={handleEditChange}
+                    readOnly={true}
+                  />{" "}
+                  <TextField
+                    fullWidth
+                    label="totalPrice"
+                    name="Total Price"
+                    value={currentRow.totalPrice}
+                    onChange={handleEditChange}
+                    readOnly={true}
+                  />
+                  <TextField
+                    fullWidth
+                    label="finalPrice"
+                    name="Final Price"
+                    value={currentRow.finalPrice}
+                    onChange={handleEditChange}
+                    readOnly={true}
+                  />
+                  <TextField
+                    fullWidth
+                    label="voucherId"
+                    name="Voucher Id"
+                    value={currentRow.voucherId}
+                    onChange={handleEditChange}
+                    readOnly={true}
+                  />
+                  <TextField
+                    fullWidth
+                    label="shippingId"
+                    name="Shipping Id"
+                    value={currentRow.shippingId}
+                    onChange={handleEditChange}
+                    readOnly={true}
+                  />
+                  <TextField
+                    fullWidth
+                    select
+                    label="Status"
+                    name="status"
+                    value={currentRow.status}
+                    onChange={handleEditChange}
+                  >
+                    <MenuItem value={1}>Chờ xác nhận đơn hàng</MenuItem>
+                    <MenuItem value={2}>Chờ lấy hàng</MenuItem>
+                    <MenuItem value={3}>Chờ giao hàng</MenuItem>
+                    <MenuItem value={4}>Giao hàng thành công</MenuItem>
+                    <MenuItem value={5}>Giao hàng thất bại</MenuItem>
+                  </TextField>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSaveEdit}
+                    sx={{ mt: 2 }}
+                  >
+                    Save
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </Modal>
         </div>
       </div>
     </>
