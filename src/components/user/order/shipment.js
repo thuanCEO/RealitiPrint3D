@@ -248,7 +248,7 @@ export default function OrdersShipments() {
                   </div>
                 ))
               ) : (
-                <div>No orders found.</div>
+                <div>Không có dữ liệu.</div>
               )}
             </div>
           </div>

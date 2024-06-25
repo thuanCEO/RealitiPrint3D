@@ -53,10 +53,10 @@ export default function Login() {
       toast.success("Đăng nhập thành công!");
 
       setTimeout(() => {
-        if (roleId === 1) {
+        if (roleId === 1 || roleId === 2) {
           //role 1 = management
           navigate("/reality3d/management/management-dashboard-page");
-        } else if (roleId === 2) {
+        } else if (roleId === 4) {
           //role 2 = staff
           navigate("/reality3d/management/staff-dashboard-page");
         } else if (roleId === 3) {

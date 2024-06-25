@@ -37,7 +37,8 @@ export default function Header({ products = [] }) {
   const handleLogout = () => {
     sessionStorage.clear();
     setIsLoggedIn(false);
-    navigate(0);
+    //  navigate(0);
+    navigate("/reality3d/home-page");
   };
 
   const toggleProfileMenu = () => {
@@ -88,7 +89,7 @@ export default function Header({ products = [] }) {
               <ul>
                 <li>
                   <AiOutlineMail />
-                  <span>reality3d@gmail.com</span>
+                  <span>inreality0102@gmail.com</span>
                 </li>
                 <li>Ship toàn quốc gia Việt Nam</li>
               </ul>
@@ -122,7 +123,9 @@ export default function Header({ products = [] }) {
                       {isProfileMenuOpen && (
                         <ul className="profile-menu">
                           <li>
-                            <Link to={"/reality3d/profile-page"}>Profile</Link>
+                            <Link to={"/reality3d/profile-page"}>
+                              Thông tin
+                            </Link>
                           </li>
                           <li>
                             <span

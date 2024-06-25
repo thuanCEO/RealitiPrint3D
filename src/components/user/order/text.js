@@ -121,7 +121,7 @@ export default function OrderHistory() {
                   </div>
                 ))
               ) : (
-                <div>No orders found.</div>
+                <div>Không có dữ liệu.</div>
               )}
               {error && <div className="text-red-500">Error: {error}</div>}
             </div>

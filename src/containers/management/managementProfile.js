@@ -4,12 +4,10 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
-  MenuItem,
-  Transition,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
+import ProfileFormat from "../../components/user/profile/profileForm";
 import { useNavigate } from "react-router-dom";
 const user = {
   name: "Tom Cook",
@@ -76,7 +74,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ManagementDashboard() {
+export default function ManagementProfileDashboard() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -89,6 +87,7 @@ export default function ManagementDashboard() {
     //  navigate(0);
     navigate("/reality3d/home-page");
   };
+
   // Example chart data
   const chartData = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -239,8 +238,9 @@ export default function ManagementDashboard() {
             <main className="flex-1 p-6 bg-gray-100">
               <div className="p-6 bg-white rounded shadow-md">
                 <h2 className="text-2xl font-bold text-center">
-                  Xem doanh thu
+                  Thay đổi thông tin cá nhân
                 </h2>
+                <ProfileFormat />
               </div>
             </main>
           </div>

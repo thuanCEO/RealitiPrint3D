@@ -5,15 +5,24 @@ import Footer from "../../components/Common/footer/footer";
 import axiosClient from "../../services/api/api";
 import SuccessModal from "./successModal";
 import { useNavigate } from "react-router-dom";
+
 export default function Cart() {
   const [products, setProducts] = useState([]);
   const [selectedVoucher, setSelectedVoucher] = useState("");
   const [discount, setDiscount] = useState(0);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [address, setAddress] = useState("");
+  const [shippingId, setShippingId] = useState(1); // Assuming 1 is a valid default shipping ID
   const navigate = useNavigate();
+
   useEffect(() => {
     const cartProducts = JSON.parse(sessionStorage.getItem("cart")) || [];
     setProducts(cartProducts);
+
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
+    if (userData && userData.address) {
+      setAddress(userData.address);
+    }
   }, []);
 
   const handleQuantityChange = (productId, newQuantity) => {
@@ -42,10 +51,9 @@ export default function Cart() {
   );
 
   useEffect(() => {
-    if (selectedVoucher === "Sale 10%") {
+    if (selectedVoucher === "voucher1") {
       setDiscount(subtotal * 0.1);
-    }
-    if (selectedVoucher === "Sale 5%") {
+    } else if (selectedVoucher === "voucher2") {
       setDiscount(subtotal * 0.05);
     } else {
       setDiscount(0);
@@ -66,6 +74,14 @@ export default function Cart() {
           paymentId: 1,
           totalPrice: total,
           finalPrice: total,
+          address: address,
+          voucherId:
+            selectedVoucher === "voucher1"
+              ? 1
+              : selectedVoucher === "voucher2"
+              ? 2
+              : null,
+          shippingId: shippingId,
         };
 
         const orderDetailDTO = products.map((product) => ({
@@ -93,7 +109,6 @@ export default function Cart() {
         navigate("/reality3d/home-page");
 
         // Show the success modal
-
         setShowSuccessModal(true);
       } else {
         console.error("User data or user ID not found.");
@@ -151,11 +166,22 @@ export default function Cart() {
                       className="border border-gray-300 rounded p-1"
                     >
                       <option value="">Chọn voucher</option>
-                      <option value="voucher1">Voucher 1</option>
-                      <option value="voucher2">Voucher 2</option>
+                      <option value="voucher1">Sale 10% </option>
+                      <option value="voucher2">Sale 5%</option>
                     </select>
                   </div>
                   <hr className="my-4" />
+                  <div className="mb-4">
+                    <label className="block text-gray-700">
+                      Địa chỉ giao hàng
+                    </label>
+                    <input
+                      type="text"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      className="w-full border border-gray-300 rounded p-2"
+                    />
+                  </div>
                   <div className="flex justify-between">
                     <p className="text-lg font-bold">Total</p>
                     <div>
@@ -164,20 +190,11 @@ export default function Cart() {
                       </p>
                     </div>
                   </div>
-                  {/* Checkout */}
-
-                  {/* <button
-                    className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-white hover:bg-blue-600"
-                    onClick={fetchCheckOut}
-                  >
-                    Thanh Toán
-                  </button> */}
-
                   <button
                     className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-white hover:bg-blue-600"
                     onClick={fetchCheckOut}
                   >
-                    Thanh Toán
+                    Mua Hàng
                   </button>
                 </div>
               </div>

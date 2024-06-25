@@ -11,20 +11,46 @@ export default function Registration() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+
   const handleRegister = async () => {
+    setUsernameError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
+
+    let isValid = true;
+
+    if (!username) {
+      setUsernameError("Tên đăng nhập không được để trống.");
+      isValid = false;
+    } else if (!username.endsWith("@gmail.com")) {
+      setUsernameError("Tên đăng nhập phải có đuôi là @gmail.com.");
+      isValid = false;
+    }
+
+    if (!password) {
+      setPasswordError("Mật khẩu không được để trống.");
+      isValid = false;
+    } else if (password.length <= 6) {
+      setPasswordError("Mật khẩu phải dài hơn 6 ký tự.");
+      isValid = false;
+    }
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Mật khẩu và xác nhận mật khẩu không khớp.");
+      isValid = false;
+    }
+
+    if (!isValid) {
+      return;
+    }
+
     try {
-      if (!username || !password || !confirmPassword) {
-        setErrorMessage("Vui lòng điền đầy đủ thông tin.");
-        return;
-      }
-      if (password !== confirmPassword) {
-        setErrorMessage("Mật khẩu và xác nhận mật khẩu không khớp.");
-        return;
-      }
       const response = await axiosClient.post(
         "api/User/CreateUser",
         {
@@ -42,18 +68,16 @@ export default function Registration() {
       console.log("Response:", response);
 
       if (response.status === 200 || response.status === 201) {
-        setErrorMessage(
+        alert(
           "Bạn đã đăng kí thành công tài khoản, vui lòng đăng nhập vào hệ thống !!"
         );
-        setTimeout(() => {
-          navigate("/reality3d/login-account");
-        }, 3000);
+        navigate("/reality3d/login-account");
       } else {
-        setErrorMessage("Đã có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.");
+        alert("Đã có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.");
       }
     } catch (error) {
       console.error("Error while registering:", error);
-      setErrorMessage("Đã có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.");
+      alert("Đã có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.");
     }
   };
 
@@ -85,6 +109,9 @@ export default function Registration() {
                 className="login-input"
               />
               <FaRegUserCircle className="icon" />
+              {usernameError && (
+                <p className="error-message">{usernameError}</p>
+              )}
             </div>
             <div className="login-input-group">
               <input
@@ -94,7 +121,6 @@ export default function Registration() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="login-input"
               />
-              {/* <FaLock className="icon" /> */}
               <span onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? (
                   <FaEyeSlash className="icon" />
@@ -102,6 +128,9 @@ export default function Registration() {
                   <FaEye className="icon" />
                 )}
               </span>
+              {passwordError && (
+                <p className="error-message">{passwordError}</p>
+              )}
             </div>
             <div className="login-input-group">
               <input
@@ -111,7 +140,6 @@ export default function Registration() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="login-input"
               />
-              {/* <FaLock className="icon" /> */}
               <span
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
@@ -121,8 +149,10 @@ export default function Registration() {
                   <FaEye className="icon" />
                 )}
               </span>
+              {confirmPasswordError && (
+                <p className="error-message">{confirmPasswordError}</p>
+              )}
             </div>
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
             <div className="container">
               <div className="login-account">
                 <a href="/reality3d/login-account">Đăng Nhập</a>
