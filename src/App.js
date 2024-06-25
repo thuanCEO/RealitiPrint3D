@@ -16,16 +16,20 @@ import ProductsList from "../src/containers/home/product";
 import ServicesList from "../src/containers/home/service";
 import ModelsList from "../src/containers/home/modelPage";
 import BlogPages from "../src/containers/home/blogPage";
+import BlogDetailPages from "../src/containers/home/blogDetailPage";
 import ProductDetailPage from "../src/containers/home/productDetail";
 import ViewCart from "../src/containers/home/cart";
 import EditPages from "../src/containers/home/editPage";
 import ProfilePages from "../src/components/user/profile/profile";
+import PasswordChangePages from "../src/components/user/profile/changePasswordForm";
 import HistoryPages from "../src/components/user/order/orderHistory";
 import HistoryOrdersPages from "../src/components/user/order/shipmentHistory";
 import HistoryOrdersFailPages from "../src/components/user/order/orderFail";
 
 // Management
 import ManagementDashboardPage from "./containers/management/managementDashboard";
+import ManagementProfileDashboardPage from "./containers/management/managementProfile";
+import ManagementPasswordDashboardPage from "./containers/management/managementPassword";
 import ManagementAccountsPage from "./containers/management/managementAccount";
 import ManagementProductsPage from "./containers/management/managementProduct";
 import ManagementBlogsPage from "./containers/management/managementBlog";
@@ -60,10 +64,18 @@ export default function App() {
           element={<ProductDetailPage />}
         />
         <Route
+          path="/reality3d/view-blog-detail/:id"
+          element={<BlogDetailPages />}
+        />
+        <Route
           path="/reality3d/registration-account"
           element={<RegistrationAccount />}
         />
         <Route path="/reality3d/profile-page" element={<ProfilePages />} />
+        <Route
+          path="/reality3d/profile-page/change-password"
+          element={<PasswordChangePages />}
+        />
         <Route path="/reality3d/history-page" element={<HistoryPages />} />
         <Route
           path="/reality3d/history-orders-page"
@@ -74,8 +86,15 @@ export default function App() {
           element={<HistoryOrdersFailPages />}
         />
         <Route path="/reality3d/edits-page" element={<EditPages />} />
-
         {/* Manager management*/}
+        <Route
+          path="/reality3d/management/management-dashboard-profile-page"
+          element={<ManagementProfileDashboardPage />}
+        />{" "}
+        <Route
+          path="/reality3d/management/management-dashboard-password-page"
+          element={<ManagementPasswordDashboardPage />}
+        />
         <Route
           path="/reality3d/management/management-dashboard-page"
           element={<ManagementDashboardPage />}

@@ -278,13 +278,25 @@ export default function ManagementAccount() {
         status: parseInt(currentRow.status, 10),
         roleId: currentRow.roleId,
       };
+      const formData = new FormData();
+      formData.append("id", currentRow.accId);
+      formData.append("fullName", currentRow.fullName);
+      formData.append("phoneNumber", currentRow.phoneNumber);
+      formData.append("email", currentRow.email);
+      formData.append("userName", currentRow.userName);
+      formData.append("password", currentRow.password);
+      formData.append("address", currentRow.address);
+      formData.append("avatar", currentRow.avatar);
+      formData.append("status", parseInt(currentRow.status, 10));
+      formData.append("roleId", currentRow.roleId);
 
       await axiosClient.put(
         `/api/User/UpdateUser/?id=${currentRow.accId}`,
-        dataToUpdate,
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            //    "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );

@@ -8,6 +8,7 @@ import {
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import axiosClient from "../../../services/api/api";
 import React, { useState, useEffect } from "react";
+import { Button } from "@mui/material";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -42,11 +43,14 @@ export default function OrdersShipments() {
 
         setOrderHistory(filteredOrders);
 
+        // Fetch product details for each order
         await Promise.all(
           filteredOrders.map(async (order) => {
             await Promise.all(
               order.orderDetails.map(async (detail) => {
-                await fetchProductDetails(detail.productId);
+                if (!productDetails[detail.productId]) {
+                  await fetchProductDetails(detail.productId);
+                }
               })
             );
           })
@@ -72,7 +76,43 @@ export default function OrdersShipments() {
         [productId]: response.data,
       }));
     } catch (error) {
-      setError("Error fetching product details.");
+      console.error("Error fetching product details for productId:", productId);
+      // Optionally handle error here, e.g., set an error state
+    }
+  };
+
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const orderToUpdate = orderHistory.find((order) => order.id === orderId);
+      if (!orderToUpdate) {
+        throw new Error(`Order with ID ${orderId} not found.`);
+      }
+
+      const dataToUpdate = {
+        ...orderToUpdate,
+        status: 5, // Update only the status field
+      };
+
+      const response = await axiosClient.put(
+        `/api/Order/UpdateOrder/?id=${orderId}`,
+        dataToUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Order cancelled successfully:", response.data);
+      setOrderHistory((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status: 5 } : order
+        )
+      );
+      window.location.reload();
+    } catch (error) {
+      console.error("Error cancelling order:", error.response || error.message);
+      // Handle error appropriately, e.g., set an error state
     }
   };
 
@@ -201,13 +241,14 @@ export default function OrdersShipments() {
                       </Menu>
 
                       <div className="hidden lg:col-span-2 lg:flex lg:items-center lg:justify-end lg:space-x-4">
-                        <a
-                          href={order.href}
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleCancelOrder(order.id)}
                           className="flex items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
-                          <span>View Order</span>
-                          <span className="sr-only">{order.number}</span>
-                        </a>
+                          Hủy
+                        </Button>
                       </div>
                     </div>
 
@@ -249,7 +290,7 @@ export default function OrdersShipments() {
                   </div>
                 ))
               ) : (
-                <div>No orders found.</div>
+                <div>Không có dữ liệu.</div>
               )}
             </div>
           </div>

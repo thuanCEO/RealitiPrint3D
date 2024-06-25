@@ -22,7 +22,7 @@ export default function Footer() {
                 <li>Địa chỉ: Q9, Thủ Đức</li>
                 <li>TP Hồ Chí Minh</li>
                 <li>Liên hệ: 0333888257</li>
-                <li>Email: reality3d@gmail.com</li>
+                <li>Email: inreality0102@gmail.com</li>
               </ul>
             </div>
           </div>

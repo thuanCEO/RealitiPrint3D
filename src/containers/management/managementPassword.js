@@ -10,6 +10,7 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
+import PasswordFormat from "../../components/user/profile/changePassword";
 import { useNavigate } from "react-router-dom";
 const user = {
   name: "Tom Cook",
@@ -76,19 +77,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ManagementDashboard() {
+export default function ManagementPasswordDashboard() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   function toggleOpen() {
     setOpen(!open);
   }
-  const handleLogout = () => {
-    sessionStorage.clear();
 
-    //  navigate(0);
-    navigate("/reality3d/home-page");
-  };
   // Example chart data
   const chartData = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -102,7 +98,12 @@ export default function ManagementDashboard() {
       },
     ],
   };
+  const handleLogout = () => {
+    sessionStorage.clear();
 
+    //  navigate(0);
+    navigate("/reality3d/home-page");
+  };
   // Chart options
   const options = {
     scales: {
@@ -239,8 +240,9 @@ export default function ManagementDashboard() {
             <main className="flex-1 p-6 bg-gray-100">
               <div className="p-6 bg-white rounded shadow-md">
                 <h2 className="text-2xl font-bold text-center">
-                  Xem doanh thu
+                  Thay đổi mật khẩu
                 </h2>
+                <PasswordFormat />
               </div>
             </main>
           </div>

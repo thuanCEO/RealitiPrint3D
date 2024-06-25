@@ -39,6 +39,14 @@ export default function ProfilePages() {
                 </li>
                 <li>
                   <Link
+                    to={"/reality3d/profile-page/change-password"}
+                    className="block py-3 px-4 hover:bg-gray-700 transition duration-200"
+                  >
+                    Đổi Mật Khẩu
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to={"/reality3d/history-page"}
                     className="block py-3 px-4 hover:bg-gray-700 transition duration-200"
                   >

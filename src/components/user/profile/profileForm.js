@@ -10,7 +10,9 @@ export default function ProfileFormat() {
     phoneNumber: "",
     email: "",
     address: "",
-    avatar: "",
+    avatar: "", // For displaying the current avatar
+    avatarFileName: "", // For storing the name of the new avatar file
+    image: null, // For holding the new image file
     userName: "",
     password: "",
     status: 1,
@@ -29,6 +31,7 @@ export default function ProfileFormat() {
         email: parsedData.email || "",
         address: parsedData.address || "",
         id: parsedData.id || null, // Setting id from storage
+        avatar: parsedData.avatar || "", // Set the avatar from stored data
       }));
     }
   }, []);
@@ -44,52 +47,40 @@ export default function ProfileFormat() {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const updatedUserData = {
-          ...userData,
-          avatar: event.target.result,
-        };
-        setUserData(updatedUserData);
-        sessionStorage.setItem("userData", JSON.stringify(updatedUserData));
-      };
-      reader.readAsDataURL(file);
+      setUserData((prevState) => ({
+        ...prevState,
+        image: file, // Save the new image file for updating
+        avatar: URL.createObjectURL(file), // Display the new image preview
+        avatarFileName: file.name, // Save the name of the new image file
+      }));
     }
   };
 
   const handleSave = async () => {
     try {
-      // Update the user data in sessionStorage
-      const updatedData = {
-        ...userData,
-        fullName: userData.fullName || "",
-        phoneNumber: userData.phoneNumber || "",
-        email: userData.email || "",
-        address: userData.address || "",
-      };
-
-      sessionStorage.setItem("userData", JSON.stringify(updatedData));
-
-      // Check if user ID is available
       if (!userData.id) {
         throw new Error("User ID is missing");
       }
+
       const formData = new FormData();
       formData.append("id", userData.id);
       formData.append("fullName", userData.fullName);
       formData.append("phoneNumber", userData.phoneNumber);
       formData.append("email", userData.email);
       formData.append("address", userData.address);
-      if (userData.avatar) {
-        const blob = await fetch(userData.avatar).then((r) => r.blob());
-        formData.append("avatar", blob, "avatar.jpg");
+      formData.append("userName", userData.userName);
+      formData.append("password", userData.password);
+      formData.append("status", userData.status);
+      formData.append("roleId", userData.roleId);
+
+      if (userData.image) {
+        formData.append("image", userData.image);
       }
 
-      // Send a PUT request to the API endpoint with JSON content type
       const response = await axiosClient.put(
         `/api/User/UpdateUser?id=${userData.id}`,
-        updatedData,
-        { headers: { "Content-Type": "application/json" } }
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
 
       console.log("Profile updated successfully", response.data);
@@ -118,92 +109,8 @@ export default function ProfileFormat() {
     >
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-          <div className="border-b border-gray-900/10 pb-12">
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              {/* FULLNAME */}
-              <div className="sm:col-span-4">
-                <label
-                  htmlFor="fullName"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Thông tin Họ & Tên
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="fullName"
-                    name="fullName"
-                    type="text"
-                    autoComplete="fullName"
-                    value={userData.fullName}
-                    onChange={handleChange}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              {/* PHONE */}
-              <div className="sm:col-span-3">
-                <label
-                  htmlFor="phoneNumber"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Số điện thoại
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    type="text"
-                    autoComplete="phoneNumber"
-                    value={userData.phoneNumber}
-                    onChange={handleChange}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              {/* EMAIL */}
-              <div className="sm:col-span-4">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Địa chỉ email
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    value={userData.email}
-                    onChange={handleChange}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              {/* ĐỊA CHỈ */}
-              <div className="col-span-full">
-                <label
-                  htmlFor="address"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Địa chỉ hiện tại
-                </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    name="address"
-                    id="address"
-                    autoComplete="street-address"
-                    value={userData.address}
-                    onChange={handleChange}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* ẢNH ĐẠI ĐIỆN */}
-          {/* <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            {/* Avatar */}
             <div className="col-span-full">
               <label
                 htmlFor="photo"
@@ -238,9 +145,98 @@ export default function ProfileFormat() {
                 >
                   Change
                 </label>
+                {userData.avatarFileName && (
+                  <span className="ml-3 text-sm text-gray-600">
+                    {userData.avatarFileName}
+                  </span>
+                )}
               </div>
             </div>
-          </div> */}
+
+            {/* FullName */}
+            <div className="sm:col-span-4">
+              <label
+                htmlFor="fullName"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Thông tin Họ & Tên
+              </label>
+              <div className="mt-2">
+                <input
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  autoComplete="fullName"
+                  value={userData.fullName}
+                  onChange={handleChange}
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            {/* PhoneNumber */}
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="phoneNumber"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Số điện thoại
+              </label>
+              <div className="mt-2">
+                <input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="text"
+                  autoComplete="phoneNumber"
+                  value={userData.phoneNumber}
+                  onChange={handleChange}
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="sm:col-span-4">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Địa chỉ email
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={userData.email}
+                  onChange={handleChange}
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            {/* Address */}
+            <div className="col-span-full">
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Địa chỉ hiện tại
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="address"
+                  id="address"
+                  autoComplete="street-address"
+                  value={userData.address}
+                  onChange={handleChange}
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -249,13 +245,13 @@ export default function ProfileFormat() {
           type="button"
           className="text-sm font-semibold leading-6 text-gray-900"
         >
-          Cancel
+          Hủy
         </button>
         <button
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Save
+          Lưu
         </button>
       </div>
     </form>

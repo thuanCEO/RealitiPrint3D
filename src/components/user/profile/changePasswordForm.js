@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "../../Common/header/header";
 import Footer from "../../Common/footer/footer";
-import OrdersFail from "./fail";
+import PasswordFormat from "./changePassword";
 
-export default function OrderFail() {
-  const [, setUserData] = useState(null);
-  const [, setIsLoggedIn] = useState(false);
+export default function ChangePasswordPages() {
+  const [userData, setUserData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");
@@ -14,7 +14,7 @@ export default function OrderFail() {
       setUserData(JSON.parse(userDataFromStorage));
       setIsLoggedIn(true);
     }
-  }, []);
+  }, []); // Empty dependency array ensures this effect runs only once after initial render
 
   return (
     <>
@@ -24,7 +24,7 @@ export default function OrderFail() {
           <aside className="w-64 bg-gray-800 text-white border-r border-gray-700">
             <div className="p-6">
               <h1 className="text-2xl font-bold text-center text-white">
-                Lịch sử mua hàng
+                Thông tin cá nhân
               </h1>
             </div>
             <nav className="mt-6">
@@ -75,9 +75,9 @@ export default function OrderFail() {
           <main className="flex-1 p-6 bg-gray-100">
             <div className="p-6 bg-white rounded shadow-md">
               <h2 className="text-2xl font-bold text-center">
-                Lịch sử mua hàng
+                Thay đổi mật khẩu
               </h2>
-              <OrdersFail />
+              <PasswordFormat />
             </div>
           </main>
         </div>
