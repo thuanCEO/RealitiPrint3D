@@ -3,16 +3,17 @@ import "./loginPages.scss";
 import { useNavigate } from "react-router-dom";
 import { FaRegUserCircle, FaLock } from "react-icons/fa";
 import icon_image_shop3D from "../../../assets/images/logos/logoShopPrint3D.png";
-import icon_logo_google from "../../../assets/images/logos/google-icon.png";
 import Footer from "../../Common/footer/footer";
 import axiosClient from "../../../services/api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ForgotPasswordPopup from "./forgotPasswordPopup"; // Import your popup component
 
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showForgotPassword, setShowForgotPassword] = useState(false); // State to control showing the popup
   const navigate = useNavigate();
 
   axiosClient.interceptors.request.use(
@@ -40,27 +41,19 @@ export default function Login() {
       );
       setErrorMessage("");
       const userData = response.data;
-      console.log("User data:", userData);
-      const { roleId, fullname, gemail, address, id } = userData;
+      const { roleId } = userData;
       sessionStorage.setItem("userData", JSON.stringify(userData));
       sessionStorage.setItem("roleId", roleId);
-      sessionStorage.setItem("fullname", fullname);
-      sessionStorage.setItem("gemail", gemail);
-      sessionStorage.setItem("address", address);
-      sessionStorage.setItem("id", id);
-      //    sessionStorage.setItem("token", token);
+      // Set other session storage items as needed
 
       toast.success("Đăng nhập thành công!");
 
       setTimeout(() => {
         if (roleId === 1 || roleId === 2) {
-          //role 1 = management
           navigate("/reality3d/management/management-dashboard-page");
         } else if (roleId === 4) {
-          //role 2 = staff
           navigate("/reality3d/management/staff-dashboard-page");
         } else if (roleId === 3) {
-          //role 4 = customer
           navigate("/reality3d/home-page");
         } else {
           navigate("/reality3d/404-page");
@@ -68,12 +61,23 @@ export default function Login() {
       }, 2000);
     } catch (error) {
       console.error("Login failed", error);
-      setErrorMessage("Invalid username or password");
+      setErrorMessage("Tên đăng nhập hoặc mật khẩu không hợp lệ");
     }
+  };
+
+  const openForgotPasswordPopup = () => {
+    setShowForgotPassword(true);
+  };
+
+  const closeForgotPasswordPopup = () => {
+    setShowForgotPassword(false);
   };
 
   return (
     <div>
+      {showForgotPassword && (
+        <ForgotPasswordPopup onClose={closeForgotPasswordPopup} />
+      )}
       <div className="login-container-header">
         <div className="login-container-header-icon">
           <img
@@ -88,15 +92,12 @@ export default function Login() {
         </div>
       </div>
       <div className="login-container">
-        {" "}
         <div className="login-box">
-          {" "}
-          {/* Login */}
           <h1 className="login-title">Đăng nhập</h1>
           <form className="login-form">
             <div className="login-input-group">
               <input
-                placeholder="Tên đăng nhập "
+                placeholder="Tên đăng nhập"
                 type="text"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
@@ -117,13 +118,15 @@ export default function Login() {
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <div className="container">
               <div className="password-recovery">
-                <a href="/registration">Quên mật khẩu</a>
+                <button type="button" onClick={openForgotPasswordPopup}>
+                  Quên mật khẩu
+                </button>
               </div>
               <div className="registration">
                 <a href="/reality3d/registration-account">Đăng ký</a>
               </div>
             </div>
-            <br></br>
+            <br />
             <div className="login-button-group">
               <button
                 type="button"
@@ -133,21 +136,6 @@ export default function Login() {
                 ĐĂNG NHẬP
               </button>
             </div>
-            {/* <div className="login-button-group">
-              <button
-                type="button"
-                onClick={handleLogin}
-                className="login-button"
-              >
-                <img
-                  src={icon_logo_google}
-                  alt="login-button"
-                  width="26px"
-                  height="14px"
-                />
-                <span className="login-google-span">Google</span>
-              </button>
-            </div> */}
           </form>
         </div>
       </div>
