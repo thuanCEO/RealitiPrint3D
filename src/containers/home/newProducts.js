@@ -8,15 +8,18 @@ export default function ProductsListPage() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
   const fetchProducts = async () => {
     try {
-      const resq = await axiosClient.get("api/Product/GetAllProducts");
-      setProducts(resq.data);
-      console.log(resq.data);
+      const res = await axiosClient.get("api/Product/GetAllProducts");
+      const sortedProducts = res.data.sort((a, b) => b.id - a.id); // Sắp xếp theo id giảm dần
+      setProducts(sortedProducts);
+      console.log(sortedProducts);
     } catch (error) {
       setError(error.message);
     }
   };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -31,11 +34,14 @@ export default function ProductsListPage() {
             </h2>
             <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
               {products
+                .filter((product) => product.status === 1)
                 .filter(
-                  (products) =>
-                    products.categoryId === 1 || products.categoryId === 2
+                  (product) =>
+                    product.categoryId === 1 ||
+                    product.categoryId === 2 ||
+                    product.categoryId === 3
                 )
-                .slice(0, 8)
+                .slice(0, 12)
                 .map((product) => (
                   <div key={product.id} className="group relative">
                     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">

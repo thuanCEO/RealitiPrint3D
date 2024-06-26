@@ -439,19 +439,17 @@ export default function ManagementAccount() {
               <div className="w-full h-full">
                 {" "}
                 <Row className="justify-content-center">
-                  <Col>
-                    <DataGrid
-                      rows={users}
-                      columns={columns}
-                      pageSize={10}
-                      pagination={true}
-                    >
-                      <div style={{ textAlign: "center" }}>
-                        <button onClick={() => {}}>Previous</button>
-                        <button onClick={() => {}}>Next</button>
-                      </div>
-                    </DataGrid>
-                  </Col>
+                  <DataGrid
+                    rows={users}
+                    columns={columns}
+                    pageSize={10}
+                    pagination={true}
+                  >
+                    <div style={{ textAlign: "center" }}>
+                      <button onClick={() => {}}>Previous</button>
+                      <button onClick={() => {}}>Next</button>
+                    </div>
+                  </DataGrid>
                 </Row>
               </div>
             </div>

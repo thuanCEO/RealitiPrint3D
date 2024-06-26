@@ -37,9 +37,9 @@ const ContactPage = () => {
       formData.append("subject", fullName || "No Subject");
       formData.append("message", message || "No message provided");
 
-      attachments.forEach((file) => {
-        formData.append("attachments", file);
-      });
+      // attachments.forEach((file) => {
+      //   formData.append("attachments", file);
+      // });
 
       // Prepare the request parameters
       const params = {
@@ -172,13 +172,13 @@ const ContactPage = () => {
                   onChange={handleInputChange}
                 />
               </div>
-              <input
+              {/* <input
                 type="file"
                 id="attachments"
                 name="attachments"
                 multiple
                 onChange={handleFileInputChange}
-              />
+              /> */}
               <div className="md:col-span-2">
                 <textarea
                   name="message"
