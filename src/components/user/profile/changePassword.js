@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../../services/api/api";
 
-export default function PasswordFormat({ userId }) {
+export default function PasswordFormat() {
   // Initialize state for user data
   const [userData, setUserData] = useState({
     id: null, // Initializing id as null
@@ -10,22 +10,18 @@ export default function PasswordFormat({ userId }) {
   });
 
   const [passwordError, setPasswordError] = useState(false);
+
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");
     if (userDataFromStorage) {
       const parsedData = JSON.parse(userDataFromStorage);
       setUserData((prevState) => ({
         ...prevState,
-        ...parsedData,
-        fullName: parsedData.fullName || "",
-        phoneNumber: parsedData.phoneNumber || "",
-        email: parsedData.email || "",
-        address: parsedData.address || "",
         id: parsedData.id || null, // Setting id from storage
-        avatar: parsedData.avatar || "", // Set the avatar from stored data
       }));
     }
   }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "password" || name === "confirmPassword") {
@@ -58,15 +54,10 @@ export default function PasswordFormat({ userId }) {
     }
 
     try {
-      const formData = new FormData();
-      formData.append("id", userData.id);
-      formData.append("password", userData.password);
+      // Construct the URL with query parameters
+      const url = `/api/User/UpdatePassword?userId=${userData.id}&Password=${userData.password}`;
 
-      const response = await axiosClient.put(
-        `/api/User/UpdateUserPassword?id=${userData.id}`, // Ensure this matches your backend route
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const response = await axiosClient.put(url);
 
       console.log("Password updated successfully", response.data);
       alert("Password updated successfully!");
@@ -84,7 +75,7 @@ export default function PasswordFormat({ userId }) {
       } else {
         console.error("Error message:", error.message);
       }
-      alert("An error occurred while updating password.");
+      alert("An error occurred while updating the password.");
     }
   };
 

@@ -22,7 +22,7 @@ import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../services/api/api";
-import { MdCheck, MdClose } from "react-icons/md";
+import { MdAdd, MdCheck, MdClose } from "react-icons/md";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -89,8 +89,33 @@ export default function ManagementProduct() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
   const [categories, setCategories] = useState([]);
-
+  const [addModalOpen, setAddModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleOpenAddModal = () => {
+    setAddModalOpen(true);
+  };
+  const handleCloseAddModal = () => {
+    setAddModalOpen(false);
+    setNewProduct({
+      productName: "",
+      description: "",
+      price: "",
+      quantity: "",
+      categoryId: "",
+      image: "",
+      status: 1,
+    });
+  };
+  const [newProduct, setNewProduct] = useState({
+    productName: "",
+    description: "",
+    price: "",
+    quantity: "",
+    categoryId: "",
+    image: "",
+    status: 1,
+  });
   const handleOpenEditModal = (row) => {
     setCurrentRow(row);
     setEditModalOpen(true);
@@ -98,6 +123,13 @@ export default function ManagementProduct() {
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
     setCurrentRow(null);
+  };
+  const handleAddChange = (e) => {
+    const { name, value } = e.target;
+    setNewProduct((prev) => ({
+      ...prev,
+      [name]: name === "status" ? parseInt(value, 10) : value,
+    }));
   };
   const columns = [
     {
@@ -241,6 +273,46 @@ export default function ManagementProduct() {
     }
   };
 
+  // Add product
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setNewProduct((prev) => ({
+      ...prev,
+      image: file,
+    }));
+  };
+  const handleAddProduct = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("title", newProduct.title);
+      formData.append("productName", newProduct.productName);
+      formData.append("description", newProduct.description);
+      formData.append("price", newProduct.price);
+      formData.append("quantity", newProduct.quantity);
+      formData.append("categoryId", newProduct.categoryId);
+      formData.append("status", newProduct.status);
+      formData.append("image", newProduct.image); // Ensure to append the image file here
+
+      const response = await axiosClient.post(
+        "/api/Product/CreateProduct",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      // After successfully adding the product, fetch the updated list of products
+      fetchUsers();
+
+      // Close the modal or reset form fields
+      handleCloseAddModal();
+
+      console.log("Product added successfully", response.data);
+      alert("Product added successfully!");
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("An error occurred while adding the product.");
+    }
+  };
+
   const handleDetailsClick = (id) => {
     navigate(`/reality3d/management/management-product-details-page/${id}`);
   };
@@ -253,6 +325,7 @@ export default function ManagementProduct() {
     }));
   };
 
+  // Edit
   const handleSaveEdit = async () => {
     try {
       if (!currentRow || !currentRow.id) {
@@ -404,10 +477,18 @@ export default function ManagementProduct() {
         </Disclosure>
 
         <header className="bg-white shadow h-16 w-full">
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 flex justify-between items-center">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
               Management Products
             </h1>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<MdAdd />}
+              onClick={handleOpenAddModal}
+            >
+              Add Product
+            </Button>
           </div>
         </header>
         {/* Main  */}
@@ -417,25 +498,130 @@ export default function ManagementProduct() {
               <div className="w-full h-full">
                 {" "}
                 <Row className="justify-content-center">
-                  <Col>
-                    <DataGrid
-                      rows={users}
-                      columns={columns}
-                      pageSize={10}
-                      pagination
-                    >
-                      <div style={{ textAlign: "center" }}>
-                        <button onClick={() => {}}>Previous</button>
-                        <button onClick={() => {}}>Next</button>
-                      </div>
-                    </DataGrid>
-                  </Col>
+                  <DataGrid
+                    rows={users}
+                    columns={columns}
+                    pageSize={10}
+                    pagination
+                  >
+                    {" "}
+                    <div style={{ textAlign: "center" }}>
+                      <button onClick={() => {}}>Previous</button>
+                      <button onClick={() => {}}>Next</button>
+                    </div>
+                  </DataGrid>
                 </Row>
               </div>
             </div>
           </main>
         </div>
       </div>
+      {/* Add Product */}
+      <Modal open={addModalOpen} onClose={handleCloseAddModal}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            maxHeight: "calc(100vh - 100px)",
+            overflowY: "auto",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 1,
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            Thêm sản phẩm mới
+          </Typography>
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Tiêu đề"
+            name="title"
+            value={newProduct.title}
+            onChange={handleAddChange}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Tên sản phẩm"
+            name="productName"
+            value={newProduct.productName}
+            onChange={handleAddChange}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Mô tả"
+            name="description"
+            value={newProduct.description}
+            onChange={handleAddChange}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Giá"
+            name="price"
+            type="number"
+            value={newProduct.price}
+            onChange={handleAddChange}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Số lượng"
+            name="quantity"
+            type="number"
+            value={newProduct.quantity}
+            onChange={handleAddChange}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Loại"
+            name="categoryId"
+            select
+            value={newProduct.categoryId}
+            onChange={handleAddChange}
+          >
+            {categories.map((category) => (
+              <MenuItem key={category.id} value={category.id}>
+                {category.title}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Trạng thái"
+            name="status"
+            select
+            value={newProduct.status}
+            onChange={handleAddChange}
+          >
+            <MenuItem value={1}>Active</MenuItem>
+            <MenuItem value={2}>Inactive</MenuItem>
+          </TextField>
+          <input type="file" onChange={handleImageUpload} accept="image/*" />
+          <Box mt={2} display="flex" justifyContent="flex-end">
+            <Button onClick={handleCloseAddModal} color="secondary">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddProduct}
+              color="primary"
+              variant="contained"
+              sx={{ ml: 2 }}
+            >
+              Add Product
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+      {/* Edit Product */}
       <Modal
         open={editModalOpen}
         onClose={handleCloseEditModal}

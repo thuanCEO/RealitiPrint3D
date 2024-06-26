@@ -39,35 +39,38 @@ export default function Blogs() {
           <div className="-my-8 divide-y-2 divide-gray-100">
             {error && <div className="text-red-500">{error}</div>}
             {blogs.length > 0 ? (
-              blogs.slice(0, 5).map((blog) => (
-                <div
-                  key={blog.id}
-                  className="py-8 flex flex-wrap md:flex-nowrap"
-                >
-                  <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                    <span className="font-semibold title-font text-gray-700">
-                      {blog.user.fullName}
-                    </span>
-                    <img
-                      src={blog.user.avatar}
-                      className="mt-1 rounded-full"
-                      width="100px"
-                      height="100px"
-                      alt="User Avatar"
-                    />
+              blogs
+                .filter((blog) => blog.status === 1)
+                .slice(0, 5)
+                .map((blog) => (
+                  <div
+                    key={blog.id}
+                    className="py-8 flex flex-wrap md:flex-nowrap"
+                  >
+                    <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                      <span className="font-semibold title-font text-gray-700">
+                        {blog.user.fullName}
+                      </span>
+                      <img
+                        src={blog.user.avatar}
+                        className="mt-1 rounded-full"
+                        width="100px"
+                        height="100px"
+                        alt="User Avatar"
+                      />
+                    </div>
+                    <div className="md:flex-grow">
+                      <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
+                        <Link to={`/reality3d/view-blog-detail/${blog.id}`}>
+                          {truncateText(blog.title, 50)}
+                        </Link>
+                      </h2>
+                      <p className="leading-relaxed">
+                        {truncateText(blog.content, 100)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="md:flex-grow">
-                    <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
-                      <Link to={`/reality3d/view-blog-detail/${blog.id}`}>
-                        {truncateText(blog.title, 50)}
-                      </Link>
-                    </h2>
-                    <p className="leading-relaxed">
-                      {truncateText(blog.content, 100)}
-                    </p>
-                  </div>
-                </div>
-              ))
+                ))
             ) : (
               <p>No blogs found.</p>
             )}

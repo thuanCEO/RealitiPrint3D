@@ -17,7 +17,7 @@ import {
   Typography,
   MenuItem,
 } from "@mui/material";
-import { Row, Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../services/api/api";
@@ -109,7 +109,7 @@ export default function ManagementVoucher() {
       headerName: "No",
       width: 70,
     },
-    { field: "voId", headerName: "Vouchers Id", width: 200 },
+    { field: "voId", headerName: "Vouchers Id", width: 100 },
     { field: "description", headerName: "Description", width: 500 },
     { field: "discount", headerName: "Discount", width: 300 },
 
@@ -385,19 +385,17 @@ export default function ManagementVoucher() {
               <div className="w-full h-full">
                 {" "}
                 <Row className="justify-content-center">
-                  <Col>
-                    <DataGrid
-                      rows={users}
-                      columns={columns}
-                      pageSize={10}
-                      pagination
-                    >
-                      <div style={{ textAlign: "center" }}>
-                        <button onClick={() => {}}>Previous</button>
-                        <button onClick={() => {}}>Next</button>
-                      </div>
-                    </DataGrid>
-                  </Col>
+                  <DataGrid
+                    rows={users}
+                    columns={columns}
+                    pageSize={10}
+                    pagination
+                  >
+                    <div style={{ textAlign: "center" }}>
+                      <button onClick={() => {}}>Previous</button>
+                      <button onClick={() => {}}>Next</button>
+                    </div>
+                  </DataGrid>
                 </Row>
               </div>
             </div>

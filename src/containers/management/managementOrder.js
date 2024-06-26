@@ -17,7 +17,7 @@ import {
   Menu,
   Modal,
 } from "@mui/material";
-import { Row, Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -443,19 +443,17 @@ export default function ManagementOrder() {
               <div className="w-full h-full">
                 {" "}
                 <Row className="justify-content-center">
-                  <Col>
-                    <DataGrid
-                      rows={users}
-                      columns={columns}
-                      pageSize={100}
-                      pagination
-                    >
-                      <div style={{ textAlign: "center" }}>
-                        <button onClick={() => {}}>Previous</button>
-                        <button onClick={() => {}}>Next</button>
-                      </div>
-                    </DataGrid>
-                  </Col>
+                  <DataGrid
+                    rows={users}
+                    columns={columns}
+                    pageSize={100}
+                    pagination
+                  >
+                    <div style={{ textAlign: "center" }}>
+                      <button onClick={() => {}}>Previous</button>
+                      <button onClick={() => {}}>Next</button>
+                    </div>
+                  </DataGrid>
                 </Row>
               </div>
             </div>

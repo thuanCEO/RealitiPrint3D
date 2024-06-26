@@ -15,7 +15,7 @@ import {
   Typography,
   MenuItem,
 } from "@mui/material";
-import { Row, Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import axiosClient from "../../services/api/api";
 import { MdCheck, MdClose } from "react-icons/md";
@@ -326,16 +326,14 @@ export default function ManagementService() {
               <div className="px-4 py-6 sm:px-0">
                 <div className="h-auto">
                   <Row>
-                    <Col>
-                      <DataGrid
-                        rows={users}
-                        columns={columns}
-                        pageSize={10}
-                        rowsPerPageOptions={[10]}
-                        disableSelectionOnClick
-                        autoHeight
-                      />
-                    </Col>
+                    <DataGrid
+                      rows={users}
+                      columns={columns}
+                      pageSize={10}
+                      rowsPerPageOptions={[10]}
+                      disableSelectionOnClick
+                      autoHeight
+                    />
                   </Row>
                 </div>
               </div>

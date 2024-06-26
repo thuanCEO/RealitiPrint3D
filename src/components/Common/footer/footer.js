@@ -31,38 +31,58 @@ export default function Footer() {
               <h6>Cửa Hàng</h6>
               <ul>
                 <li>
-                  <Link to="#">Reality Blog</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Reality Blog
+                  </Link>
                 </li>
 
                 <li>
-                  <Link to="#">Thông tin về chúng tôi</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Thông tin về chúng tôi
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#">Chính Sách Bảo Mật</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Chính Sách Bảo Mật
+                  </Link>
                 </li>
 
                 <li>
-                  <Link to="#">Trả Hàng & Hoàn Tiền</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Trả Hàng & Hoàn Tiền
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#">Sản phẩm kinh doanh</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Sản phẩm kinh doanh
+                  </Link>
                 </li>
               </ul>
               <ul>
                 <li>
-                  <Link to="#">Giới Thiệu Về Reality 3D Việt Nam</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Giới Thiệu Về Reality 3D Việt Nam
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#">Chăm Sóc Khách Hàng</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Chăm Sóc Khách Hàng
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#">Liên Hệ Với Truyền Thông</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Liên Hệ Với Truyền Thông
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#">Chương Trình Tiếp Thị Liên Kết </Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Chương Trình Tiếp Thị Liên Kết{" "}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#">Chính Sách Bảo Hành</Link>
+                  <Link to="/reality3d/view-information-about-page">
+                    Chính Sách Bảo Hành
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -71,7 +91,7 @@ export default function Footer() {
             <div className="footer__widget">
               <h6>Khuyến mãi & ưu đãi</h6>
               <p>Đăng ký nhận thông tin tại đây</p>
-              <form action="#">
+              <form action="/reality3d/view-information-about-page">
                 <div className="input-group">
                   <input type="text" placeholder="Nhập email"></input>
                   <button type="submit" className="button-submit">

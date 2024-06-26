@@ -15,7 +15,7 @@ import {
   Typography,
   MenuItem,
 } from "@mui/material";
-import { Row, Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { FaRegEdit } from "react-icons/fa";
 import axiosClient from "../../services/api/api";
 import { MdCheck, MdClose } from "react-icons/md";
@@ -102,7 +102,7 @@ export default function ManagementCategory() {
       headerName: "No",
       width: 70,
     },
-    { field: "cateId", headerName: "Category Id", width: 200 },
+    { field: "cateId", headerName: "Category Id", width: 100 },
     { field: "title", headerName: "Title", width: 200 },
     { field: "description", headerName: "Description", width: 580 },
     {
@@ -323,16 +323,14 @@ export default function ManagementCategory() {
               <div className="px-4 py-6 sm:px-8">
                 <div className="h-auto">
                   <Row>
-                    <Col>
-                      <DataGrid
-                        rows={users}
-                        columns={columns}
-                        pageSize={10}
-                        rowsPerPageOptions={[10]}
-                        disableSelectionOnClick
-                        autoHeight
-                      />
-                    </Col>
+                    <DataGrid
+                      rows={users}
+                      columns={columns}
+                      pageSize={10}
+                      rowsPerPageOptions={[10]}
+                      disableSelectionOnClick
+                      autoHeight
+                    />
                   </Row>
                 </div>
               </div>
