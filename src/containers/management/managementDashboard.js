@@ -11,6 +11,7 @@ import {
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Dashboard from "../dashboard/Dashboard";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -242,6 +243,7 @@ export default function ManagementDashboard() {
                   Xem doanh thu
                 </h2>
               </div>
+              <Dashboard />
             </main>
           </div>
         </div>
