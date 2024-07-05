@@ -386,6 +386,17 @@ export default function ManagementOrderDetails() {
                               </span>
                               <span>{detail.product.description}</span>
                             </div>
+                            <div className="flex items-center space-x-4">
+                              <span className="font-semibold">
+                                Product Image :
+                              </span>
+                            </div>
+                            <img
+                              src={detail.product.imageUrl}
+                              alt="Product Image"
+                              width={800}
+                              height={300}
+                            />
                           </div>
                         ))}
                       </div>

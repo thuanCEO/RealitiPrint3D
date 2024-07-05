@@ -1,27 +1,67 @@
+// EditPages.js
 import React, { useState, useRef, useEffect } from "react";
 import Header from "../../components/Common/header/header";
 import Footer from "../../components/Common/footer/footer";
 import { ChromePicker } from "react-color";
 import Draggable from "react-draggable";
 import img1 from "../../assets/images/products/R.png";
+import IconGrid from "./IconGrid"; // Import IconGrid component
 
 export default function EditPages() {
   const [selectedColor, setSelectedColor] = useState("#ffffff");
   const [elements, setElements] = useState([]);
-  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
   const canvasRef = useRef(null);
   const imgRef = useRef(null);
+  const [isErasing, setIsErasing] = useState(false); // State to toggle eraser mode
+
+  const handleToggleSection = (section) => {
+    setActiveSection(activeSection === section ? null : section);
+  };
 
   const handleAddElement = (type) => {
-    if (type === "color") {
-      setShowColorPicker(true);
-    } else {
-      setElements([...elements, { type, id: elements.length }]);
-    }
+    setElements([...elements, { type, id: elements.length }]);
   };
 
   const handleColorChange = (color) => {
     setSelectedColor(color.hex);
+  };
+
+  const handleIconSelect = (icon) => {
+    setElements([...elements, { type: "icon", id: elements.length, icon }]);
+    setActiveSection(null);
+  };
+
+  const handleEraserToggle = () => {
+    setIsErasing(!isErasing);
+  };
+
+  const handleCanvasClick = (e) => {
+    if (isErasing) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      elements.forEach((element, index) => {
+        if (element.type === "icon") {
+          // Check if click is within the bounds of the icon
+          // For simplicity, assuming icons are centered at their positions
+          if (
+            x >= element.x - 20 &&
+            x <= element.x + 20 &&
+            y >= element.y - 20 &&
+            y <= element.y + 20
+          ) {
+            // Remove the element if clicked within its bounds
+            const updatedElements = [...elements];
+            updatedElements.splice(index, 1);
+            setElements(updatedElements);
+          }
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -59,7 +99,7 @@ export default function EditPages() {
       <Header />
       <div className="flex flex-col min-h-screen">
         <div className="flex flex-1">
-          <aside className="w-64 bg-gray-800 text-white border-r border-gray-700">
+          <aside className="w-96 bg-gray-800 text-white border-r border-gray-700">
             <div className="p-6">
               <h1 className="text-2xl font-bold text-center text-white">
                 Thanh công cụ
@@ -67,31 +107,86 @@ export default function EditPages() {
             </div>
             <nav className="mt-6">
               <ul>
-                <li className="p-4 hover:bg-gray-700 cursor-pointer">
-                  <div onClick={() => handleAddElement("color")}>Thanh màu</div>
+                <li className="relative p-4 hover:bg-gray-700 cursor-pointer">
+                  <div onClick={() => handleToggleSection("color")}>
+                    Thanh màu
+                  </div>
+                  {activeSection === "color" && (
+                    <div className="mt-2">
+                      <ChromePicker
+                        color={selectedColor}
+                        onChangeComplete={handleColorChange}
+                      />
+                    </div>
+                  )}
                 </li>
-                <li className="p-4 hover:bg-gray-700 cursor-pointer">
-                  <div onClick={() => handleAddElement("icon")}>Thanh Icon</div>
+                <li className="relative p-4 hover:bg-gray-700 cursor-pointer">
+                  <div onClick={() => handleToggleSection("icon")}>
+                    Thanh Icon
+                  </div>
+                  {activeSection === "icon" && (
+                    <div className="mt-2">
+                      <IconGrid onSelect={handleIconSelect} />
+                    </div>
+                  )}
                 </li>
-                <li className="p-4 hover:bg-gray-700 cursor-pointer">
-                  <div onClick={() => handleAddElement("image")}>
+                <li className="relative p-4 hover:bg-gray-700 cursor-pointer">
+                  <div onClick={() => handleToggleSection("image")}>
                     Thanh logo
                   </div>
+                  {activeSection === "image" && (
+                    <div className="mt-2">
+                      <div
+                        className="cursor-pointer text-2xl p-2 flex justify-center items-center border border-gray-200 hover:bg-gray-100 rounded"
+                        onClick={() => handleAddElement("image")}
+                      >
+                        Add Logo
+                      </div>
+                    </div>
+                  )}
                 </li>
-                <li className="p-4 hover:bg-gray-700 cursor-pointer">
-                  <div onClick={() => handleAddElement("text")}>
+                <li className="relative p-4 hover:bg-gray-700 cursor-pointer">
+                  <div onClick={() => handleToggleSection("text")}>
                     Thêm text chữ
                   </div>
+                  {activeSection === "text" && (
+                    <div className="mt-2">
+                      <div
+                        className="cursor-pointer text-2xl p-2 flex justify-center items-center border border-gray-200 hover:bg-gray-100 rounded"
+                        onClick={() => handleAddElement("text")}
+                      >
+                        Add Text
+                      </div>
+                    </div>
+                  )}
                 </li>
-                <li className="p-4 hover:bg-gray-700 cursor-pointer">
-                  <div onClick={() => handleAddElement("pattern")}>
+                <li className="relative p-4 hover:bg-gray-700 cursor-pointer">
+                  <div onClick={() => handleToggleSection("pattern")}>
                     Thêm họa tiết
+                  </div>
+                  {activeSection === "pattern" && (
+                    <div className="mt-2">
+                      <div
+                        className="cursor-pointer text-2xl p-2 flex justify-center items-center border border-gray-200 hover:bg-gray-100 rounded"
+                        onClick={() => handleAddElement("pattern")}
+                      >
+                        Add Pattern
+                      </div>
+                    </div>
+                  )}
+                </li>
+                <li className="relative p-4 hover:bg-gray-700 cursor-pointer">
+                  <div onClick={handleEraserToggle}>
+                    {isErasing ? "Đang dùng tẩy" : "Dùng tẩy"}
                   </div>
                 </li>
               </ul>
             </nav>
           </aside>
-          <main className="flex-1 p-6 bg-gray-100 flex justify-center items-center">
+          <main
+            className="flex-1 p-6 bg-gray-100 flex justify-center items-center"
+            onClick={handleCanvasClick}
+          >
             <div className="p-6 bg-white rounded shadow-md w-full h-full flex flex-col items-center">
               <h2 className="text-2xl font-bold text-center mb-6">
                 Thiết Kế Sản Phẩm
@@ -106,24 +201,22 @@ export default function EditPages() {
                   <Draggable key={element.id}>
                     <div className="absolute m-2">
                       {element.type === "icon" && (
-                        <div>
-                          <span role="img" aria-label="icon">
-                            🌟
-                          </span>
-                        </div>
+                        <div className="text-4xl">{element.icon}</div>
                       )}
                       {element.type === "image" && (
                         <div>
                           <img
                             src="https://via.placeholder.com/50"
                             alt="placeholder"
+                            className="rounded"
                           />
                         </div>
                       )}
                       {element.type === "text" && (
                         <div
                           contentEditable={true}
-                          className="border p-2 bg-white"
+                          className="border border-gray-400 p-2 bg-white rounded"
+                          onBlur={(e) => (e.target.style.border = "none")}
                         >
                           Editable Text
                         </div>
@@ -146,14 +239,6 @@ export default function EditPages() {
                   </Draggable>
                 ))}
               </div>
-              {showColorPicker && (
-                <div className="mt-4">
-                  <ChromePicker
-                    color={selectedColor}
-                    onChangeComplete={handleColorChange}
-                  />
-                </div>
-              )}
             </div>
           </main>
         </div>

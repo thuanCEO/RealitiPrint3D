@@ -113,13 +113,14 @@ export default function ManagementOrder() {
     },
     { field: "id", headerName: "Order ID", width: 60 },
     { field: "userId", headerName: "User ID", width: 60 },
+    { field: "address", headerName: "Address", width: 100 },
     { field: "totalPrice", headerName: "Total Price", width: 150 },
     { field: "finalPrice", headerName: "Final Price", width: 150 },
-    { field: "voucherId", headerName: "Voucher ID", width: 80 },
+    { field: "voucherId", headerName: "Voucher ID", width: 60 },
     {
       field: "shippingId",
       headerName: "Shipping Id",
-      width: 80,
+      width: 60,
     },
     {
       field: "payment",
@@ -271,6 +272,7 @@ export default function ManagementOrder() {
 
       const dataToUpdate = {
         userId: currentRow.userId,
+        address: currentRow.address,
         paymentId: currentRow.paymentId,
         totalPrice: currentRow.totalPrice,
         finalPrice: currentRow.finalPrice,
@@ -499,6 +501,14 @@ export default function ManagementOrder() {
                     label="userId"
                     name="User Id"
                     value={currentRow.userId}
+                    onChange={handleEditChange}
+                    readOnly={true}
+                  />
+                  <TextField
+                    fullWidth
+                    label="address"
+                    name="Address"
+                    value={currentRow.address}
                     onChange={handleEditChange}
                     readOnly={true}
                   />
