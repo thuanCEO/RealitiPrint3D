@@ -41,15 +41,21 @@ export default function ViewFeedBackProduct() {
           {product.feedbacks && product.feedbacks.length > 0 ? (
             product.feedbacks.map((feedback) => (
               <div
-                key={feedback.id}
+                key={feedback.user.fullName}
                 className="py-8 flex flex-wrap md:flex-nowrap"
               >
-                <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                  <span className="font-semibold title-font text-gray-700">
-                    {feedback.userId}
+                <div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col items-center">
+                  <span className="font-semibold title-font text-gray-700 mb-2">
+                    {feedback.user.fullName}
                   </span>
+                  <img
+                    className="w-24 h-24 rounded-full object-cover"
+                    src={feedback.user.avatar}
+                    alt="User Avatar"
+                  />
                 </div>
-                <div className="md:flex-grow">
+
+                <div className="md:flex-grow md:pl-8">
                   <h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
                     {feedback.title}
                   </h2>
