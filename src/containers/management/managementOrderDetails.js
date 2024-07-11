@@ -329,12 +329,20 @@ export default function ManagementOrderDetails() {
                         <span>{orderDetails.finalPrice}</span>
                       </div>
                       <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Created Date:</span>
+                        <span>{orderDetails.createdDate}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
                         <span className="font-semibold">Voucher Id:</span>
                         <span>{orderDetails.voucherId}</span>
                       </div>
                       <div className="flex items-center space-x-4">
                         <span className="font-semibold">Shipping Id:</span>
                         <span>{orderDetails.shippingId}</span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="font-semibold">Is Payment:</span>
+                        <span>{orderDetails.isPayment}</span>
                       </div>
 
                       <div className="flex items-center space-x-4">

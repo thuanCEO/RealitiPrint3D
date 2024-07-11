@@ -43,6 +43,7 @@ export default function Login() {
       const userData = response.data;
       const { roleId } = userData;
       sessionStorage.setItem("userData", JSON.stringify(userData));
+      // sessionStorage.setItem("userId", userData.id);
       sessionStorage.setItem("roleId", roleId);
       // Set other session storage items as needed
 
