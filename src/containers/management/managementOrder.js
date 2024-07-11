@@ -116,6 +116,7 @@ export default function ManagementOrder() {
     { field: "address", headerName: "Address", width: 100 },
     { field: "totalPrice", headerName: "Total Price", width: 150 },
     { field: "finalPrice", headerName: "Final Price", width: 150 },
+    { field: "createdDate", headerName: "Created Date", width: 150 },
     { field: "voucherId", headerName: "Voucher ID", width: 60 },
     {
       field: "shippingId",
@@ -125,7 +126,7 @@ export default function ManagementOrder() {
     {
       field: "payment",
       headerName: "Payment Method",
-      width: 150,
+      width: 60,
       valueGetter: (params) => {
         if (
           !params ||
@@ -278,6 +279,7 @@ export default function ManagementOrder() {
         finalPrice: currentRow.finalPrice,
         voucherId: currentRow.voucherId,
         shippingId: currentRow.shippingId,
+        createdDate: currentRow.createdDate,
         status: parseInt(currentRow.status, 10),
       };
 
@@ -532,6 +534,14 @@ export default function ManagementOrder() {
                     fullWidth
                     label="finalPrice"
                     name="Final Price"
+                    value={currentRow.finalPrice}
+                    onChange={handleEditChange}
+                    readOnly={true}
+                  />
+                  <TextField
+                    fullWidth
+                    label="createdDate"
+                    name="Created Date"
                     value={currentRow.finalPrice}
                     onChange={handleEditChange}
                     readOnly={true}

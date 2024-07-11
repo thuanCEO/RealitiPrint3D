@@ -72,7 +72,7 @@ export default function Blogs() {
                   </div>
                 ))
             ) : (
-              <p>No blogs found.</p>
+              <p>Chưa có bài viết </p>
             )}
           </div>
         </div>

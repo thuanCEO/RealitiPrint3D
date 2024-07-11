@@ -17,12 +17,15 @@ export default function OrdersShipments() {
   const [orderHistory, setOrderHistory] = useState([]);
   const [error, setError] = useState(null);
   const [productDetails, setProductDetails] = useState({});
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = sessionStorage.getItem("id");
+        const userDataFromStorage = sessionStorage.getItem("userData");
+        const userData = JSON.parse(userDataFromStorage);
+        const userId = userData.id;
+
         if (!userId) {
           throw new Error("User ID not found in session");
         }

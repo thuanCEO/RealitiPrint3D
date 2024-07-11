@@ -10,6 +10,7 @@ export default function OrderHistoryPages() {
 
   useEffect(() => {
     const userDataFromStorage = sessionStorage.getItem("userData");
+    console.log("userDataFromStorage: ", userDataFromStorage);
     if (userDataFromStorage) {
       setUserData(JSON.parse(userDataFromStorage));
       setIsLoggedIn(true);

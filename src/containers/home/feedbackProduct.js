@@ -64,7 +64,7 @@ export default function ViewFeedBackProduct() {
               </div>
             ))
           ) : (
-            <p>No feedback available for this product.</p>
+            <p>Sản phẩm chưa có bảng đánh giá từ khách hàng.</p>
           )}
         </div>
       </div>

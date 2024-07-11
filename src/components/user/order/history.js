@@ -9,7 +9,7 @@ import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import axiosClient from "../../../services/api/api";
 import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -18,16 +18,19 @@ export default function OrdersShipments() {
   const [orderHistory, setOrderHistory] = useState([]);
   const [error, setError] = useState(null);
   const [productDetails, setProductDetails] = useState({});
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = sessionStorage.getItem("id");
+        const userDataFromStorage = sessionStorage.getItem("userData");
+        const userData = JSON.parse(userDataFromStorage);
+        const userId = userData.id;
+
+        console.log(userId);
         if (!userId) {
           throw new Error("User ID not found in session");
         }
-
         const response = await axiosClient.get(
           `/api/User/GetUserById?id=${userId}`
         );
@@ -36,14 +39,12 @@ export default function OrdersShipments() {
         console.log("Parsed user data:", data);
         const sortedOrders = (data.orders || []).sort((a, b) => b.id - a.id);
 
-        // Filter out orders with status 4 or 5
         const filteredOrders = sortedOrders.filter(
           (order) => order.status !== 4 && order.status !== 5
         );
 
         setOrderHistory(filteredOrders);
 
-        // Fetch product details for each order
         await Promise.all(
           filteredOrders.map(async (order) => {
             await Promise.all(
@@ -56,7 +57,7 @@ export default function OrdersShipments() {
           })
         );
 
-        setLoading(false); // Set loading to false after fetching data
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
         setError(error.message);
@@ -77,7 +78,6 @@ export default function OrdersShipments() {
       }));
     } catch (error) {
       console.error("Error fetching product details for productId:", productId);
-      // Optionally handle error here, e.g., set an error state
     }
   };
 
@@ -90,7 +90,7 @@ export default function OrdersShipments() {
 
       const dataToUpdate = {
         ...orderToUpdate,
-        status: 5, // Update only the status field
+        status: 5,
       };
 
       const response = await axiosClient.put(
@@ -112,12 +112,11 @@ export default function OrdersShipments() {
       window.location.reload();
     } catch (error) {
       console.error("Error cancelling order:", error.response || error.message);
-      // Handle error appropriately, e.g., set an error state
     }
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Optional: Loading state while data is fetching
+    return <div>Loading...</div>;
   }
 
   return (
@@ -137,7 +136,7 @@ export default function OrdersShipments() {
                   >
                     <h3 className="sr-only">
                       Order placed on{" "}
-                      <time dateTime={order.createdDatetime}>
+                      <time dateTime={order.createdDate}>
                         {order.createdDate}
                       </time>
                     </h3>
