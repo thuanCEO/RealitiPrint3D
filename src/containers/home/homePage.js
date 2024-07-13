@@ -10,6 +10,7 @@ import NewProducts from "../home/newProducts";
 import Blogs from "./blogs";
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -17,10 +18,12 @@ export default function HomePage() {
     };
     fetchData();
   }, []);
+
   return (
     <div>
       <Header />
       {/* <CarouselDefault /> */}
+
       {isLoading ? (
         <div className="flex justify-center items-center h-screen">
           <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>

@@ -4,10 +4,22 @@ import axiosClient from "../../../services/api/api";
 export default function ProductsListPage() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-
+  const [countdown, setCountdown] = useState({
+    hours: 2,
+    minutes: 0,
+    seconds: 0,
+  });
   useEffect(() => {
     fetchProducts();
   });
+  useEffect(() => {
+    fetchProducts();
+    const interval = setInterval(() => {
+      updateCountdown();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const fetchProducts = async () => {
     try {
@@ -18,7 +30,32 @@ export default function ProductsListPage() {
       setError(error.message);
     }
   };
+  const updateCountdown = () => {
+    if (
+      countdown.hours === 0 &&
+      countdown.minutes === 0 &&
+      countdown.seconds === 0
+    ) {
+      return;
+    }
+    setCountdown((prevCountdown) => {
+      let updatedCountdown = { ...prevCountdown };
 
+      if (updatedCountdown.seconds > 0) {
+        updatedCountdown.seconds--;
+      } else {
+        if (updatedCountdown.minutes > 0) {
+          updatedCountdown.minutes--;
+          updatedCountdown.seconds = 59;
+        } else {
+          updatedCountdown.hours--;
+          updatedCountdown.minutes = 59;
+          updatedCountdown.seconds = 59;
+        }
+      }
+      return updatedCountdown;
+    });
+  };
   if (error) {
     return <div>Error: {error.message}</div>;
   }
@@ -48,6 +85,32 @@ export default function ProductsListPage() {
                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                       />
                     </div>
+                    <div className="mt-1 flex justify-between">
+                      <div
+                        className="ml-0"
+                        style={{
+                          background:
+                            "linear-gradient(to right, darkorange, orange)",
+                          color: "white",
+                          padding: "5px 10px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        Flash Sale
+                      </div>
+                      <div
+                        className="mr-0"
+                        style={{
+                          background:
+                            "linear-gradient(to right, orange, lightcoral)",
+                          padding: "5px 10px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        Kết thúc sau: {countdown.hours}:{countdown.minutes}:
+                        {countdown.seconds}
+                      </div>
+                    </div>
                     <div className="mt-4 flex justify-between">
                       <div>
                         <h3 className="text-sm font-medium text-gray-700">
@@ -60,8 +123,22 @@ export default function ProductsListPage() {
                           </a>
                         </h3>
                       </div>
-                      <p className="text-sm font-medium text-red-500">
-                        {product.price.toLocaleString()}
+                      <div></div>
+                    </div>
+                    <div className="mt-3 flex items-center space-x-2">
+                      {product.categoryId === 1 && (
+                        <p className="text-sm font-medium text-gray-700">
+                          <del>
+                            {product.price.toLocaleString()}{" "}
+                            <span className="align-top text-xs"> đ</span>
+                          </del>
+                        </p>
+                      )}
+                      <p className="text-sm font-bold text-red-500">
+                        {product.categoryId === 1
+                          ? (product.price - 30000).toLocaleString()
+                          : product.price.toLocaleString()}{" "}
+                        <span className="align-top text-xs"> đ</span>
                       </p>
                     </div>
                   </div>

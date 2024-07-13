@@ -24,6 +24,7 @@ export default function ProductDetail() {
       const response = await axiosClient.get(
         `/api/Product/GetProductById?id=${productId}`
       );
+      console.log(response.data);
       setProductDetails(response.data);
       setUnitPrice(response.data.price);
       setTotalPrice(response.data.price);
@@ -68,6 +69,7 @@ export default function ProductDetail() {
       const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
       const productToAdd = {
         id: productDetails.id,
+        categoryId: productDetails.categoryId,
         imageUrl: productDetails.imageUrl,
         name: productDetails.productName,
         description: productDetails.description,
@@ -149,8 +151,20 @@ export default function ProductDetail() {
                 <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                   <div className="flex">
                     <span className="mr-3">Giá:</span>
-                    <span className="text-gray-900">
-                      {unitPrice.toLocaleString()} đ
+                    {productDetails.categoryId === 1 && (
+                      <span className="text-gray-700 mr-3">
+                        <del>
+                          {unitPrice.toLocaleString()}{" "}
+                          <span className="align-top text-xs"> đ</span>
+                        </del>
+                      </span>
+                    )}
+
+                    <span className="text-red-700 font-bold mr-3">
+                      {productDetails.categoryId === 1
+                        ? (unitPrice - 30000).toLocaleString()
+                        : unitPrice.toLocaleString()}{" "}
+                      <span className="align-top text-xs"> đ</span>
                     </span>
                   </div>
                   <div className="flex ml-6 items-center">
@@ -206,7 +220,8 @@ export default function ProductDetail() {
                 </div>
                 <div className="flex">
                   <span className="title-font font-medium text-2xl text-gray-900">
-                    {totalPrice.toLocaleString()} đ
+                    {(totalPrice - 30000).toLocaleString()}{" "}
+                    <span className="align-top text-xs"> đ</span>
                   </span>
                   <button
                     className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"

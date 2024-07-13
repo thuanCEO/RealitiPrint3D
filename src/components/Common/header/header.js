@@ -9,6 +9,7 @@ import {
 } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../utils/constants/routers";
+import RunningNotification from "../../../containers/home/saleNotificationPopup";
 
 export default function Header({ products = [] }) {
   const [userData, setUserData] = useState(null);
@@ -17,7 +18,8 @@ export default function Header({ products = [] }) {
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
   const [, setCart] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [showNotification, setShowNotification] = useState(true);
   const location = useLocation();
   useEffect(() => {
     const cartData = JSON.parse(sessionStorage.getItem("cart")) || [];
@@ -44,7 +46,11 @@ export default function Header({ products = [] }) {
   const toggleProfileMenu = () => {
     setProfileMenuOpen(!isProfileMenuOpen);
   };
-
+  useEffect(() => {
+    if (!isLoading) {
+      setShowNotification(true);
+    }
+  }, [isLoading]);
   const menus = [
     {
       name: "Trang Chủ",
@@ -55,13 +61,14 @@ export default function Header({ products = [] }) {
       path: ROUTERS.USER.BEST_SALE,
     },
     {
-      name: "Sản Phẩm",
-      path: ROUTERS.USER.PRODUCTS,
-    },
-    {
       name: "Model",
       path: ROUTERS.USER.MODELS,
     },
+    {
+      name: "Áo Thun",
+      path: ROUTERS.USER.PRODUCTS,
+    },
+
     {
       name: "Dịch Vụ",
       path: ROUTERS.USER.SERVICE3D,
@@ -145,6 +152,7 @@ export default function Header({ products = [] }) {
           </div>
         </div>
       </div>
+      {showNotification && <RunningNotification duration={1000} />}
       <div className="header-container">
         <div className="row">
           <div className="col-xl-2">
