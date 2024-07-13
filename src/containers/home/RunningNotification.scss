@@ -1,0 +1,28 @@
+.running-notification {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    background-color: #f44336;
+    z-index: 1000;
+    color: white;
+    padding: 10px 20px;
+    white-space: nowrap;
+    animation: slide-in 60s linear infinite;
+}
+
+.notification-text {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+@keyframes slide-in {
+    from {
+        left: 100%;
+
+    }
+
+    to {
+        left: -100%;
+
+    }
+}

@@ -62,7 +62,13 @@ export default function CartItem({ product, onQuantityChange, onRemove }) {
             </button>
           </div>
           <div className="flex items-center space-x-4">
-            <p className="text-sm">{product.price.toLocaleString()} </p>
+            <p className="text-sm">
+              {product.categoryId === 1
+                ? (product.price - 30000).toLocaleString()
+                : product.price.toLocaleString()}
+              <span className="align-top text-xs"> đ</span>{" "}
+            </p>
+
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

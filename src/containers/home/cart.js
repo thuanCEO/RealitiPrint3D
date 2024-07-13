@@ -45,10 +45,13 @@ export default function Cart() {
     sessionStorage.setItem("cart", JSON.stringify(updatedProducts));
   };
 
-  const subtotal = products.reduce(
-    (total, product) => total + product.price * product.quantity,
-    0
-  );
+  const subtotal = products.reduce((total, product) => {
+    // Giảm giá nếu categoryId là 1
+    const price =
+      product.categoryId === 1 ? product.price - 30000 : product.price;
+
+    return total + price * product.quantity;
+  }, 0);
 
   useEffect(() => {
     if (selectedVoucher === "voucher1") {

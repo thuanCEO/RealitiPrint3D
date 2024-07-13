@@ -22,7 +22,7 @@ import { BiSolidDetail } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../services/api/api";
-import { MdCheck, MdClose } from "react-icons/md";
+import { MdAdd, MdCheck, MdClose } from "react-icons/md";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -95,6 +95,7 @@ export default function ManagementBlog() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
   const navigate = useNavigate();
+  const [addModalOpen, setAddModalOpen] = useState(false);
 
   const handleOpenEditModal = (row) => {
     setCurrentRow(row);
@@ -104,7 +105,30 @@ export default function ManagementBlog() {
     setEditModalOpen(false);
     setCurrentRow(null);
   };
-
+  const handleOpenAddModal = () => {
+    setAddModalOpen(true);
+  };
+  const handleCloseAddModal = () => {
+    setAddModalOpen(false);
+    setNewBlogs({
+      productName: "",
+      description: "",
+      price: "",
+      quantity: "",
+      categoryId: "",
+      image: "",
+      status: 1,
+    });
+  };
+  const [newBlogs, setNewBlogs] = useState({
+    productName: "",
+    description: "",
+    price: "",
+    quantity: "",
+    categoryId: "",
+    image: "",
+    status: 1,
+  });
   const columns = [
     {
       field: "id",
@@ -405,6 +429,14 @@ export default function ManagementBlog() {
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
               Management Blogs
             </h1>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<MdAdd />}
+              onClick={handleOpenAddModal}
+            >
+              Add Blogs
+            </Button>
           </div>
         </header>
         {/* Main  */}
