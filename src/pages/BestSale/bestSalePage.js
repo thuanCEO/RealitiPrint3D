@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axiosClient from "../../../services/api/api";
+import Footer from "@components/common/footer/footer";
+import Header from "@components/common/header/header";
+import axiosClient from "@services/api/api";
 
-export default function ProductsListPage() {
+export default function BestSalePage() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [countdown, setCountdown] = useState({
@@ -20,7 +22,6 @@ export default function ProductsListPage() {
 
     return () => clearInterval(interval);
   }, []);
-
   const fetchProducts = async () => {
     try {
       const resq = await axiosClient.get("api/Product/GetAllProducts");
@@ -56,11 +57,25 @@ export default function ProductsListPage() {
       return updatedCountdown;
     });
   };
+  // const shuffleArray = (array) => {
+  //   const shuffledArray = [...array];
+  //   for (let i = shuffledArray.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [shuffledArray[i], shuffledArray[j]] = [
+  //       shuffledArray[j],
+  //       shuffledArray[i],
+  //     ];
+  //   }
+  //   return shuffledArray;
+  // };
+
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Error: {error}</div>;
   }
+
   return (
     <>
+      <Header />
       <div>
         <div className="bg-white">
           <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -75,7 +90,6 @@ export default function ProductsListPage() {
                   (products) =>
                     products.categoryId === 1 || products.categoryId === 2
                 )
-                .slice(0, 16)
                 .map((product) => (
                   <div key={product.id} className="group relative">
                     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
@@ -147,6 +161,7 @@ export default function ProductsListPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

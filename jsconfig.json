@@ -1,8 +1,51 @@
 {
     "compilerOptions": {
-        "target": "ES6",
-        "module": "CommonJS",
-        "baseUrl": "./src"
+        "target": "ES2020",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "outDir": "dist",
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "paths": {
+            "@app/*": [
+                "src/app/*"
+            ],
+            "@assets/*": [
+                "src/assets/*"
+            ],
+            "@components/*": [
+                "src/components/*"
+            ],
+            "@features/*": [
+                "src/features/*"
+            ],
+            "@pages/*": [
+                "src/pages/*"
+            ],
+            "@routers/*": [
+                "src/routers/*"
+            ],
+            "@services/*": [
+                "src/services/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
+            ],
+            "@layouts/*": [
+                "src/layouts/*"
+            ]
+        }
     },
-    "exclude": ["src/**/*"]
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

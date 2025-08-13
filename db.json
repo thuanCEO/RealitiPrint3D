@@ -1,0 +1,335 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "productName": "Áo 3D Galaxy",
+      "price": 150000,
+      "status": 1,
+      "categoryId": 1,
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUf1HtAzGM4JDXMn1YzG9O65zvVFG2I4W_xw&s",
+      "imageAlt": "Áo 3D Galaxy",
+      "description": "Áo 3D in họa tiết thiên hà đầy màu sắc, chất liệu vải mềm mại, thoáng mát."
+    },
+    {
+      "id": 2,
+      "productName": "Áo 3D Dragon",
+      "price": 180000,
+      "status": 1,
+      "categoryId": 1,
+      "imageUrl": "https://cf.shopee.vn/file/1f3319af72ab8e384d1a6ca608fb7c04_tn",
+      "imageAlt": "Áo 3D Dragon",
+      "description": "Hình rồng 3D sống động trên nền đen huyền bí, tạo cảm giác mạnh mẽ và cá tính."
+    },
+    {
+      "id": 3,
+      "productName": "Áo 3D Sunset",
+      "price": 140000,
+      "status": 1,
+      "categoryId": 2,
+      "imageUrl": "https://ae-pic-a1.aliexpress-media.com/kf/Hd33b48bd191246729a4f57e60bee1770C.jpg",
+      "imageAlt": "Áo 3D Sunset",
+      "description": "Họa tiết hoàng hôn 3D đầy nghệ thuật, phù hợp cho các buổi dạo phố hay đi biển."
+    },
+    {
+      "id": 4,
+      "productName": "Áo 3D Neon City",
+      "price": 170000,
+      "status": 1,
+      "categoryId": 1,
+      "imageUrl": "https://athundep.com/wp-content/uploads/2019/05/63-copy.jpg",
+      "imageAlt": "Áo 3D Neon City",
+      "description": "Áo với phong cách Neon 3D hiện đại, tỏa sáng trong đêm, cực kỳ cá tính."
+    },
+    {
+      "id": 5,
+      "productName": "Áo 3D Anime Hero",
+      "price": 160000,
+      "status": 1,
+      "categoryId": 2,
+      "imageUrl": "https://m.media-amazon.com/images/I/618bZX+K8ML._AC_UL1000_.jpg",
+      "imageAlt": "Áo 3D Anime Hero",
+      "description": "Thiết kế 3D nhân vật anime nổi bật, dành cho các fan yêu thích văn hóa Nhật Bản."
+    },
+    {
+      "id": 6,
+      "productName": "Áo 3D Hologram",
+      "price": 200000,
+      "status": 1,
+      "categoryId": 1,
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaZM9pd3k4sxCsL7IrfKLs-xDiR0GG5DJM8A&s",
+      "imageAlt": "Áo 3D Hologram",
+      "description": "Chất liệu hologram phản quang 3D, tạo hiệu ứng màu sắc thay đổi theo ánh sáng."
+    },
+    {
+      "id": 7,
+      "productName": "Áo 3D Ocean Wave",
+      "price": 145000,
+      "status": 1,
+      "categoryId": 2,
+      "imageUrl": "https://gw.alicdn.com/imgextra/i2/2807852584/O1CN01YSZwPe1UxWIzaBX09_!!2807852584.jpg_Q75.jpg_.webp",
+      "imageAlt": "Áo 3D Ocean Wave",
+      "description": "Áo 3D sóng biển mềm mại, họa tiết sống động, mang lại cảm giác thư giãn, tươi mới."
+    },
+    {
+      "id": 8,
+      "productName": "Áo 3D Cyberpunk",
+      "price": 190000,
+      "status": 1,
+      "categoryId": 1,
+      "imageUrl": "https://animeape.com/wp-content/uploads/2023/03/Johnny-Silverhand-Cyberpunk-2077_AOP-Hoodie-3D-FRONT_Mockup.jpg",
+      "imageAlt": "Áo 3D Cyberpunk",
+      "description": "Phong cách Cyberpunk 3D đầy sáng tạo, thích hợp cho các buổi tiệc hoặc streetwear."
+    },
+    {
+      "id": 9,
+      "productName": "Áo 3D Forest Spirit",
+      "price": 155000,
+      "status": 1,
+      "categoryId": 2,
+      "imageUrl": "https://printstyle.com.vn/wp-content/uploads/2023/07/z4547998710831_9f1ddeb9290a4806412a458dc9b35ed9.jpg",
+      "imageAlt": "Áo 3D Forest Spirit",
+      "description": "Họa tiết linh hồn rừng 3D, tông màu xanh dịu mắt, rất hợp cho phong cách tự nhiên."
+    },
+    {
+      "id": 10,
+      "productName": "Áo 3D Tech Pattern",
+      "price": 175000,
+      "status": 1,
+      "categoryId": 1,
+      "imageUrl": "https://newstyle.vn/wp-content/uploads/2022/02/a14-1.jpg",
+      "imageAlt": "Áo 3D Tech Pattern",
+      "description": "Họa tiết công nghệ 3D độc đáo, mang phong cách hiện đại và tinh tế."
+    }
+  ],
+  "blogs": [
+    {
+      "id": 1,
+      "title": "Khám phá công nghệ in 3D",
+      "content": "In 3D đang thay đổi cách sản xuất trong nhiều lĩnh vực...",
+      "status": 1,
+      "user": {
+        "fullName": "Nguyễn Văn A",
+        "avatar": "https://i.pravatar.cc/100?img=20"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Ứng dụng thực tế ảo trong giáo dục",
+      "content": "Thực tế ảo giúp học sinh trải nghiệm kiến thức trực quan hơn...",
+      "status": 1,
+      "user": {
+        "fullName": "Trần Thị B",
+        "avatar": "https://i.pravatar.cc/100?img=2"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Tương lai của AI trong ngành y tế",
+      "content": "AI hỗ trợ chuẩn đoán bệnh nhanh hơn và chính xác hơn...",
+      "status": 1,
+      "user": {
+        "fullName": "Lê Văn C",
+        "avatar": "https://i.pravatar.cc/100?img=3"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Thiết kế mô hình 3D cho in ấn",
+      "content": "Học cách tạo mô hình chuẩn để in 3D mượt mà...",
+      "status": 1,
+      "user": {
+        "fullName": "Phạm Thị D",
+        "avatar": "https://i.pravatar.cc/100?img=4"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Các loại máy in 3D phổ biến",
+      "content": "So sánh các loại máy in FDM, SLA, SLS...",
+      "status": 1,
+      "user": {
+        "fullName": "Hoàng Văn E",
+        "avatar": "https://i.pravatar.cc/100?img=5"
+      }
+    },
+    {
+      "id": 6,
+      "title": "Cách tối ưu hóa mô hình in 3D",
+      "content": "Giảm thời gian in và vật liệu bằng cách thiết kế đúng...",
+      "status": 1,
+      "user": {
+        "fullName": "Nguyễn Thị F",
+        "avatar": "https://i.pravatar.cc/100?img=6"
+      }
+    },
+    {
+      "id": 7,
+      "title": "Lịch sử và phát triển của in 3D",
+      "content": "Từ những năm 80, in 3D đã trải qua nhiều giai đoạn...",
+      "status": 1,
+      "user": {
+        "fullName": "Trần Văn G",
+        "avatar": "https://i.pravatar.cc/100?img=7"
+      }
+    },
+    {
+      "id": 8,
+      "title": "Các phần mềm thiết kế 3D phổ biến",
+      "content": "Blender, Tinkercad, Fusion 360 là những phần mềm tốt...",
+      "status": 1,
+      "user": {
+        "fullName": "Lê Thị H",
+        "avatar": "https://i.pravatar.cc/100?img=8"
+      }
+    },
+    {
+      "id": 9,
+      "title": "Tạo vật liệu mới cho in 3D",
+      "content": "Nghiên cứu vật liệu sinh học và nhựa thân thiện môi trường...",
+      "status": 1,
+      "user": {
+        "fullName": "Phạm Văn I",
+        "avatar": "https://i.pravatar.cc/100?img=9"
+      }
+    },
+    {
+      "id": 10,
+      "title": "In 3D trong ngành thời trang",
+      "content": "Sản xuất quần áo, giày dép độc đáo với in 3D...",
+      "status": 1,
+      "user": {
+        "fullName": "Hoàng Thị J",
+        "avatar": "https://i.pravatar.cc/100?img=10"
+      }
+    },
+    {
+      "id": 11,
+      "title": "Sử dụng in 3D trong xây dựng",
+      "content": "Nhà in 3D giúp tiết kiệm chi phí và thời gian xây dựng...",
+      "status": 1,
+      "user": {
+        "fullName": "Nguyễn Văn K",
+        "avatar": "https://i.pravatar.cc/100?img=100"
+      }
+    },
+    {
+      "id": 12,
+      "title": "In 3D và y học cá nhân hóa",
+      "content": "Cấy ghép, mô phỏng giải phẫu theo từng bệnh nhân...",
+      "status": 1,
+      "user": {
+        "fullName": "Trần Thị L",
+        "avatar": "https://i.pravatar.cc/100?img=99"
+      }
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "productName": "Sản phẩm A",
+      "price": 100000,
+      "status": 1,
+      "categoryId": 1,
+      "imageUrl": "https://dongphuckhanhlinh.com/pic/product/39-ao-3d_637145480151850678.jpg?w=800",
+      "imageAlt": "Sản phẩm A"
+    },
+    {
+      "id": 2,
+      "productName": "Sản phẩm B",
+      "price": 200000,
+      "status": 1,
+      "categoryId": 2,
+      "imageUrl": "https://dongphuckhanhlinh.com/pic/product/39-ao-3d_637145480151850678.jpg?w=800",
+      "imageAlt": "Sản phẩm B"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Đỗ Hữu Thuận",
+      "email": "thuando@gmail.com",
+      "password": "123456T",
+      "role": "user",
+      "avatar": "/assets/images/avatars/user1.jpg",
+      "phone": "0901234567",
+      "bio": "Designer 3D chuyên về áo thun và mô hình 3D",
+      "blogs": [
+        101,
+        102
+      ],
+      "createdAt": "2025-08-13T07:00:00Z",
+      "updatedAt": "2025-08-13T08:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Tran Thi B",
+      "email": "b.tran@example.com",
+      "password": "123456",
+      "role": "user",
+      "avatar": "/assets/images/avatars/user2.jpg",
+      "phone": "0902345678",
+      "bio": "Chuyên gia marketing Reality 3D",
+      "blogs": [
+        103
+      ],
+      "createdAt": "2025-08-13T07:05:00Z",
+      "updatedAt": "2025-08-13T08:10:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "password": "admin123",
+      "role": "admin",
+      "avatar": "/assets/images/avatars/admin.jpg",
+      "blogs": [],
+      "createdAt": "2025-08-13T07:10:00Z",
+      "updatedAt": "2025-08-13T07:10:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Nguyễn Thị Thùy Trang",
+      "email": "trangngo@gmail.com",
+      "password": "123456T",
+      "role": "user",
+      "avatar": "/assets/images/avatars/user1.jpg",
+      "phone": "0901234567",
+      "bio": "Designer 3D chuyên về áo thun và mô hình 3D",
+      "blogs": [
+        101,
+        102
+      ],
+      "createdAt": "2025-08-13T07:00:00Z",
+      "updatedAt": "2025-08-13T08:00:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Đỗ Hữu Thuận",
+      "email": "thuando1@gmail.com",
+      "password": "123456T",
+      "role": "user",
+      "avatar": "/assets/images/avatars/user1.jpg",
+      "phone": "0901234567",
+      "bio": "Designer 3D chuyên về áo thun và mô hình 3D",
+      "blogs": [
+        101,
+        102
+      ],
+      "createdAt": "2025-08-13T07:00:00Z",
+      "updatedAt": "2025-08-13T08:00:00Z"
+    },
+    {
+      "id": 6,
+      "name": "anhdev",
+      "email": "anhdev@gmail.com",
+      "password": "123456T",
+      "role": "user",
+      "avatar": "/assets/images/avatars/default.jpg",
+      "phone": "",
+      "bio": "",
+      "blogs": [],
+      "createdAt": "2025-08-13T09:16:31.650Z",
+      "updatedAt": "2025-08-13T09:16:31.650Z"
+    }
+  ]
+}
