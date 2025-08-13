@@ -2,36 +2,33 @@ import React, { useEffect, useState } from "react";
 import "./header.scss";
 import {
   AiOutlineFacebook,
-  AiOutlineInstagram,
   AiOutlineMail,
   AiOutlineShoppingCart,
   AiOutlineUser,
 } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ROUTERS } from "../../../utils/constants/routers";
+import { ROUTERS } from "@utils/constants/routers";
 import RunningNotification from "../../../containers/home/saleNotificationPopup";
 
-export default function Header({ products = [] }) {
+export default function Header() {
   const [userData, setUserData] = useState(null);
-  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
-  const [, setCart] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
   const [showNotification, setShowNotification] = useState(true);
+  const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-    const cartData = JSON.parse(sessionStorage.getItem("cart")) || [];
-    setCart(cartData);
-    const total = cartData.reduce((total, item) => total + item.quantity, 0);
-    setTotalItems(total);
-  }, [sessionStorage.getItem("cart")]);
 
   useEffect(() => {
-    const userDataFromStorage = sessionStorage.getItem("userData");
-    if (userDataFromStorage) {
-      setUserData(JSON.parse(userDataFromStorage));
+    const cartData = JSON.parse(sessionStorage.getItem("cart")) || [];
+    const total = cartData.reduce((t, item) => t + item.quantity, 0);
+    setTotalItems(total);
+  }, []);
+
+  useEffect(() => {
+    const user = sessionStorage.getItem("userData");
+    if (user) {
+      setUserData(JSON.parse(user));
       setIsLoggedIn(true);
     }
   }, []);
@@ -39,170 +36,97 @@ export default function Header({ products = [] }) {
   const handleLogout = () => {
     sessionStorage.clear();
     setIsLoggedIn(false);
-    //  navigate(0);
     navigate("/reality3d/home-page");
   };
 
-  const toggleProfileMenu = () => {
-    setProfileMenuOpen(!isProfileMenuOpen);
-  };
-  useEffect(() => {
-    if (!isLoading) {
-      setShowNotification(true);
-    }
-  }, [isLoading]);
-  const menus = [
-    {
-      name: "Trang Chủ",
-      path: ROUTERS.USER.HOME,
-    },
-    {
-      name: "Best Sale",
-      path: ROUTERS.USER.BEST_SALE,
-    },
-    {
-      name: "Model",
-      path: ROUTERS.USER.MODELS,
-    },
-    {
-      name: "Áo Thun",
-      path: ROUTERS.USER.PRODUCTS,
-    },
+  const toggleProfileMenu = () => setProfileMenuOpen(!isProfileMenuOpen);
 
-    {
-      name: "Dịch Vụ",
-      path: ROUTERS.USER.SERVICE3D,
-    },
-    {
-      name: "Thiết Kế",
-      path: ROUTERS.USER.EDITS,
-    },
-    {
-      name: "Bài Viết",
-      path: ROUTERS.USER.BLOGS,
-    },
-    {
-      name: "Liên Hệ",
-      path: ROUTERS.USER.CONTACT,
-    },
+  // Sticky shadow on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const header = document.querySelector(".header-main");
+      if (window.scrollY > 10) header.classList.add("scrolled");
+      else header.classList.remove("scrolled");
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const menus = [
+    { name: "Trang Chủ", path: ROUTERS.USER.HOME },
+    { name: "Best Sale", path: ROUTERS.USER.BEST_SALE },
+    { name: "Model", path: ROUTERS.USER.MODELS },
+    { name: "Áo Thun", path: ROUTERS.USER.PRODUCTS },
+    { name: "Dịch Vụ", path: ROUTERS.USER.SERVICE3D },
+    { name: "Thiết Kế", path: ROUTERS.USER.EDITS },
+    { name: "Bài Viết", path: ROUTERS.USER.BLOGS },
+    { name: "Liên Hệ", path: ROUTERS.USER.CONTACT },
   ];
 
   return (
     <>
+      {/* Top Bar */}
       <div className="header-on-top">
         <div className="header-container">
-          <div className="row">
-            <div className="col-6 header-container-top-left">
-              <ul>
-                <li>
-                  <AiOutlineMail />
-                  <span>inreality0102@gmail.com</span>
-                </li>
-                <li>Ship toàn quốc gia Việt Nam</li>
-              </ul>
-            </div>
-            <div className="col-6 header-container-top-right">
-              <ul>
-                <li>
-                  <Link
-                    to={
-                      "https://www.facebook.com/realityprint3d.page?mibextid=LQQJ4d"
-                    }
-                  >
-                    <AiOutlineFacebook />
-                  </Link>
-                </li>
-                <li>
-                  {!isLoggedIn && (
-                    <Link to={"/reality3d/login-account"}>
-                      <span className="span-login">Đăng Nhập</span>
-                    </Link>
+          <ul className="header-top-left">
+            <li><AiOutlineMail /> <span>inreality0102@gmail.com</span></li>
+            <li>Ship toàn quốc</li>
+          </ul>
+          <ul className="header-top-right">
+            <li>
+              <Link to="https://www.facebook.com/realityprint3d.page">
+                <AiOutlineFacebook />
+              </Link>
+            </li>
+            <li>
+              {!isLoggedIn && <Link to="/reality3d/login-account"><span>Đăng Nhập</span></Link>}
+              {isLoggedIn && (
+                <div className="profile-menu-container">
+                  <span className="profile-menu-trigger" onClick={toggleProfileMenu}>
+                    {userData?.name} <AiOutlineUser />
+                  </span>
+                  {isProfileMenuOpen && (
+                    <ul className="profile-menu">
+                      <li><Link to="/reality3d/profile-page">Thông tin</Link></li>
+                      <li><span onClick={handleLogout}>Đăng Xuất</span></li>
+                    </ul>
                   )}
-                  {isLoggedIn && (
-                    <div className="profile-menu-container">
-                      <span
-                        className="profile-menu-trigger"
-                        onClick={toggleProfileMenu}
-                      >
-                        {userData?.name}
-                        <AiOutlineUser />
-                      </span>{" "}
-                      {isProfileMenuOpen && (
-                        <ul className="profile-menu">
-                          <li>
-                            <Link to={"/reality3d/profile-page"}>
-                              Thông tin
-                            </Link>
-                          </li>
-                          <li>
-                            <span
-                              className="span-logout"
-                              onClick={handleLogout}
-                            >
-                              Đăng Xuất
-                            </span>
-                          </li>
-                        </ul>
-                      )}
-                    </div>
-                  )}
-                </li>
-              </ul>
-            </div>
-          </div>
+                </div>
+              )}
+            </li>
+          </ul>
         </div>
       </div>
+
+      {/* Notification */}
       {showNotification && <RunningNotification duration={1000} />}
-      <div className="header-container">
-        <div className="row">
-          <div className="col-xl-2">
-            <div className="header__logo">
-              <h1 className="header__logo__name">REALITY 3D</h1>
-              <div className="header__logo__img-container">
-                <img
-                  className="header__logo__img"
-                  src="https://firebasestorage.googleapis.com/v0/b/webid-6c809.appspot.com/o/logo3d.jpg?alt=media&token=1d2623f2-5b7e-4569-bfab-fe4bc271ef17"
-                  width={50}
-                  height={50}
-                  alt="Logo"
-                />
-              </div>
-            </div>
+
+      {/* Main Header */}
+      <div className="header-main">
+        <div className="header-container">
+          <div className="header-logo">
+            <h1>REALITY 3D</h1>
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/webid-6c809.appspot.com/o/logo3d.jpg?alt=media"
+              alt="Logo"
+            />
           </div>
-          <div className="col-xl-8">
-            <nav className="header__menu">
-              <ul>
-                {menus.map((menu, index) => (
-                  <li
-                    key={index}
-                    className={location.pathname === menu.path ? "active" : ""}
-                  >
-                    <Link to={menu.path}>{menu.name}</Link>
-                    {menu.child && (
-                      <ul className="header__menu__dropdown">
-                        {menu.child.map((childItem, childIndex) => (
-                          <li key={childIndex}>
-                            <Link to={childItem.path}> {childItem.name}</Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-          <div className="col-xl-2">
-            <div className="header__cart">
-              <ul>
-                <li>
-                  <Link to={"/reality3d/view-cart"}>
-                    <AiOutlineShoppingCart />
-                    <span>{totalItems}</span>
-                  </Link>
+
+          <nav className="header-menu">
+            <ul>
+              {menus.map((menu, idx) => (
+                <li key={idx} className={location.pathname === menu.path ? "active" : ""}>
+                  <Link to={menu.path}>{menu.name}</Link>
                 </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="header-cart">
+            <Link to="/reality3d/view-cart">
+              <AiOutlineShoppingCart />
+              {totalItems > 0 && <span>{totalItems}</span>}
+            </Link>
           </div>
         </div>
       </div>
