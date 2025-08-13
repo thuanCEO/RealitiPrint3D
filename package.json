@@ -46,10 +46,10 @@
     "webpack": "^5.91.0"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "npm run start-react",
     "start-react": "craco start",
     "start-json": "json-server --watch db.json --port 5000",
-    "build": "concurrently \"npm run start-react\" \"npm run start-json\"",
+    "build": "craco build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "concurrently \"npm run start-react\" \"npm run start-json\""
