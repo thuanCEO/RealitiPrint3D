@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axiosClient from "@services/api/api";
+import axiosClient from "@services/axiosClient";
 
 export default function ProductsListPage() {
   const [products, setProducts] = useState([]);

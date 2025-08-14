@@ -7,7 +7,7 @@ import { FaRegUserCircle, FaLock } from "react-icons/fa";
 
 import icon_image_shop3D from "@assets/images/logos/logo3d.png";
 import Footer from "@components/common/footer/footer";
-import axiosClient from "@services/api/api";
+import axiosClient from "@services/axiosClient";
 
 export default function RegisterPage() {
   const [userName, setUserName] = useState("");

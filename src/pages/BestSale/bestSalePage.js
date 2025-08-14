@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Footer from "@components/common/footer/footer";
 import Header from "@components/common/header/header";
-import axiosClient from "@services/api/api";
+import axiosClient from "@services/axiosClient";
 
 export default function BestSalePage() {
   const [products, setProducts] = useState([]);
