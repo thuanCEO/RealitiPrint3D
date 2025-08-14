@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axiosClient from "@services/api/api";
+import axiosClient from "@services/axiosClient";
 import "./blogPage.scss";
 
 export default function BlogPage() {

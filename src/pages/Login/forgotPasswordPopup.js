@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { toast } from "react-toastify";
 import "./forgotPasswordPopup.scss";
-import axiosClient from "@services/api/api";
+import axiosClient from "@services/axiosClient";
 
 const ForgotPasswordPopup = ({ onClose }) => {
   const [email, setEmail] = useState("");

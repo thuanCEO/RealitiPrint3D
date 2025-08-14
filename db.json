@@ -25,7 +25,7 @@
       "productName": "Áo 3D Sunset",
       "price": 140000,
       "status": 1,
-      "categoryId": 2,
+      "categoryId": 1,
       "imageUrl": "https://ae-pic-a1.aliexpress-media.com/kf/Hd33b48bd191246729a4f57e60bee1770C.jpg",
       "imageAlt": "Áo 3D Sunset",
       "description": "Họa tiết hoàng hôn 3D đầy nghệ thuật, phù hợp cho các buổi dạo phố hay đi biển."
@@ -45,7 +45,7 @@
       "productName": "Áo 3D Anime Hero",
       "price": 160000,
       "status": 1,
-      "categoryId": 2,
+      "categoryId": 1,
       "imageUrl": "https://m.media-amazon.com/images/I/618bZX+K8ML._AC_UL1000_.jpg",
       "imageAlt": "Áo 3D Anime Hero",
       "description": "Thiết kế 3D nhân vật anime nổi bật, dành cho các fan yêu thích văn hóa Nhật Bản."
@@ -65,7 +65,7 @@
       "productName": "Áo 3D Ocean Wave",
       "price": 145000,
       "status": 1,
-      "categoryId": 2,
+      "categoryId": 1,
       "imageUrl": "https://gw.alicdn.com/imgextra/i2/2807852584/O1CN01YSZwPe1UxWIzaBX09_!!2807852584.jpg_Q75.jpg_.webp",
       "imageAlt": "Áo 3D Ocean Wave",
       "description": "Áo 3D sóng biển mềm mại, họa tiết sống động, mang lại cảm giác thư giãn, tươi mới."
@@ -99,6 +99,129 @@
       "imageUrl": "https://newstyle.vn/wp-content/uploads/2022/02/a14-1.jpg",
       "imageAlt": "Áo 3D Tech Pattern",
       "description": "Họa tiết công nghệ 3D độc đáo, mang phong cách hiện đại và tinh tế."
+    }
+  ],
+  "models": [
+    {
+      "id": 1,
+      "modelName": "Xe Hơi Thể Thao",
+      "price": 500000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://png.pngtree.com/background/20250107/original/pngtree-3d-illustration-of-a-white-backgrounded-super-sport-yellow-supercar-picture-image_11970168.jpg",
+      "previewImage": "https://i.imgur.com/5N5y9Gq.png",
+      "modelAlt": "Xe hơi thể thao màu đỏ",
+      "description": "Mô hình 3D xe thể thao chi tiết cao, định dạng GLB."
+    },
+    {
+      "id": 2,
+      "modelName": "Ngôi Nhà Hiện Đại",
+      "price": 750000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://m.vietnamese.architecturehousemodel.com/photo/pl24257785-cad_v_ngo_i_th_t_m_h_nh_3d_m_h_nh_ki_n_tr_c_hi_n_i_th_ng_m_i.jpg",
+      "previewImage": "https://i.imgur.com/T6P7Ouq.png",
+      "modelAlt": "Ngôi nhà hiện đại",
+      "description": "Mô hình 3D kiến trúc nhà hiện đại, đầy đủ nội thất."
+    },
+    {
+      "id": 3,
+      "modelName": "Robot Viễn Tưởng",
+      "price": 300000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://png.pngtree.com/png-clipart/20241204/original/pngtree-3d-model-of-futuristic-small-robot-on-transparent-background-png-image_17559351.png",
+      "previewImage": "https://i.imgur.com/jCOztgV.png",
+      "modelAlt": "Robot viễn tưởng",
+      "description": "Mô hình 3D robot hoạt hình, có animation."
+    },
+    {
+      "id": 4,
+      "modelName": "Mô Hình Trái Đất",
+      "price": 200000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://www.dochoigiaotri.com/wp-content/uploads/2020/08/13410117785_1210828647.jpg",
+      "previewImage": "https://i.imgur.com/ukj4rRk.png",
+      "modelAlt": "Hành tinh Trái Đất",
+      "description": "Mô hình 3D Trái Đất với kết cấu chi tiết, có thể xoay."
+    },
+    {
+      "id": 5,
+      "modelName": "Phi Hành Gia",
+      "price": 400000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://png.pngtree.com/png-vector/20250728/ourlarge/pngtree-astronaut-3d-model-png-image_16884111.webp",
+      "previewImage": "https://i.imgur.com/wg8uZrZ.png",
+      "modelAlt": "Phi hành gia",
+      "description": "Mô hình 3D phi hành gia, định dạng GLB, có thể xoay 360°."
+    },
+    {
+      "id": 6,
+      "modelName": "Máy Bay Chiến Đấu",
+      "price": 900000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsD5aEqvJ_9ZLEF-u7LQAoCgdooPILpsLADA&s",
+      "previewImage": "https://i.imgur.com/0f4npT4.png",
+      "modelAlt": "Máy bay chiến đấu",
+      "description": "Mô hình 3D máy bay chiến đấu hiện đại."
+    },
+    {
+      "id": 7,
+      "modelName": "Đèn Trang Trí",
+      "price": 150000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://cdn1099.cdn4s2.com/media/n%20led%203d/23%20m%E1%BA%ABu/23-mau-den-ngu-3d-led-trang-tri-de-thuong-qua-tang-y-nghia-dep-ben-quatangah-vn-01%20(12).jpg",
+      "previewImage": "https://i.imgur.com/3hJNjau.png",
+      "modelAlt": "Đèn trang trí",
+      "description": "Mô hình 3D đèn trang trí, chất liệu kim loại."
+    },
+    {
+      "id": 8,
+      "modelName": "Nhân Vật Game",
+      "price": 450000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://in3dvanloc.com/wp-content/uploads/2024/12/in-3d-mo-hinh-nhan-vat-mele-1.jpg",
+      "previewImage": "https://i.imgur.com/lpA1rFt.png",
+      "modelAlt": "Nhân vật game 3D",
+      "description": "Mô hình 3D nhân vật hoạt hình, vui nhộn."
+    },
+    {
+      "id": 9,
+      "modelName": "Bàn Làm Việc",
+      "price": 350000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJYvHU9Ed3ipezw6qun3uNZqvkuT8lItaiQCQSjC3gqQH0jQU6Zzizp_DApwGUFF1R7Ac&usqp=CAU",
+      "previewImage": "https://i.imgur.com/4xZCvTd.png",
+      "modelAlt": "Bàn làm việc",
+      "description": "Mô hình 3D bàn làm việc gỗ."
+    },
+    {
+      "id": 10,
+      "modelName": "Cây Xanh Trang Trí",
+      "price": 180000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://img.lovepik.com/free-png/20220127/lovepik-green-environmentally-friendly-tree-tree-trek-png-image_401903988_wh1200.png",
+      "previewImage": "https://i.imgur.com/DRUzQ2N.png",
+      "modelAlt": "Cây xanh trang trí",
+      "description": "Mô hình 3D cây xanh trang trí nội thất."
+    },
+    {
+      "id": 11,
+      "modelName": "Máy Bay Cấp Cứu",
+      "price": 900000,
+      "status": 1,
+      "categoryId": 2,
+      "modelUrl": "https://down-vn.img.susercontent.com/file/sg-11134201-7qveh-lihnwh9yumh5fb",
+      "previewImage": "https://i.imgur.com/0f4npT4.png",
+      "modelAlt": "Máy bay cấp cứu",
+      "description": "Mô hình 3D máy bay cấp cứu hiện đại."
     }
   ],
   "blogs": [

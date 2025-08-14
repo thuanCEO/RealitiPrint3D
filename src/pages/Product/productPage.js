@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
-import axiosClient from "@services/api/api";
-import "./productPage.scss";
+import axiosClient from "@services/axiosClient";
+import { FaShoppingCart } from "react-icons/fa";
+import "@pages/Product/productPage.scss";
 
-export default function ProductsListPage() {
+export default function ProductsListPage({ cartCount, setCartCount }) {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-  const [countdown, setCountdown] = useState({
-    hours: 2,
-    minutes: 0,
-    seconds: 0,
-  });
-
+  const [countdown, setCountdown] = useState({ hours: 2, minutes: 0, seconds: 0 });
   const [currentPage, setCurrentPage] = useState(1);
+  const [soldCounts, setSoldCounts] = useState({});
   const productsPerPage = 6;
 
   const filteredProducts = products.filter(
@@ -23,10 +20,6 @@ export default function ProductsListPage() {
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
-  const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const handlePageClick = (page) => setCurrentPage(page);
-
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -35,6 +28,16 @@ export default function ProductsListPage() {
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
   }, [countdown]);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      const counts = {};
+      products.forEach((product) => {
+        counts[product.id] = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
+      });
+      setSoldCounts(counts);
+    }
+  }, [products]);
 
   const fetchProducts = async () => {
     try {
@@ -63,13 +66,20 @@ export default function ProductsListPage() {
     });
   };
 
+  const handleAddToCart = (product) => {
+    setCartCount((prev) => prev + 1);
+    const btn = document.getElementById(`cart-btn-${product.id}`);
+    if (btn) {
+      btn.classList.add("cart-added");
+      setTimeout(() => btn.classList.remove("cart-added"), 500);
+    }
+  };
+
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="products-list-container">
-      <h2 className="products-page-title fire-effect">
-        Sản Phẩm Bán Chạy
-      </h2>
+      <h2 className="products-page-title fire-effect">Sản Phẩm Bán Chạy</h2>
       <div className="products-grid">
         {currentProducts.map((product) => (
           <div className="product-card" key={product.id}>
@@ -102,19 +112,28 @@ export default function ProductsListPage() {
                   đ
                 </span>
               </div>
+              <div className="product-bottom">
+                <span className="sold-count">{soldCounts[product.id]} đã bán</span>
+                <div className="add-to-cart-wrapper">
+                  <button
+                    id={`cart-btn-${product.id}`}
+                    className="add-to-cart-btn"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    <FaShoppingCart /> Thêm vào giỏ
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Pagination */}
-      <div className="pagination flex justify-center mt-8 items-center gap-2">
+      <div className="pagination">
         <button
-          className={`px-3 py-1 rounded ${currentPage === 1
-            ? "bg-gray-300 cursor-not-allowed"
-            : "bg-orange-500 text-white"
-            }`}
-          onClick={handlePrev}
+          className={currentPage === 1 ? "disabled" : ""}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
           &larr; Prev
@@ -123,22 +142,16 @@ export default function ProductsListPage() {
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i + 1}
-            className={`px-3 py-1 rounded ${currentPage === i + 1
-              ? "bg-orange-500 text-white"
-              : "bg-gray-200"
-              }`}
-            onClick={() => handlePageClick(i + 1)}
+            className={currentPage === i + 1 ? "active" : ""}
+            onClick={() => setCurrentPage(i + 1)}
           >
             {i + 1}
           </button>
         ))}
 
         <button
-          className={`px-3 py-1 rounded ${currentPage === totalPages
-            ? "bg-gray-300 cursor-not-allowed"
-            : "bg-orange-500 text-white"
-            }`}
-          onClick={handleNext}
+          className={currentPage === totalPages ? "disabled" : ""}
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
         >
           Next &rarr;
