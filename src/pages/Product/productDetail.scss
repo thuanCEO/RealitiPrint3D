@@ -1,0 +1,111 @@
+.product-detail {
+    background: #f9fafb;
+    padding: 40px 0;
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    &__wrapper {
+        display: flex;
+        gap: 40px;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    &__image img {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    &__info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    &__title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #111827;
+    }
+
+    &__description {
+        color: #4b5563;
+        line-height: 1.6;
+    }
+
+    &__price {
+        font-size: 24px;
+        font-weight: bold;
+        color: #e11d48;
+    }
+
+    &__options select {
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+    }
+
+    &__quantity {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        button {
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+
+            &:hover {
+                background: #e5e7eb;
+            }
+        }
+
+        input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+    }
+}
+
+.btn-add-cart {
+    padding: 12px 20px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+        background: #1d4ed8;
+    }
+}
+
+.product-detail__loading,
+.product-detail__error {
+    padding: 50px;
+    text-align: center;
+    font-size: 18px;
+    color: #ef4444;
+}
+
+.product-detail__total-price {
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #d32f2f;
+}

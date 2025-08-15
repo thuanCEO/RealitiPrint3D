@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import axiosClient from "@services/axiosClient";
 import { FaShoppingCart } from "react-icons/fa";
 import "@pages/Product/productPage.scss";
+import { useNavigate } from "react-router-dom";
+import Header from "@components/common/header/header";
+import Footer from "@components/common/footer/footer";
 
-export default function ProductsListPage({ cartCount, setCartCount }) {
+export default function ProductsPage({ cartCount, setCartCount }) {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [countdown, setCountdown] = useState({ hours: 2, minutes: 0, seconds: 0 });
   const [currentPage, setCurrentPage] = useState(1);
   const [soldCounts, setSoldCounts] = useState({});
   const productsPerPage = 6;
-
+  const navigate = useNavigate();
   const filteredProducts = products.filter(
     (p) => p.status === 1 && (p.categoryId === 1 || p.categoryId === 2)
   );
@@ -75,88 +78,102 @@ export default function ProductsListPage({ cartCount, setCartCount }) {
     }
   };
 
+  const goToDetail = (id) => {
+    navigate(`/reality3d/product-detail/${id}`);
+  };
+
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="products-list-container">
-      <h2 className="products-page-title fire-effect">Sản Phẩm Bán Chạy</h2>
-      <div className="products-grid">
-        {currentProducts.map((product) => (
-          <div className="product-card" key={product.id}>
-            <div className="product-image">
-              <img
-                src={product.imageUrl}
-                alt={product.imageAlt || product.productName}
-              />
-            </div>
-            <div className="flash-sale">Flash Sale</div>
-            <div className="countdown">
-              Kết thúc sau: {countdown.hours}:{countdown.minutes}:{countdown.seconds}
-            </div>
-            <div className="product-info">
-              <h3>
-                <a href={`/reality3d/product-detail/${product.id}`}>
-                  {product.productName}
-                </a>
-              </h3>
-              <div className="price">
-                {product.categoryId === 1 && (
-                  <span className="original-price">
-                    {product.price.toLocaleString()} đ
-                  </span>
-                )}
-                <span className="sale-price">
-                  {product.categoryId === 1
-                    ? (product.price - 30000).toLocaleString()
-                    : product.price.toLocaleString()}{" "}
-                  đ
-                </span>
+    <>   <Header />
+      <div className="products-list-container">
+        <div className="products-grid">
+          {currentProducts.map((product) => (
+            <div className="product-card" key={product.id}>
+              <div className="product-image">
+                <img
+                  src={product.imageUrl}
+                  alt={product.imageAlt || product.productName}
+                />
+                <div
+                  className="view-detail-overlay"
+                  onClick={() => goToDetail(product.id)}
+                >
+                  Xem chi tiết
+                </div>
               </div>
-              <div className="product-bottom">
-                <span className="sold-count">{soldCounts[product.id]} đã bán</span>
-                <div className="add-to-cart-wrapper">
-                  <button
-                    id={`cart-btn-${product.id}`}
-                    className="add-to-cart-btn"
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    <FaShoppingCart /> Thêm vào giỏ
-                  </button>
+              <div className="flash-sale">Flash Sale</div>
+              <div className="countdown">
+                Kết thúc sau: {countdown.hours}:{countdown.minutes}:{countdown.seconds}
+              </div>
+              <div className="product-info">
+                <h3
+                  className="product-title"
+                  onClick={() => goToDetail(product.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {product.productName}
+                </h3>
+                <div className="price">
+                  {product.categoryId === 1 && (
+                    <span className="original-price">
+                      {product.price.toLocaleString()} đ
+                    </span>
+                  )}
+                  <span className="sale-price">
+                    {product.categoryId === 1
+                      ? (product.price - 30000).toLocaleString()
+                      : product.price.toLocaleString()}{" "}
+                    đ
+                  </span>
+                </div>
+                <div className="product-bottom">
+                  <span className="sold-count">{soldCounts[product.id]} đã bán</span>
+                  <div className="add-to-cart-wrapper">
+                    <button
+                      id={`cart-btn-${product.id}`}
+                      className="add-to-cart-btn"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <FaShoppingCart /> Thêm vào giỏ
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {/* Pagination */}
-      <div className="pagination">
-        <button
-          className={currentPage === 1 ? "disabled" : ""}
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          &larr; Prev
-        </button>
-
-        {Array.from({ length: totalPages }, (_, i) => (
+        {/* Pagination */}
+        <div className="pagination">
           <button
-            key={i + 1}
-            className={currentPage === i + 1 ? "active" : ""}
-            onClick={() => setCurrentPage(i + 1)}
+            className={currentPage === 1 ? "disabled" : ""}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
           >
-            {i + 1}
+            &larr; Prev
           </button>
-        ))}
 
-        <button
-          className={currentPage === totalPages ? "disabled" : ""}
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-        >
-          Next &rarr;
-        </button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              className={currentPage === i + 1 ? "active" : ""}
+              onClick={() => setCurrentPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            className={currentPage === totalPages ? "disabled" : ""}
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next &rarr;
+          </button>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
