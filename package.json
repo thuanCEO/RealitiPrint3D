@@ -46,7 +46,7 @@
     "webpack": "^5.91.0"
   },
   "scripts": {
-    "start": "serve -s build",
+    "start": "npx serve -s build",
     "start-react": "craco start",
     "start-json": "json-server --watch db.json --port 5000",
     "build": "craco build",
