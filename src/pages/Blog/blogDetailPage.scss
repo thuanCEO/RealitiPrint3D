@@ -1,5 +1,5 @@
 .blog-details-page {
-    background: linear-gradient(135deg, #f8f9fa, #eef2f7);
+    background: linear-gradient(135deg, #f0f4ff, #ffffff);
     min-height: 100vh;
     padding: 30px 0;
 
@@ -14,37 +14,30 @@
         text-align: center;
         margin-bottom: 20px;
         font-weight: bold;
-        font-size: 1.1rem;
     }
 
     .loading-text {
         text-align: center;
-        font-size: 18px;
-        color: #555;
+        color: #666;
     }
 
     .blog-card {
-        background: #fff;
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 20px;
         overflow: hidden;
-        box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.08);
-        animation: fadeIn 0.6s ease-in-out;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-        &:hover {
-            transform: translateY(-3px);
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.12);
-        }
+        backdrop-filter: blur(8px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
     }
 
     .blog-banner {
-        height: 320px;
+        height: 300px;
         background-size: cover;
         background-position: center;
         position: relative;
 
         .overlay {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.35);
             height: 100%;
             display: flex;
             align-items: center;
@@ -53,33 +46,33 @@
 
         .blog-title {
             color: white;
-            font-size: 2.6rem;
+            font-size: 2.4rem;
+            font-weight: bold;
             text-align: center;
-            padding: 0 10px;
-            font-weight: 700;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            padding: 0 10px;
         }
     }
 
     .blog-author {
-        display: flex;
-        align-items: center;
         gap: 15px;
         padding: 20px;
         border-bottom: 1px solid #eee;
         background: #fafafa;
+        text-align: center;
+        align-items: center;
+        flex-direction: column;
 
         .author-avatar {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
+            border: 2px solid #ddd;
             object-fit: cover;
-            border: 3px solid #ddd;
-            transition: transform 0.3s ease;
-
-            &:hover {
-                transform: scale(1.05);
-            }
+            align-items: center;
+            flex-direction: column;
+            display: flex;
+            object-fit: cover;
         }
 
         .author-info {
@@ -100,109 +93,102 @@
     }
 
     .blog-content {
-        padding: 20px 25px;
+        padding: 20px;
 
         .blog-paragraph {
-            font-size: 16px;
-            line-height: 1.7;
+            font-size: 1rem;
+            line-height: 1.8;
             color: #444;
             margin-bottom: 15px;
-            text-align: justify;
-            animation: fadeInUp 0.4s ease-in-out;
-        }
-    }
-}
-
-.blog-comments {
-    margin-top: 30px;
-    padding: 20px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.06);
-
-    h3 {
-        font-size: 1.4rem;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    textarea {
-        resize: none;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        padding: 10px;
-        width: 100%;
-        min-height: 80px;
-        transition: border-color 0.2s ease;
-
-        &:focus {
-            border-color: #3b82f6; // blue-500
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-            outline: none;
         }
     }
 
-    button {
-        background: #3b82f6;
-        color: white;
-        padding: 8px 18px;
-        border-radius: 8px;
-        margin-top: 10px;
-        font-weight: 500;
-        transition: background-color 0.2s ease, transform 0.2s ease;
+    .blog-comments {
+        padding: 20px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
 
-        &:hover {
-            background-color: #2563eb;
-            transform: translateY(-1px);
-        }
-    }
-
-    .comment-item {
-        margin-top: 15px;
-        padding: 10px 12px;
-        border-radius: 10px;
-        background: #f9f9f9;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-        &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .comment-author {
+        h3 {
+            font-size: 1.4rem;
             font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 0.95rem;
+            margin-bottom: 15px;
         }
 
-        .comment-text {
-            font-size: 0.9rem;
-            color: #555;
-            line-height: 1.5;
+        .comment-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+
+            .comment-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+            }
+
+            textarea {
+                flex: 1;
+                resize: none;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+                padding: 10px;
+                min-height: 80px;
+
+                &:focus {
+                    border-color: #3b82f6;
+                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+                    outline: none;
+                }
+            }
         }
-    }
-}
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+        .btn-submit {
+            background: linear-gradient(45deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: 0.2s;
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+            &:hover {
+                background: linear-gradient(45deg, #2563eb, #1d4ed8);
+                transform: translateY(-1px);
+            }
+        }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+        .comment-list {
+            margin-top: 20px;
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+            .comment-item {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 10px;
+                padding: 10px;
+                background: #f9f9f9;
+                border-radius: 10px;
+
+                .comment-avatar {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                }
+
+                .comment-content {
+                    strong {
+                        display: block;
+                        margin-bottom: 3px;
+                    }
+
+                    p {
+                        margin: 0;
+                    }
+
+                    .comment-date {
+                        font-size: 0.75rem;
+                        color: #999;
+                    }
+                }
+            }
+        }
     }
 }

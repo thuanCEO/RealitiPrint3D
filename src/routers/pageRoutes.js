@@ -12,6 +12,7 @@ import ContactPage from "@pages/Contact/contactPage";
 import ProductDetailPage from "@pages/Product/productDetail";
 import ModelDetailPage from "@pages/Product/modelDetail";
 import BlogDetailPages from "@pages/Blog/blogDetailPage";
+import StudioPage from "@pages/Studio/studioPage";
 
 export const pageRoutes = [
     { path: "/", element: <Navigate to="/reality3d/home-page" /> },
@@ -26,6 +27,7 @@ export const pageRoutes = [
     { path: "/reality3d/product-detail/:id", element: <ProductDetailPage /> },
     { path: "/reality3d/model-detail/:id", element: <ModelDetailPage /> },
     { path: "/reality3d/blog-detail/:id", element: <BlogDetailPages /> },
+    { path: "/reality3d/design-page", element: <StudioPage /> }
     // { path: "/reality3d/best-sale", element: <BestSalePage /> },
 
     // { path: "/reality3d/product-list", element: <ProductsList /> },

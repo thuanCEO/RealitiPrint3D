@@ -58,7 +58,7 @@ export default function Header() {
 
     { name: "Model", path: ROUTERS.USER.MODELS },
     { name: "Áo 3D", path: ROUTERS.USER.PRODUCTS },
-    { name: "Thiết Kế", path: ROUTERS.USER.EDITS },
+    { name: "Thiết Kế", path: ROUTERS.USER.DESIGN },
     { name: "Bài Viết", path: ROUTERS.USER.BLOGS },
     { name: "Liên Hệ", path: ROUTERS.USER.CONTACT },
   ];
