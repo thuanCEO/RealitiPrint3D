@@ -1,0 +1,37 @@
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    padding: 5px 10px;
+    width: 300px;
+    transition: box-shadow 0.3s ease;
+
+    &:focus-within {
+        box-shadow: 0 0 5px #f97316;
+    }
+
+    input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 8px;
+        font-size: 14px;
+        border-radius: 25px;
+    }
+
+    button {
+        background: #f97316;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        color: white;
+        font-size: 14px;
+
+        &:hover {
+            background: #ff7f2a;
+        }
+    }
+}

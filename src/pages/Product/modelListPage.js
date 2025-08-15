@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "@services/axiosClient";
 import { FaShoppingCart } from "react-icons/fa";
-import Header from "@components/common/header/header";
-import Footer from "@components/common/footer/footer";
 
 import "@pages/Product/productPage.scss";
 
-export default function ModelPage({ cartCount, setCartCount }) {
-    const pageSize = 10;
+export default function ModelListPage({ cartCount, setCartCount }) {
     const [models, setModels] = useState([]);
     const [error, setError] = useState(null);
     const [countdown, setCountdown] = useState({ hours: 2, minutes: 0, seconds: 0 });
@@ -88,8 +85,10 @@ export default function ModelPage({ cartCount, setCartCount }) {
 
     return (
         <>
-            <Header />
             <div className="products-list-container">
+                <h2 className="products-page-titles fire-effect">
+                    Mô hình 3D
+                </h2>
                 <div className="products-grid">
                     {currentModels.map((model) => (
                         <div className="product-card" key={model.id}>
@@ -174,7 +173,6 @@ export default function ModelPage({ cartCount, setCartCount }) {
                     </button>
                 </div>
             </div>
-            <Footer />
         </>
     );
 }

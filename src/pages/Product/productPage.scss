@@ -35,6 +35,34 @@
         }
     }
 
+    .products-page-titles {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #FFA500;
+        position: relative;
+        display: inline-block;
+        letter-spacing: 1px;
+        animation: flicker 1s infinite;
+        padding-bottom: 30px;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.4), transparent 70%);
+            z-index: -1;
+            filter: blur(8px);
+            animation: fireMove 1s infinite alternate;
+        }
+
+        &::after {
+            animation-delay: 0.5s;
+        }
+    }
 
     // Chuyển động “cháy” nhấp nháy
     @keyframes flicker {
@@ -134,7 +162,6 @@
 
             // Overlay khi hover
             &::after {
-                content: "Xem chi tiết";
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -372,5 +399,37 @@
         font-size: 14px;
         color: #ff6600;
         font-weight: bold;
+    }
+
+    .product-image {
+        position: relative;
+        overflow: hidden;
+
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .view-detail-overlay {
+            position: absolute;
+            inset: 0;
+            /* top:0; right:0; bottom:0; left:0 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-weight: bold;
+            opacity: 0;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        &:hover .view-detail-overlay {
+            opacity: 1;
+        }
     }
 }

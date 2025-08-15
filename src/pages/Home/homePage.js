@@ -5,8 +5,10 @@ import "react-tabs/style/react-tabs.css";
 
 import Header from "@components/common/header/header";
 import Footer from "@components/common/footer/footer";
-import ProductsListPage from "@pages/Product/productPage";
-import BlogPage from "@pages/Blog/blogPage";
+import ProductsListPage from "@pages/Product/productListPage";
+import BlogListPage from "@pages/Blog/blogListPages";
+import ModelListPage from "@pages/Product/modelListPage";
+
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,7 +32,8 @@ export default function HomePage() {
       ) : (
         <>
           <ProductsListPage />
-          <BlogPage />
+          <ModelListPage />
+          <BlogListPage />
         </>
       )}
       <Footer />
