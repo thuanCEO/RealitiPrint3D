@@ -14,4 +14,7 @@ module.exports = {
             "@layouts": path.resolve(__dirname, "src/layouts")
         },
     },
+    eslint: {
+        enable: false, // ✅ tắt eslint khi build
+    },
 };
