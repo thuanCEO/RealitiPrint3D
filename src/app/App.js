@@ -1,23 +1,14 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import { appRoutes } from "@routers/index";
-import "@app/App.scss"
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 export default function App() {
   return (
     <Router>
-        <Routes>
-          {appRoutes.map(({ path, element }, idx) => (
-            <Route key={idx} path={path} element={element} />
-          ))}
-      
-          <Route path="*" element={<Navigate to="/reality3d/404-page" replace />} />
-        </Routes>
+      <Routes>
+        {appRoutes.map(({ path, element }, idx) => (
+          <Route key={idx} path={path} element={element} />
+        ))}
+        <Route path="*" element={<Navigate to="/reality3d/404-page" replace />} />
+      </Routes>
     </Router>
   );
 }
