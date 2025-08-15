@@ -12,9 +12,9 @@ module.exports = {
             "@services": path.resolve(__dirname, "src/services"),
             "@utils": path.resolve(__dirname, "src/utils"),
             "@layouts": path.resolve(__dirname, "src/layouts")
-        },
+        }
     },
     eslint: {
-        enable: false, // ✅ tắt eslint khi build
-    },
+        enable: false // tắt eslint khi build
+    }
 };
