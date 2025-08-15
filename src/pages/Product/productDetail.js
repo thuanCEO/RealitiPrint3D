@@ -4,6 +4,7 @@ import Footer from "@components/common/footer/footer";
 import Header from "@components/common/header/header";
 import axiosClient from "@services/axiosClient";
 import ProductImageGallery from "@pages/Product/productImageGallery";
+import ProductsListPage from "@pages/Product/productListPage";
 import "@pages/Product/productDetail.scss";
 
 export default function ProductDetail() {
@@ -150,6 +151,8 @@ export default function ProductDetail() {
                     </div>
                 </div>
             </div>
+
+            <ProductsListPage />
             <Footer />
         </>
     );

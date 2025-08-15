@@ -1,11 +1,11 @@
 // EditPages.js
 import React, { useState, useRef, useEffect } from "react";
-import Header from "../../components/Common/header/header";
-import Footer from "../../components/Common/footer/footer";
+import Header from "@components/common/header/header";
+import Footer from "@components/common/footer/footer";
 import { ChromePicker } from "react-color";
 import Draggable from "react-draggable";
-import img1 from "../../assets/images/products/R.png";
-import IconGrid from "./IconGrid"; // Import IconGrid component
+import img1 from "@assets/images/products/R.png";
+import IconGrid from "./IconGrid";
 
 export default function EditPages() {
   const [selectedColor, setSelectedColor] = useState("#ffffff");
@@ -13,7 +13,7 @@ export default function EditPages() {
   const [activeSection, setActiveSection] = useState(null);
   const canvasRef = useRef(null);
   const imgRef = useRef(null);
-  const [isErasing, setIsErasing] = useState(false); // State to toggle eraser mode
+  const [isErasing, setIsErasing] = useState(false);
 
   const handleToggleSection = (section) => {
     setActiveSection(activeSection === section ? null : section);

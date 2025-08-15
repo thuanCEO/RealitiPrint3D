@@ -5,6 +5,7 @@ import Header from "@components/common/header/header";
 import axiosClient from "@services/axiosClient";
 import ProductImageGallery from "@pages/Product/productImageGallery";
 import "@pages/Product/productDetail.scss";
+import ModelListPage from "@pages/Product/modelListPage";
 
 export default function ModelDetail() {
     const navigate = useNavigate();
@@ -150,6 +151,7 @@ export default function ModelDetail() {
                     </div>
                 </div>
             </div>
+            <ModelListPage />
             <Footer />
         </>
     );
