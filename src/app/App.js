@@ -4,14 +4,14 @@ import { appRoutes } from "@routers/index";
 
 export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         {appRoutes.map(({ path, element }, idx) => (
           <Route key={idx} path={path} element={element} />
         ))}
         <Route path="*" element={<Navigate to="/reality3d/404-page" replace />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
